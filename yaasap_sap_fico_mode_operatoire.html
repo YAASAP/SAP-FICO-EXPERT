@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SAP FICO expert : 6 phases, 12 mois, du T-code au paramétrage — YAASAP Notes</title>
+<meta name="description" content="Mode opératoire complet pour devenir expert SAP FICO : structure organisationnelle, FS00, OBY6, OBA7, FBZP, AP/AR, AA, CO, clôture, tables, transactions et S/4HANA.">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600;700&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{
+  --paper:#f9f6f0;--paper2:#f2ede4;--paper3:#e8e1d5;
+  --ink:#1c1814;--ink2:#3a342c;--ink3:#6a5f52;--ink4:#9a8f82;
+  --rule:rgba(0,0,0,.12);--rule2:rgba(0,0,0,.07);
+  --accent:#1a3a5c;--green:#1e5c32;--amber:#8a5c00;--gold:#c8902a;--blue:#1a3a5c;--red:#b01c1c;
+  --serif:'Libre Baskerville',Georgia,serif;
+  --sans:'Source Sans 3','Helvetica Neue',Arial,sans-serif;
+  --mono:'Source Code Pro','Courier New',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+
+/* Masthead */
+.masthead{background:var(--ink);border-bottom:3px solid var(--accent);padding:11px 22px 9px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.pub-name{font-family:var(--serif);font-size:20px;font-weight:700;color:#fff}
+.pub-name em{font-style:italic;color:#7fb2e5}
+.pub-sub{font-family:var(--mono);font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-top:2px}
+.mast-r{display:flex;align-items:center;gap:12px}
+.mast-date{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.4);letter-spacing:.06em}
+#qr-mast{width:36px;height:36px;background:#fff;padding:2px;border-radius:2px}
+
+/* Hero */
+.hero{position:relative;background:var(--blue);min-height:300px;overflow:hidden;display:flex;align-items:flex-end}
+.hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.32}
+.hero::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,26,46,.35) 0%,rgba(11,26,46,.92) 100%);z-index:1}
+.hero-in{position:relative;z-index:2;max-width:760px;margin:0 auto;padding:60px 22px 26px;width:100%}
+.eyebrow{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.tag{font-family:var(--mono);font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:3px 8px;border-radius:1px;background:rgba(255,255,255,.14);color:#fff}
+.tag.a{background:#7fb2e5;color:var(--space,#0b1a2e)}
+.hero h1{font-family:var(--serif);font-size:30px;line-height:1.18;color:#fff;font-weight:700;margin-bottom:12px}
+.hero .deck{font-family:var(--serif);font-style:italic;font-size:14.5px;line-height:1.6;color:rgba(255,255,255,.78)}
+
+/* KPI strip */
+.kpi-strip{display:grid;grid-template-columns:repeat(6,1fr);background:var(--ink)}
+.kpi{padding:10px 0 10px 14px;border-right:1px solid rgba(255,255,255,.06)}
+.kpi-v{font-family:var(--mono);font-size:14px;font-weight:700;line-height:1;display:block}
+.kpi-v.up{color:#4ade80}.kpi-v.dn{color:#f87171}.kpi-v.am{color:#fbbf24}.kpi-v.neu{color:#e0d8cc}
+.kpi-l{font-family:var(--mono);font-size:7px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:3px;display:block}
+
+/* Kicker */
+.kicker{overflow-x:auto;background:var(--paper2);border-bottom:1px solid var(--rule)}
+.kicker::-webkit-scrollbar{display:none}
+.kicker-inner{display:flex;min-width:max-content}
+.kk{padding:8px 14px;border-right:1px solid var(--rule2);flex-shrink:0}
+.kk-l{font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink4);margin-bottom:2px}
+.kk-v{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--ink);line-height:1}
+.kk-n{font-size:9px;color:var(--ink4);font-style:italic;margin-top:1px}
+
+/* Layout */
+.wrap{max-width:760px;margin:0 auto;padding:6px 22px 30px}
+.sec-rule{display:flex;align-items:center;gap:8px;margin:34px 0 14px}
+.sec-rule::before{content:'';width:20px;height:2px;background:var(--accent);flex-shrink:0}
+.sec-rule-txt{font-size:8px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent)}
+.sec-rule::after{content:'';flex:1;height:1px;background:var(--rule)}
+
+.lead-hl{font-family:var(--serif);font-size:20px;font-weight:700;line-height:1.25;color:var(--ink);margin-bottom:8px}
+.lead-deck{font-family:var(--serif);font-size:14px;font-style:italic;color:var(--ink3);line-height:1.6;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--rule2)}
+.body-p{font-family:var(--serif);font-size:14px;color:var(--ink2);line-height:1.75;margin-bottom:11px}
+.body-p strong{font-weight:700;color:var(--ink)}
+.h3{font-family:var(--serif);font-size:15.5px;font-weight:700;color:var(--ink);margin:20px 0 8px}
+code,.tc{font-family:var(--mono);font-size:.86em;background:var(--paper3);padding:1px 5px;border-radius:2px;color:var(--ink);white-space:nowrap}
+
+.pull{border-left:3px solid var(--accent);padding:10px 16px;margin:16px 0;background:var(--paper2)}
+.pull-t{font-family:var(--serif);font-size:15px;font-style:italic;color:var(--ink);line-height:1.5}
+.pull-a{font-family:var(--mono);font-size:8px;color:var(--ink4);margin-top:5px;letter-spacing:.06em;text-transform:uppercase}
+
+/* Listes */
+.chk{list-style:none;margin:0 0 12px}
+.chk li{font-family:var(--serif);font-size:13.5px;color:var(--ink2);line-height:1.6;padding:4px 0 4px 22px;position:relative;border-bottom:1px solid var(--rule2)}
+.chk li::before{content:'□';position:absolute;left:2px;top:3px;font-family:var(--mono);color:var(--accent)}
+.chk li strong{color:var(--ink)}
+
+/* Phase header */
+.phase{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid var(--rule);border-left:4px solid var(--accent);padding:12px 14px;margin:6px 0 14px;border-radius:2px}
+.phase-n{font-family:var(--mono);font-size:22px;font-weight:700;color:var(--accent);line-height:1}
+.phase-t{font-family:var(--serif);font-size:15px;font-weight:700;color:var(--ink);line-height:1.3}
+.phase-m{font-family:var(--mono);font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink4);margin-top:4px}
+.phase-d{font-family:var(--serif);font-size:13px;color:var(--ink3);line-height:1.55;margin-top:6px}
+
+/* Tableaux */
+.tbl-card{background:#fff;border:1px solid var(--rule);border-top:3px solid var(--ink);border-radius:2px;overflow:hidden;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.tbl-hd{padding:8px 14px;background:var(--paper2);border-bottom:1px solid var(--rule2)}
+.tbl-hd-t{font-family:var(--mono);font-size:8.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3)}
+.tbl-sc{overflow-x:auto}
+.tbl{width:100%;border-collapse:collapse;min-width:520px}
+.tbl th{font-family:var(--mono);font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink4);padding:8px 13px;text-align:left;border-bottom:1.5px solid var(--ink);background:var(--paper2)}
+.tbl td{font-size:13px;padding:7px 13px;border-bottom:1px solid var(--rule2);color:var(--ink2);vertical-align:top;line-height:1.45}
+.tbl td:first-child{font-weight:600;color:var(--ink)}
+.tbl tr:last-child td{border-bottom:none}
+.b-up{background:rgba(30,92,50,.1);color:var(--green);font-family:var(--mono);font-size:9px;font-weight:700;padding:2px 6px;border-radius:1px;white-space:nowrap}
+.b-dn{background:rgba(176,28,28,.1);color:var(--red);font-family:var(--mono);font-size:9px;font-weight:700;padding:2px 6px;border-radius:1px;white-space:nowrap}
+.b-am{background:rgba(138,92,0,.1);color:var(--amber);font-family:var(--mono);font-size:9px;font-weight:700;padding:2px 6px;border-radius:1px;white-space:nowrap}
+
+/* Charts */
+.chart-card{background:#fff;border:1px solid var(--rule);border-top:3px solid var(--ink);padding:12px 14px 10px;margin:14px 0 16px}
+.chart-t{font-family:var(--mono);font-size:8.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px}
+.chart-box{position:relative;height:260px}
+.chart-src{font-family:var(--mono);font-size:8px;color:var(--ink4);margin-top:6px}
+
+/* Verdict */
+.verdict{background:var(--blue);border-radius:2px;padding:20px 22px;margin:28px 0}
+.v-tag{font-family:var(--mono);font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;background:#7fb2e5;color:#0b1a2e;padding:3px 8px;border-radius:1px;display:inline-block;margin-bottom:12px}
+.v-hl{font-family:var(--serif);font-size:17px;font-style:italic;color:rgba(255,255,255,.9);line-height:1.45;margin-bottom:12px}
+.v-hl strong{font-style:normal;color:#fbbf24}
+.v-list{border-top:1px solid rgba(255,255,255,.1);padding-top:12px;display:flex;flex-direction:column;gap:7px}
+.v-li{display:flex;gap:10px;font-family:var(--serif);font-size:13.5px;color:rgba(255,255,255,.78);align-items:baseline;line-height:1.55}
+.v-li::before{content:'—';color:#fbbf24;flex-shrink:0;font-family:var(--mono)}
+.v-li strong{color:#fff;font-weight:700}
+.v-disc{margin-top:14px;padding-top:10px;border-top:1px solid rgba(255,255,255,.08);font-family:var(--mono);font-size:8px;color:rgba(255,255,255,.4);letter-spacing:.04em;line-height:1.7}
+
+/* Newsletter */
+.nl{background:var(--paper2);border:1px solid var(--rule);border-top:3px solid var(--accent);padding:18px 20px;margin:10px 0 0}
+.nl-hl{font-family:var(--serif);font-size:16px;font-weight:700;margin-bottom:10px}
+.nl-row{display:flex;gap:8px;flex-wrap:wrap}
+.nl-input{flex:1;min-width:200px;padding:9px 11px;border:1px solid var(--rule);background:#fff;font-family:var(--sans);font-size:14px;border-radius:2px}
+.nl-btn{padding:9px 16px;background:var(--ink);color:#fff;border:none;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border-radius:2px}
+.nl-btn:hover{background:var(--accent)}
+.nl-ok{display:none;font-family:var(--mono);font-size:11px;color:var(--green);margin-top:8px}
+
+/* Footer */
+footer{background:var(--ink);padding:22px;margin-top:30px}
+.ft-in{max-width:760px;margin:0 auto}
+.ft-nav{display:flex;flex-wrap:wrap;gap:16px;margin-bottom:12px}
+.ft-nav a{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.6);text-decoration:none}
+.ft-nav a:hover{color:#fff}
+.ft-c{font-family:var(--mono);font-size:8px;color:rgba(255,255,255,.28);line-height:1.7}
+
+@media(max-width:700px){
+  .kpi-strip{grid-template-columns:repeat(3,1fr)}
+  .hero h1{font-size:23px}
+  .hero{min-height:260px}
+  .mast-date{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- 1. MASTHEAD -->
+<header class="masthead">
+  <div>
+    <div class="pub-name">YAASAP <em>Notes</em></div>
+    <div class="pub-sub">Dossier thématique · SAP FICO</div>
+  </div>
+  <div class="mast-r">
+    <div class="mast-date" id="mastDate">3 octobre 2026</div>
+    <div id="qr-mast"></div>
+  </div>
+</header>
+
+<!-- 2. HERO -->
+<section class="hero">
+  <img class="hero-img" alt="" src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=1400&q=85&fit=crop" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1200&q=80&fit=crop'">
+  <div class="hero-in">
+    <div class="eyebrow">
+      <span class="tag a">SAP · FICO · S/4HANA</span>
+      <span class="tag">Mode opératoire</span>
+      <span class="tag">3 oct. 2026</span>
+    </div>
+    <h1>SAP FICO expert : 6 phases, 12 mois, du T-code au paramétrage</h1>
+    <p class="deck">Environ 416 heures séparent l'utilisateur qui poste une pièce du consultant qui paramètre une société de bout en bout. Voici l'ordre exact dans lequel apprendre les structures, FS00, OBY6, OBA7, FBZP, les tables et ce que S/4HANA a changé.</p>
+  </div>
+</section>
+
+<!-- 3. KPI STRIP -->
+<div class="kpi-strip">
+  <div class="kpi"><span class="kpi-v neu">12 mois</span><span class="kpi-l">Durée du parcours</span></div>
+  <div class="kpi"><span class="kpi-v am">~416 h</span><span class="kpi-l">8 h / semaine</span></div>
+  <div class="kpi"><span class="kpi-v up">6</span><span class="kpi-l">Phases de montée</span></div>
+  <div class="kpi"><span class="kpi-v neu">70+</span><span class="kpi-l">T-codes détaillés</span></div>
+  <div class="kpi"><span class="kpi-v neu">50+</span><span class="kpi-l">Tables clés</span></div>
+  <div class="kpi"><span class="kpi-v am">C_TS4FI</span><span class="kpi-l">Certification visée</span></div>
+</div>
+
+<!-- 4. KICKER -->
+<div class="kicker"><div class="kicker-inner">
+  <div class="kk"><div class="kk-l">Phase 1</div><div class="kk-v">32 h</div><div class="kk-n">Fondamentaux</div></div>
+  <div class="kk"><div class="kk-l">Phase 2</div><div class="kk-v">64 h</div><div class="kk-n">Structure + GL</div></div>
+  <div class="kk"><div class="kk-l">Phase 3</div><div class="kk-v">96 h</div><div class="kk-n">AP / AR / Banque</div></div>
+  <div class="kk"><div class="kk-l">Phase 4</div><div class="kk-v">96 h</div><div class="kk-n">AA / CO / Clôture</div></div>
+  <div class="kk"><div class="kk-l">Phase 5</div><div class="kk-v">64 h</div><div class="kk-n">S/4HANA</div></div>
+  <div class="kk"><div class="kk-l">Phase 6</div><div class="kk-v">64 h</div><div class="kk-n">Expert + certif.</div></div>
+  <div class="kk"><div class="kk-l">Pivot</div><div class="kk-v">ACDOCA</div><div class="kk-n">Universal Journal</div></div>
+  <div class="kk"><div class="kk-l">Point dur</div><div class="kk-v">FBZP</div><div class="kk-n">5 niveaux</div></div>
+</div></div>
+
+<!-- 5. WRAP -->
+<main class="wrap">
+
+<div class="sec-rule"><span class="sec-rule-txt">Cartographie · 6 phases, 416 heures</span></div>
+
+<h2 class="lead-hl">On devient expert en paramétrant, pas en mémorisant des T-codes</h2>
+<p class="lead-deck">La plupart des parcours échouent parce qu'ils commencent par les transactions de saisie. Un expert FICO se reconnaît à sa capacité à expliquer pourquoi une pièce ne passe pas, donc à lire la configuration derrière chaque écran.</p>
+
+<p class="body-p">Le parcours ci-dessous suit l'ordre de dépendance réel de la configuration : <strong>structure organisationnelle → grand livre → sous-ledgers → paiements → immobilisations et contrôle de gestion → clôture → S/4HANA</strong>. Chaque phase se termine par un livrable vérifiable dans un système de test, jamais par une simple lecture.</p>
+
+<div class="chart-card">
+  <div class="chart-t">Répartition des heures par phase (base 8 h / semaine)</div>
+  <div class="chart-box"><canvas id="chHours"></canvas></div>
+  <div class="chart-src">Répartition indicative YAASAP · ajustable selon l'expérience comptable préalable</div>
+</div>
+
+<div class="tbl-card">
+  <div class="tbl-hd"><div class="tbl-hd-t">Plan sur 12 mois</div></div>
+  <div class="tbl-sc"><table class="tbl">
+    <thead><tr><th>Phase</th><th>Période</th><th>Contenu</th><th>Livrable de sortie</th></tr></thead>
+    <tbody>
+      <tr><td>1 · Fondamentaux</td><td>Mois 1</td><td>Comptabilité, navigation SAP GUI, SPRO, SE16N, transports</td><td>Poster et lire 20 pièces sans aide</td></tr>
+      <tr><td>2 · Structure et GL</td><td>Mois 2-3</td><td>Mandant, société, plan comptable, OBY6, FS00, OBA7, périodes</td><td>Société de test créée de zéro</td></tr>
+      <tr><td>3 · AP / AR / Banque</td><td>Mois 3-5</td><td>Fournisseurs, clients, FBZP, F110, relances, relevés bancaires, taxes</td><td>Cycle P2P et O2C complet, run de paiement</td></tr>
+      <tr><td>4 · AA / CO / Clôture</td><td>Mois 5-7</td><td>Immobilisations, centres de coûts, ordres, CO-PA, clôture mensuelle</td><td>Clôture mensuelle et annuelle simulées</td></tr>
+      <tr><td>5 · S/4HANA</td><td>Mois 7-9</td><td>Universal Journal, Business Partner, Fiori, CDS, migration</td><td>Mapping ECC vers S/4 des 15 objets clés</td></tr>
+      <tr><td>6 · Expert</td><td>Mois 10-12</td><td>Intégration MM/SD, debug, IDoc, spécialisation, certification</td><td>Certification passée, projet réel ou fil rouge</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- PHASE 1 -->
+<div class="sec-rule"><span class="sec-rule-txt">Phase 1 · Fondamentaux · 4 semaines, 32 h</span></div>
+
+<div class="phase">
+  <div class="phase-n">01</div>
+  <div>
+    <div class="phase-t">Comptabilité d'abord, SAP ensuite</div>
+    <div class="phase-m">Mois 1 · 32 h · Prérequis de tout le reste</div>
+    <div class="phase-d">Sans partie double, lettrage, TVA et amortissements solides, aucun paramétrage n'a de sens. Le plan comptable local (PCG français) et les IFRS servent de grille de lecture.</div>
+  </div>
+</div>
+
+<ul class="chk">
+  <li><strong>Comptabilité</strong> : partie double, bilan et compte de résultat, comptabilité auxiliaire, rapprochement bancaire, TVA, cut-off, amortissements, consolidation de base.</li>
+  <li><strong>Navigation</strong> : <span class="tc">SPRO</span> (IMG), <span class="tc">SE16N</span> et <span class="tc">SE11</span> pour les tables, <span class="tc">SM30</span> pour les tables de paramétrage, <span class="tc">SE93</span> pour retrouver un T-code, <span class="tc">SU53</span> pour les autorisations manquantes.</li>
+  <li><strong>Transports</strong> : <span class="tc">SE09</span> / <span class="tc">SE10</span> / <span class="tc">STMS</span>, notion de mandant (<span class="tc">SCC4</span>), paramétrage dépendant ou non du mandant.</li>
+  <li><strong>Traces et jobs</strong> : <span class="tc">SM37</span> (jobs), <span class="tc">SLG1</span> (journal applicatif), <span class="tc">ST22</span> (dumps), <span class="tc">SM59</span> (RFC).</li>
+  <li><strong>Accès système</strong> : un bac à sable est indispensable. Options : SAP S/4HANA Fully-Activated Appliance via SAP CAL (facturé à l'usage), ou un système de formation fourni par un employeur ou un organisme. Vérifier les conditions actuelles sur le portail SAP.</li>
+</ul>
+
+<div class="pull">
+  <div class="pull-t">Règle de travail : jamais de lecture sans manipulation. Chaque notion se valide par une pièce postée et une table consultée.</div>
+  <div class="pull-a">Principe YAASAP</div>
+</div>
+
+<!-- PHASE 2 -->
+<div class="sec-rule"><span class="sec-rule-txt">Phase 2 · Structure organisationnelle et grand livre · OBY6, FS00, OBA7</span></div>
+
+<div class="phase">
+  <div class="phase-n">02</div>
+  <div>
+    <div class="phase-t">Créer une société de zéro, dans le bon ordre</div>
+    <div class="phase-m">Mois 2-3 · 64 h · Le cœur du paramétrage FI</div>
+    <div class="phase-d">L'ordre compte : plusieurs objets ne se modifient plus une fois des écritures passées (plan comptable affecté, variante d'exercice). On configure donc d'abord les éléments structurants, puis seulement les comptes.</div>
+  </div>
+</div>
+
+<div class="tbl-card">
+  <div class="tbl-hd"><div class="tbl-hd-t">Séquence de paramétrage d'une société (ordre recommandé)</div></div>
+  <div class="tbl-sc"><table class="tbl">
+    <thead><tr><th>#</th><th>Objet</th><th>T-code</th><th>Point d'attention</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Société (company)</td><td><span class="tc">OX15</span></td><td>Entité juridique pour la consolidation</td></tr>
+      <tr><td>2</td><td>Code société</td><td><span class="tc">OX02</span> ou copie <span class="tc">EC01</span></td><td>Une copie reprend beaucoup de paramètres : vérifier tout ce qui est copié</td></tr>
+      <tr><td>3</td><td>Plan comptable</td><td><span class="tc">OB13</span>, affectation <span class="tc">OB62</span></td><td>Ne plus changer après premières écritures</td></tr>
+      <tr><td>4</td><td>Variante d'exercice comptable</td><td><span class="tc">OB29</span></td><td>Périodes spéciales de clôture (13 à 16) à décider dès le départ</td></tr>
+      <tr><td>5</td><td>Variante de périodes comptables et ouverture</td><td><span class="tc">OBBO</span> (variante), <span class="tc">OB52</span> (ouverture)</td><td>Une variante peut servir plusieurs codes société</td></tr>
+      <tr><td>6</td><td>Variante de statut de zone</td><td><span class="tc">OBC4</span>, affectation <span class="tc">OBC5</span></td><td>Définit les champs obligatoires, facultatifs, masqués</td></tr>
+      <tr><td>7</td><td>Paramètres globaux</td><td><span class="tc">OBY6</span></td><td>Voir le détail ci-dessous</td></tr>
+      <tr><td>8</td><td>Devises et taux</td><td><span class="tc">OB07</span>, <span class="tc">OB08</span>, <span class="tc">OB22</span></td><td>En S/4HANA les devises parallèles se gèrent par ledger</td></tr>
+      <tr><td>9</td><td>Comptes de grand livre</td><td><span class="tc">FSP0</span>, <span class="tc">FSS0</span>, <span class="tc">FS00</span></td><td>Niveau plan comptable puis niveau société</td></tr>
+      <tr><td>10</td><td>Types de pièce et numérotation</td><td><span class="tc">OBA7</span>, <span class="tc">FBN1</span></td><td>Plages de numéros par exercice si nécessaire</td></tr>
+      <tr><td>11</td><td>Clés de comptabilisation</td><td><span class="tc">OB41</span></td><td>Rarement modifiées, à connaître</td></tr>
+      <tr><td>12</td><td>Compte de report à nouveau</td><td><span class="tc">OB53</span></td><td>Indispensable avant le premier report de solde</td></tr>
+      <tr><td>13</td><td>Écarts de change</td><td><span class="tc">OBA1</span></td><td>Comptes de gains et pertes de change réalisés</td></tr>
+      <tr><td>14</td><td>Tolérances</td><td><span class="tc">OBA3</span>, <span class="tc">OBA4</span></td><td>Écarts de lettrage et plafonds par groupe d'utilisateurs</td></tr>
+      <tr><td>15</td><td>Taxes (TVA)</td><td><span class="tc">FTXP</span>, <span class="tc">OB40</span></td><td>Codes TVA et comptes associés par processus fiscal</td></tr>
+      <tr><td>16</td><td>Schéma de bilan et compte de résultat</td><td><span class="tc">OB58</span></td><td>Base de <span class="tc">F.01</span> et des états légaux</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<h3 class="h3">OBY6 · Paramètres globaux du code société</h3>
+<p class="body-p"><span class="tc">OBY6</span> est la fiche d'identité du code société. Les champs à maîtriser : <strong>pays, devise de la société (devise locale), langue, plan comptable, variante d'exercice, variante de périodes, variante de statut de zone, société (company), zone de contrôle de crédit</strong> et les options de comptabilisation (comptabilisation de montants négatifs, gestion des écarts de change). La devise locale et le plan comptable sont les deux décisions les plus lourdes de conséquences : se les faire valider avant toute écriture.</p>
+
+<h3 class="h3">OBA7 · Types de pièce</h3>
+<p class="body-p"><span class="tc">OBA7</span> relie un <strong>type de pièce</strong> (deux caractères) à une plage de numéros, à des <strong>types de compte autorisés</strong> (A immobilisation, D client, K fournisseur, M matière, S général), à un type d'extourne et à un statut. Types usuels : <span class="tc">SA</span> pièce générale, <span class="tc">KR</span> facture fournisseur, <span class="tc">KG</span> avoir fournisseur, <span class="tc">KZ</span> paiement fournisseur, <span class="tc">DR</span> facture client, <span class="tc">DG</span> avoir client, <span class="tc">DZ</span> encaissement client, <span class="tc">AB</span> pièce de compensation, <span class="tc">WE</span> entrée de marchandises, <span class="tc">WA</span> sortie de marchandises, <span class="tc">AF</span> amortissement. Une erreur de plage de numéros est la cause classique d'un blocage de comptabilisation en début de projet.</p>
+
+<h3 class="h3">FS00 · Compte de grand livre</h3>
+<p class="body-p"><span class="tc">FS00</span> édite le compte aux deux niveaux : <strong>plan comptable</strong> (<span class="tc">FSP0</span> : type de compte bilan ou résultat, groupe de comptes, catégorie de compte S/4HANA) et <strong>code société</strong> (<span class="tc">FSS0</span> : devise, compte collectif, gestion des postes ouverts, affichage par postes, groupe de statut de zone, clé de tri, catégorie de taxe, comptabilisation manuelle autorisée ou non). En S/4HANA, les <strong>éléments de coûts</strong> sont aussi créés dans FS00 (catégories primaire et secondaire), ce qui supprime la création séparée via <span class="tc">KA01</span>.</p>
+
+<div class="tbl-card">
+  <div class="tbl-hd"><div class="tbl-hd-t">FS00 · champs décisifs à connaître</div></div>
+  <div class="tbl-sc"><table class="tbl">
+    <thead><tr><th>Champ</th><th>Niveau</th><th>Effet</th></tr></thead>
+    <tbody>
+      <tr><td>Groupe de comptes</td><td>Plan comptable</td><td>Contrôle les champs visibles et la plage de numéros de compte</td></tr>
+      <tr><td>Type de compte (bilan / résultat)</td><td>Plan comptable</td><td>Détermine le report de solde de fin d'exercice</td></tr>
+      <tr><td>Compte collectif (reconciliation account)</td><td>Société</td><td>Bloque la saisie directe : alimenté par les sous-ledgers AP, AR, AA</td></tr>
+      <tr><td>Gestion des postes ouverts</td><td>Société</td><td>Indispensable pour lettrer (comptes d'attente, banque, GR/IR)</td></tr>
+      <tr><td>Affichage par postes</td><td>Société</td><td>Permet <span class="tc">FAGLL03</span> sur ce compte</td></tr>
+      <tr><td>Groupe de statut de zone</td><td>Société</td><td>Impose ou masque centre de coûts, ordre, ligne de produit</td></tr>
+      <tr><td>Catégorie de taxe</td><td>Société</td><td>Limite les codes TVA utilisables sur le compte</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<p class="body-p"><strong>Livrable de phase 2</strong> : créer un code société <span class="tc">FR01</span> par copie, le basculer sur un plan comptable de test, ouvrir les périodes, créer 20 comptes, poster une pièce <span class="tc">SA</span> via <span class="tc">FB50</span>, la lire dans <span class="tc">FB03</span>, la retrouver dans <span class="tc">BKPF</span> et <span class="tc">BSEG</span>, puis l'extourner par <span class="tc">FB08</span>.</p>
+
+<!-- PHASE 3 -->
+<div class="sec-rule"><span class="sec-rule-txt">Phase 3 · Dettes, créances, banque · FBZP de bout en bout</span></div>
+
+<div class="phase">
+  <div class="phase-n">03</div>
+  <div>
+    <div class="phase-t">Les sous-ledgers et le programme de paiement</div>
+    <div class="phase-m">Mois 3-5 · 96 h · La phase la plus riche en erreurs de configuration</div>
+    <div class="phase-d">Fournisseurs, clients et banque forment le flux de trésorerie du système. La maîtrise de <span class="tc">FBZP</span> et de <span class="tc">F110</span> est la compétence qui sépare le junior du confirmé.</div>
+  </div>
+</div>
+
+<h3 class="h3">Fournisseurs et clients</h3>
+<ul class="chk">
+  <li><strong>Données de base</strong> : en S/4HANA tout passe par le Business Partner (<span class="tc">BP</span>) avec rôles fournisseur et client ; en ECC, <span class="tc">XK01</span> / <span class="tc">FK01</span> et <span class="tc">XD01</span> / <span class="tc">FD01</span>. Groupes de comptes et plages de numéros pilotent les champs.</li>
+  <li><strong>Conditions de paiement</strong> : <span class="tc">OBB8</span>. Les jours, escompte et base de calcul déterminent la date d'échéance utilisée par F110.</li>
+  <li><strong>Comptabilisations</strong> : factures <span class="tc">FB60</span> / <span class="tc">FB70</span>, avoirs <span class="tc">FB65</span> / <span class="tc">FB75</span>, paiements manuels <span class="tc">F-53</span> / <span class="tc">F-28</span>, lettrage <span class="tc">F-44</span> / <span class="tc">F-32</span> / <span class="tc">F-03</span>, annulation de lettrage <span class="tc">FBRA</span>.</li>
+  <li><strong>Relances</strong> : procédure <span class="tc">FBMP</span>, exécution <span class="tc">F150</span>. Comprendre niveaux, délais de grâce et formulaires.</li>
+  <li><strong>Lecture</strong> : <span class="tc">FBL1N</span> (fournisseur), <span class="tc">FBL5N</span> (client), <span class="tc">FAGLL03</span> (grand livre).</li>
+</ul>
+
+<h3 class="h3">FBZP · Les 5 niveaux de configuration du paiement</h3>
+<p class="body-p"><span class="tc">FBZP</span> centralise la configuration du programme de paiement automatique. Avant lui, les <strong>banques de la maison</strong> doivent exister dans <span class="tc">FI12</span> (banque et comptes bancaires), avec leurs comptes de grand livre. Le programme est ensuite exécuté par <span class="tc">F110</span>.</p>
+
+<div class="tbl-card">
+  <div class="tbl-hd"><div class="tbl-hd-t">FBZP · cinq niveaux, du plus large au plus fin</div></div>
+  <div class="tbl-sc"><table class="tbl">
+    <thead><tr><th>Niveau</th><th>Ce que l'on y définit</th><th>Piège fréquent</th></tr></thead>
+    <tbody>
+      <tr><td>1 · Tous les codes société</td><td>Code société émetteur et payeur, paiement séparé par division, opérations de grand livre spéciales à régler, tolérances et frais bancaires</td><td>Oublier le code société payeur : le code société n'apparaît pas dans F110</td></tr>
+      <tr><td>2 · Codes société payeurs</td><td>Montant minimum de paiement, tolérance d'escompte, formulaire d'avis de paiement, partenaires et devises étrangers autorisés</td><td>Devise étrangère non autorisée : partenaires exclus du run sans message clair</td></tr>
+      <tr><td>3 · Modes de paiement par pays</td><td>Mode (chèque, virement, prélèvement…), données de base exigées (coordonnées bancaires, adresse), type de pièce de paiement, format du support (<span class="tc">DMEE</span> ou programme)</td><td>Mode exigeant des coordonnées bancaires absentes du partenaire</td></tr>
+      <tr><td>4 · Modes de paiement par code société</td><td>Montant minimum et maximum, paiements étrangers, formulaire de paiement, compte de compensation</td><td>Plafond de montant mal fixé : poste rejeté en proposition</td></tr>
+      <tr><td>5 · Détermination des banques</td><td>Ordre de classement des banques de la maison, comptes bancaires par mode et devise, montants disponibles, frais</td><td>Aucun compte pour la devise du paiement : « aucune banque déterminée »</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<p class="body-p"><strong>Déroulé F110</strong> : saisir date d'exécution et identifiant → onglet <em>Paramètres</em> (codes société, modes de paiement, prochaine date de paiement, plages de comptes) → <em>Proposition</em> → contrôle et édition de la proposition (blocages, exclusions) → <em>Paiement</em> → <em>Impression / support de données</em> → journal. Toujours vérifier le journal d'exception avant de lancer l'exécution réelle : il liste les partenaires exclus et la cause.</p>
+
+<h3 class="h3">Banque, TVA et trésorerie</h3>
+<ul class="chk">
+  <li><strong>Relevés bancaires</strong> : <span class="tc">FF_5</span> (import), <span class="tc">FF67</span> (saisie manuelle), <span class="tc">FEBA_BANK_STATEMENT</span> (post-traitement). Comprendre algorithmes de lettrage et règles de recherche.</li>
+  <li><strong>Caisse</strong> : <span class="tc">FBCJ</span>.</li>
+  <li><strong>TVA</strong> : codes (<span class="tc">FTXP</span>), détermination des comptes de TVA (<span class="tc">OB40</span>), déclaration selon le contexte légal local (France : ancrage sur les exigences de facturation électronique et de reporting).</li>
+  <li><strong>Livrable de phase 3</strong> : cycle complet <em>facture fournisseur → proposition de paiement → run → relevé bancaire → lettrage</em>, puis <em>facture client → relance → encaissement</em>.</li>
+</ul>
+
+<!-- PHASE 4 -->
+<div class="sec-rule"><span class="sec-rule-txt">Phase 4 · Immobilisations, contrôle de gestion et clôture</span></div>
+
+<div class="phase">
+  <div class="phase-n">04</div>
+  <div>
+    <div class="phase-t">AA, CO et la clôture qui relie tout</div>
+    <div class="phase-m">Mois 5-7 · 96 h · Là où FI et CO se rejoignent</div>
+    <div class="phase-d">La clôture est un test d'intégration : si le paramétrage est faux, c'est ici qu'il apparaît.</div>
+  </div>
+</div>
+
+<h3 class="h3">Immobilisations (AA)</h3>
+<ul class="chk">
+  <li><strong>Structure</strong> : plan d'amortissement de référence (<span class="tc">EC08</span>), affectation au code société (<span class="tc">OAOB</span>), classes d'immobilisation (<span class="tc">OAOA</span>), zones d'amortissement, clés d'amortissement, détermination des comptes (<span class="tc">AO90</span>).</li>
+  <li><strong>Données de base et mouvements</strong> : <span class="tc">AS01</span> / <span class="tc">AS02</span> / <span class="tc">AS03</span>, acquisition <span class="tc">ABZON</span>, mise au rebut avec revenu <span class="tc">ABAVN</span>, virement <span class="tc">ABUMN</span>, explorateur <span class="tc">AW01N</span>.</li>
+  <li><strong>Périodique</strong> : calcul des amortissements <span class="tc">AFAB</span>, clôture annuelle <span class="tc">AJAB</span>, changement d'exercice <span class="tc">AJRW</span>.</li>
+  <li>En S/4HANA, la <strong>nouvelle comptabilité des immobilisations</strong> est obligatoire : valeurs et amortissements sont lus dans le Universal Journal, les zones d'amortissement sont liées aux ledgers.</li>
+</ul>
+
+<h3 class="h3">Contrôle de gestion (CO)</h3>
+<ul class="chk">
+  <li><strong>Structure</strong> : périmètre analytique (<span class="tc">OKKP</span>), affectation (<span class="tc">OKKS</span>), centres de coûts (<span class="tc">KS01</span>, <span class="tc">KSH1</span>), centres de profit (<span class="tc">KE51</span>), détermination par défaut (<span class="tc">OKB9</span>).</li>
+  <li><strong>Objets</strong> : ordres internes (<span class="tc">KO01</span>), éléments d'OTP (projets), types d'ordre.</li>
+  <li><strong>Planification</strong> : <span class="tc">KP06</span> (coûts par centre).</li>
+  <li><strong>Allocations</strong> : répartition <span class="tc">KSV5</span>, imputation <span class="tc">KSU5</span>, règlement d'ordres <span class="tc">KO88</span>, règlement de projets <span class="tc">CJ88</span>.</li>
+  <li><strong>Rentabilité (CO-PA)</strong> : en S/4HANA, la rentabilité par comptes s'appuie sur le Universal Journal (analyse de marge) ; la rentabilité par produits reste possible mais devient une option avancée (<span class="tc">KEA0</span> pour l'opérationnel).</li>
+</ul>
+
+<h3 class="h3">Clôture mensuelle : séquence type</h3>
+<div class="tbl-card">
+  <div class="tbl-hd"><div class="tbl-hd-t">Checklist de clôture FI/CO</div></div>
+  <div class="tbl-sc"><table class="tbl">
+    <thead><tr><th>Ordre</th><th>Action</th><th>T-code</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Contrôler les écritures en suspens (pièces préenregistrées, comptes d'attente)</td><td><span class="tc">FBV0</span>, <span class="tc">FAGLL03</span></td></tr>
+      <tr><td>2</td><td>Apurer GR/IR, rapprocher MM-FI</td><td><span class="tc">MR11</span>, <span class="tc">MIRO</span>, <span class="tc">MIGO</span></td></tr>
+      <tr><td>3</td><td>Lettrage automatique des comptes à postes ouverts</td><td><span class="tc">F.13</span></td></tr>
+      <tr><td>4</td><td>Calcul des amortissements</td><td><span class="tc">AFAB</span></td></tr>
+      <tr><td>5</td><td>Réévaluation des devises</td><td><span class="tc">FAGL_FCV</span></td></tr>
+      <tr><td>6</td><td>Provisions et extournes automatiques</td><td><span class="tc">FBS1</span>, <span class="tc">F.81</span></td></tr>
+      <tr><td>7</td><td>Reclassement des dettes et créances par échéance</td><td><span class="tc">FAGLF101</span></td></tr>
+      <tr><td>8</td><td>Allocations CO et règlements</td><td><span class="tc">KSU5</span>, <span class="tc">KSV5</span>, <span class="tc">KO88</span>, <span class="tc">CJ88</span></td></tr>
+      <tr><td>9</td><td>Verrouiller les périodes</td><td><span class="tc">OB52</span>, <span class="tc">MMPV</span></td></tr>
+      <tr><td>10</td><td>Éditer les états légaux et de gestion</td><td><span class="tc">F.01</span>, <span class="tc">FAGLB03</span>, <span class="tc">FS10N</span></td></tr>
+      <tr><td>Fin d'année</td><td>Report de solde, clôture des immobilisations, changement d'exercice</td><td><span class="tc">FAGLGVTR</span>, <span class="tc">AJAB</span>, <span class="tc">AJRW</span></td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- PHASE 5 -->
+<div class="sec-rule"><span class="sec-rule-txt">Phase 5 · S/4HANA · ce qui change vraiment</span></div>
+
+<div class="phase">
+  <div class="phase-n">05</div>
+  <div>
+    <div class="phase-t">Un seul journal, un seul partenaire, une interface Fiori</div>
+    <div class="phase-m">Mois 7-9 · 64 h · À apprendre après l'ECC, pas à la place</div>
+    <div class="phase-d">Comprendre l'ancien modèle de données reste utile : les projets de migration et de TMA mélangent encore les deux mondes.</div>
+  </div>
+</div>
+
+<p class="body-p">Le changement structurant est le <strong>Universal Journal</strong> : la table <span class="tc">ACDOCA</span> devient la source unique des écritures de grand livre, de contrôle de gestion, d'immobilisations et de rentabilité. <span class="tc">BKPF</span> et <span class="tc">BSEG</span> restent les en-têtes et lignes de pièces, mais les tables d'agrégats historiques (<span class="tc">BSIS</span>, <span class="tc">BSAS</span>, <span class="tc">BSID</span>, <span class="tc">BSAD</span>, <span class="tc">BSIK</span>, <span class="tc">BSAK</span>, <span class="tc">GLT0</span> et d'autres) sont remplacées par des <strong>vues de compatibilité</strong>. Conséquence pratique : on lit encore ces noms dans les programmes, mais les données viennent d'ailleurs, et un <code>SELECT</code> direct n'a pas toujours le même sens.</p>
+
+<div class="tbl-card">
+  <div class="tbl-hd"><div class="tbl-hd-t">ECC vers S/4HANA · mapping des objets clés</div></div>
+  <div class="tbl-sc"><table class="tbl">
+    <thead><tr><th>Domaine</th><th>ECC</th><th>S/4HANA</th></tr></thead>
+    <tbody>
+      <tr><td>Écritures GL, CO, AA</td><td><span class="tc">BSEG</span>, <span class="tc">FAGLFLEXA</span>, <span class="tc">COEP</span>, <span class="tc">ANEP</span></td><td><span class="tc">ACDOCA</span> (Universal Journal)</td></tr>
+      <tr><td>Soldes</td><td><span class="tc">GLT0</span>, <span class="tc">FAGLFLEXT</span>, <span class="tc">COSP</span> / <span class="tc">COSS</span></td><td>Vues de compatibilité calculées sur <span class="tc">ACDOCA</span></td></tr>
+      <tr><td>Postes ouverts / lettrés</td><td><span class="tc">BSIS</span>, <span class="tc">BSAS</span>, <span class="tc">BSID</span>, <span class="tc">BSAD</span>, <span class="tc">BSIK</span>, <span class="tc">BSAK</span></td><td>Vues de compatibilité</td></tr>
+      <tr><td>Fournisseurs et clients</td><td><span class="tc">LFA1</span>, <span class="tc">KNA1</span>, <span class="tc">XK01</span>, <span class="tc">XD01</span></td><td>Business Partner : <span class="tc">BP</span>, <span class="tc">BUT000</span>, intégration CVI</td></tr>
+      <tr><td>Éléments de coûts</td><td><span class="tc">KA01</span></td><td>Comptes de grand livre via <span class="tc">FS00</span></td></tr>
+      <tr><td>Mouvements de stock</td><td><span class="tc">MKPF</span>, <span class="tc">MSEG</span></td><td><span class="tc">MATDOC</span></td></tr>
+      <tr><td>Conditions de prix</td><td><span class="tc">KONV</span></td><td><span class="tc">PRCD_ELEMENTS</span></td></tr>
+      <tr><td>Immobilisations</td><td>Ancienne AA : <span class="tc">ANLC</span>, <span class="tc">ANEP</span></td><td>Nouvelle AA obligatoire, valeurs dans le Universal Journal</td></tr>
+      <tr><td>Gestion du crédit</td><td><span class="tc">FD32</span></td><td>SAP Credit Management (<span class="tc">UKM</span>)</td></tr>
+      <tr><td>Rentabilité</td><td>CO-PA par produits ou par comptes</td><td>Analyse de marge par comptes sur le Universal Journal</td></tr>
+      <tr><td>Division d'exploitation</td><td>Business Area (<span class="tc">OX03</span>)</td><td>Segment et centre de profit recommandés</td></tr>
+      <tr><td>Migration</td><td><span class="tc">LSMW</span></td><td>Application Fiori « Migrate Your Data » (Migration Cockpit)</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<h3 class="h3">Les 6 chantiers S/4HANA à maîtriser</h3>
+<ul class="chk">
+  <li><strong>Ledgers et devises</strong> : ledger principal (0L), ledgers non principaux, types de devise, principes comptables ; paramétrage via le IMG finances de S/4HANA.</li>
+  <li><strong>Business Partner</strong> : rôles, intégration CVI, conversions fournisseur et client.</li>
+  <li><strong>Fiori</strong> : rôles et catalogues, applications de gestion des pièces comptables, des paiements automatiques, des postes ouverts. Consulter la <em>Fiori Apps Reference Library</em> pour la liste officielle et la correspondance avec les T-codes.</li>
+  <li><strong>Modèle de données et CDS</strong> : lire les vues CDS du Universal Journal, comprendre OData et analytique embarquée.</li>
+  <li><strong>Migration</strong> : Migration Cockpit, approche Greenfield, Brownfield ou sélective, nettoyage des données de base.</li>
+  <li><strong>Méthode</strong> : SAP Activate (Discover, Prepare, Explore, Realize, Deploy, Run) et l'outil <em>SAP Best Practices Explorer</em> pour la phase Fit-to-Standard.</li>
+</ul>
+
+<div class="pull">
+  <div class="pull-t">En S/4HANA, plus de réconciliation FI-CO : une seule pièce, une seule table. Toute la valeur du consultant se déplace vers la qualité du paramétrage et des données de base.</div>
+  <div class="pull-a">Synthèse YAASAP</div>
+</div>
+
+<!-- TABLES -->
+<div class="sec-rule"><span class="sec-rule-txt">Tables · 50 tables à connaître par domaine</span></div>
+
+<p class="body-p">Les tables se retiennent par domaine et par relation, pas par liste alphabétique. Pour chaque table, apprendre sa clé, ses jointures et son rôle. Outils : <span class="tc">SE16N</span> pour consulter, <span class="tc">SE11</span> pour la structure, <span class="tc">SE16N_CD_DATA</span> / <span class="tc">SCU3</span> pour l'historique de modifications.</p>
+
+<div class="tbl-card">
+  <div class="tbl-hd"><div class="tbl-hd-t">Tables clés par domaine</div></div>
+  <div class="tbl-sc"><table class="tbl">
+    <thead><tr><th>Domaine</th><th>Tables</th><th>À retenir</th></tr></thead>
+    <tbody>
+      <tr><td>Structure</td><td><span class="tc">T001</span>, <span class="tc">T004</span>, <span class="tc">T009</span> / <span class="tc">T009B</span>, <span class="tc">T001B</span>, <span class="tc">TKA01</span></td><td>Code société, plan comptable, variante d'exercice, périodes ouvertes, périmètre analytique</td></tr>
+      <tr><td>Pièces</td><td><span class="tc">BKPF</span>, <span class="tc">BSEG</span>, <span class="tc">ACDOCA</span>, <span class="tc">T003</span></td><td>BKPF en-tête, BSEG lignes, ACDOCA journal universel, T003 types de pièce</td></tr>
+      <tr><td>Grand livre</td><td><span class="tc">SKA1</span>, <span class="tc">SKB1</span>, <span class="tc">SKAT</span>, <span class="tc">T030</span></td><td>Compte plan comptable, compte société, libellés, détermination automatique</td></tr>
+      <tr><td>Fournisseurs</td><td><span class="tc">LFA1</span>, <span class="tc">LFB1</span>, <span class="tc">LFBK</span>, <span class="tc">BSIK</span>, <span class="tc">BSAK</span></td><td>Général, société, banque, postes ouverts et lettrés</td></tr>
+      <tr><td>Clients</td><td><span class="tc">KNA1</span>, <span class="tc">KNB1</span>, <span class="tc">KNVV</span>, <span class="tc">BSID</span>, <span class="tc">BSAD</span></td><td>Général, société, données commerciales, postes</td></tr>
+      <tr><td>Business Partner</td><td><span class="tc">BUT000</span>, <span class="tc">CVI_VEND_LINK</span>, <span class="tc">CVI_CUST_LINK</span></td><td>BUT000 partenaire, CVI_* ponts vers fournisseur et client</td></tr>
+      <tr><td>Paiement</td><td><span class="tc">T042A</span>, <span class="tc">T042Z</span>, <span class="tc">REGUH</span>, <span class="tc">REGUP</span>, <span class="tc">PAYR</span>, <span class="tc">T052</span></td><td>Config FBZP, données de run, chèques, conditions de paiement</td></tr>
+      <tr><td>Banque</td><td><span class="tc">BNKA</span>, <span class="tc">T012</span>, <span class="tc">T012K</span></td><td>Répertoire banques, banques de la maison, comptes</td></tr>
+      <tr><td>Taxes et devises</td><td><span class="tc">T007A</span>, <span class="tc">TCURR</span>, <span class="tc">TCURV</span></td><td>Codes TVA, cours de change, types de cours</td></tr>
+      <tr><td>Immobilisations</td><td><span class="tc">ANLA</span>, <span class="tc">ANLB</span>, <span class="tc">ANLZ</span>, <span class="tc">ANLC</span>, <span class="tc">ANEK</span>, <span class="tc">T093</span>, <span class="tc">T095</span></td><td>Base, paramètres d'amortissement, temps, valeurs, documents, zones, comptes</td></tr>
+      <tr><td>Contrôle de gestion</td><td><span class="tc">CSKS</span>, <span class="tc">CSKA</span> / <span class="tc">CSKB</span>, <span class="tc">AUFK</span>, <span class="tc">PRPS</span>, <span class="tc">CEPC</span>, <span class="tc">COBK</span>, <span class="tc">COEP</span></td><td>Centres, éléments de coûts, ordres, OTP, centres de profit, documents CO</td></tr>
+      <tr><td>Achats et ventes</td><td><span class="tc">EKKO</span>, <span class="tc">EKPO</span>, <span class="tc">EKBE</span>, <span class="tc">RBKP</span>, <span class="tc">RSEG</span>, <span class="tc">VBRK</span>, <span class="tc">VBRP</span>, <span class="tc">MATDOC</span></td><td>Commande, historique, facture logistique, facture client, mouvements</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- TRANSACTIONS -->
+<div class="sec-rule"><span class="sec-rule-txt">Transactions · 70 T-codes par usage</span></div>
+
+<div class="tbl-card">
+  <div class="tbl-hd"><div class="tbl-hd-t">T-codes de configuration et d'exploitation</div></div>
+  <div class="tbl-sc"><table class="tbl">
+    <thead><tr><th>Usage</th><th>T-codes</th><th>Statut S/4HANA</th></tr></thead>
+    <tbody>
+      <tr><td>Outils système</td><td><span class="tc">SPRO</span>, <span class="tc">SE16N</span>, <span class="tc">SE11</span>, <span class="tc">SM30</span>, <span class="tc">SM37</span>, <span class="tc">SLG1</span>, <span class="tc">SU53</span>, <span class="tc">ST22</span>, <span class="tc">STMS</span></td><td><span class="b-up">VALIDE</span></td></tr>
+      <tr><td>Structure</td><td><span class="tc">OX15</span>, <span class="tc">OX02</span>, <span class="tc">EC01</span>, <span class="tc">OB13</span>, <span class="tc">OB62</span>, <span class="tc">OB29</span>, <span class="tc">OBY6</span></td><td><span class="b-up">VALIDE</span></td></tr>
+      <tr><td>Périodes et zones</td><td><span class="tc">OBBO</span>, <span class="tc">OB52</span>, <span class="tc">OBC4</span>, <span class="tc">OBC5</span></td><td><span class="b-up">VALIDE</span></td></tr>
+      <tr><td>Pièces</td><td><span class="tc">OBA7</span>, <span class="tc">FBN1</span>, <span class="tc">OB41</span>, <span class="tc">OB53</span>, <span class="tc">OBA1</span>, <span class="tc">OBA3</span>, <span class="tc">OBA4</span></td><td><span class="b-up">VALIDE</span></td></tr>
+      <tr><td>Comptes</td><td><span class="tc">FS00</span>, <span class="tc">FSP0</span>, <span class="tc">FSS0</span></td><td><span class="b-up">VALIDE</span> <span class="b-am">+ éléments de coûts</span></td></tr>
+      <tr><td>Saisie GL</td><td><span class="tc">FB50</span>, <span class="tc">FB01</span>, <span class="tc">F-02</span>, <span class="tc">FB08</span>, <span class="tc">FB03</span></td><td><span class="b-am">F-02 / FB01 : préférer Fiori ou FB50</span></td></tr>
+      <tr><td>Fournisseurs</td><td><span class="tc">FB60</span>, <span class="tc">F-43</span>, <span class="tc">F-53</span>, <span class="tc">F-44</span>, <span class="tc">FBL1N</span>, <span class="tc">XK01</span>, <span class="tc">FK01</span></td><td><span class="b-dn">XK01 / FK01 → BP</span></td></tr>
+      <tr><td>Clients</td><td><span class="tc">FB70</span>, <span class="tc">F-22</span>, <span class="tc">F-28</span>, <span class="tc">F-32</span>, <span class="tc">FBL5N</span>, <span class="tc">XD01</span>, <span class="tc">FD01</span></td><td><span class="b-dn">XD01 / FD01 → BP</span></td></tr>
+      <tr><td>Paiement</td><td><span class="tc">FBZP</span>, <span class="tc">F110</span>, <span class="tc">FI12</span>, <span class="tc">OBB8</span>, <span class="tc">FBMP</span>, <span class="tc">F150</span></td><td><span class="b-up">VALIDE</span></td></tr>
+      <tr><td>Banque et caisse</td><td><span class="tc">FF_5</span>, <span class="tc">FF67</span>, <span class="tc">FEBA_BANK_STATEMENT</span>, <span class="tc">FBCJ</span></td><td><span class="b-up">VALIDE</span> <span class="b-am">+ applications Fiori</span></td></tr>
+      <tr><td>Lettrage et annulation</td><td><span class="tc">F.13</span>, <span class="tc">F-03</span>, <span class="tc">FBRA</span>, <span class="tc">F.80</span></td><td><span class="b-up">VALIDE</span></td></tr>
+      <tr><td>Taxes</td><td><span class="tc">FTXP</span>, <span class="tc">OB40</span></td><td><span class="b-up">VALIDE</span></td></tr>
+      <tr><td>Immobilisations</td><td><span class="tc">OAOA</span>, <span class="tc">AO90</span>, <span class="tc">AS01</span>, <span class="tc">ABZON</span>, <span class="tc">ABAVN</span>, <span class="tc">ABUMN</span>, <span class="tc">AFAB</span>, <span class="tc">AJAB</span>, <span class="tc">AJRW</span>, <span class="tc">AW01N</span></td><td><span class="b-am">Nouvelle AA : vérifier chaque T-code</span></td></tr>
+      <tr><td>Contrôle de gestion</td><td><span class="tc">OKKP</span>, <span class="tc">KS01</span>, <span class="tc">KSH1</span>, <span class="tc">KP06</span>, <span class="tc">KSU5</span>, <span class="tc">KSV5</span>, <span class="tc">KO01</span>, <span class="tc">KO88</span>, <span class="tc">CJ88</span>, <span class="tc">KE51</span>, <span class="tc">KEA0</span></td><td><span class="b-up">VALIDE</span> <span class="b-dn">KA01 → FS00</span></td></tr>
+      <tr><td>Reporting</td><td><span class="tc">FAGLL03</span>, <span class="tc">FAGLB03</span>, <span class="tc">FS10N</span>, <span class="tc">F.01</span>, <span class="tc">OB58</span></td><td><span class="b-up">VALIDE</span></td></tr>
+      <tr><td>Clôture</td><td><span class="tc">FAGL_FCV</span>, <span class="tc">FAGLF101</span>, <span class="tc">FAGLGVTR</span>, <span class="tc">F.81</span>, <span class="tc">MMPV</span></td><td><span class="b-up">VALIDE</span></td></tr>
+      <tr><td>Intégration MM / SD</td><td><span class="tc">MIGO</span>, <span class="tc">MIRO</span>, <span class="tc">MR11</span>, <span class="tc">OBYC</span>, <span class="tc">VKOA</span></td><td><span class="b-up">VALIDE</span></td></tr>
+      <tr><td>Interfaces</td><td><span class="tc">WE02</span>, <span class="tc">WE05</span>, <span class="tc">BD87</span>, <span class="tc">SM59</span></td><td><span class="b-up">VALIDE</span></td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<p class="body-p"><strong>Réserve importante</strong> : la disponibilité d'un T-code varie selon la release et le mode de déploiement (Private Edition ou Public Cloud). La colonne « statut » donne la tendance générale : toujours contrôler dans le système cible (<span class="tc">SE93</span>), dans la <em>Simplification Item List</em> de la release et dans la <em>Fiori Apps Reference Library</em>.</p>
+
+<!-- PHASE 6 -->
+<div class="sec-rule"><span class="sec-rule-txt">Phase 6 · Passer de confirmé à expert</span></div>
+
+<div class="phase">
+  <div class="phase-n">06</div>
+  <div>
+    <div class="phase-t">Intégration, diagnostic et certification</div>
+    <div class="phase-m">Mois 10-12 · 64 h · Compétences transverses</div>
+    <div class="phase-d">Le niveau expert se mesure à la vitesse de diagnostic : retrouver la cause d'une écriture erronée en quelques minutes, du document à la table de configuration.</div>
+  </div>
+</div>
+
+<div class="chart-card">
+  <div class="chart-t">Profil cible à 12 mois (niveau de maîtrise, 0 à 5)</div>
+  <div class="chart-box"><canvas id="chRadar"></canvas></div>
+  <div class="chart-src">Grille d'auto-évaluation YAASAP · objectif, pas mesure</div>
+</div>
+
+<ul class="chk">
+  <li><strong>Intégration MM-FI</strong> : détermination automatique des comptes (<span class="tc">OBYC</span> : clés <span class="tc">BSX</span>, <span class="tc">WRX</span>, <span class="tc">GBB</span>, <span class="tc">PRD</span>), cycle commande → réception → facture.</li>
+  <li><strong>Intégration SD-FI</strong> : détermination des comptes de revenus (<span class="tc">VKOA</span>), facturation vers comptabilité, conditions.</li>
+  <li><strong>Diagnostic</strong> : suivre une pièce depuis <span class="tc">FB03</span> (voir l'origine, les en-têtes, le journal de la pièce), identifier le programme ou la détermination fautive, utiliser le debug ABAP et <span class="tc">ST05</span> pour les traces SQL.</li>
+  <li><strong>Interfaces</strong> : IDoc (<span class="tc">WE02</span>, <span class="tc">BD87</span>), BAPI de comptabilisation, OData, intégrations bancaires et facturation électronique.</li>
+  <li><strong>Spécialisations possibles</strong> : trésorerie et banque, consolidation (Group Reporting), clôture avancée, facturation électronique, IFRS 15 et 16, immobilisations.</li>
+  <li><strong>Certification</strong> : <strong>C_TS4FI</strong> (S/4HANA Cloud Private Edition, comptabilité financière, implémentation). Le millésime change régulièrement : vérifier la version et le programme d'examen en vigueur sur SAP Learning avant de s'inscrire.</li>
+</ul>
+
+<!-- ROUTINE -->
+<div class="sec-rule"><span class="sec-rule-txt">Routine · 8 h par semaine, projets d'exercice</span></div>
+
+<div class="tbl-card">
+  <div class="tbl-hd"><div class="tbl-hd-t">Semaine type</div></div>
+  <div class="tbl-sc"><table class="tbl">
+    <thead><tr><th>Bloc</th><th>Durée</th><th>Contenu</th></tr></thead>
+    <tbody>
+      <tr><td>Théorie ciblée</td><td>2 h</td><td>Un chapitre : SAP Help Portal, SAP Learning, openSAP</td></tr>
+      <tr><td>Manipulation</td><td>3 h</td><td>Reproduire le paramétrage et poster dans le système de test</td></tr>
+      <tr><td>Tables</td><td>1 h</td><td>Retrouver chaque pièce dans BKPF, BSEG, ACDOCA, SE16N</td></tr>
+      <tr><td>Cas d'erreur</td><td>1 h</td><td>Casser volontairement un paramétrage et diagnostiquer le message</td></tr>
+      <tr><td>Documentation</td><td>1 h</td><td>Rédiger une fiche de paramétrage : objet, T-code, valeur, effet</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<h3 class="h3">Trois projets fil rouge</h3>
+<ul class="chk">
+  <li><strong>Projet A · Société complète</strong> : créer <span class="tc">FR01</span>, plan comptable, devises, types de pièce, 50 comptes, TVA, immobilisations et un cycle d'achat et de vente.</li>
+  <li><strong>Projet B · Paiements</strong> : FBZP complet avec deux banques, deux devises, virement et prélèvement, plus un run F110 avec cas d'exclusion.</li>
+  <li><strong>Projet C · Clôture</strong> : clôture mensuelle puis annuelle, reporting légal, report de solde, puis migration conceptuelle de ces objets vers S/4HANA.</li>
+</ul>
+
+<p class="body-p"><strong>Ressources officielles</strong> : SAP Help Portal (documentation), SAP Learning (parcours et certification), openSAP (cours en ligne), SAP Community (questions et blogs), SAP Best Practices Explorer (processus standards), Fiori Apps Reference Library (applications), SAP for Me (notes SAP et Simplification Item List).</p>
+
+<!-- VERDICT -->
+<section class="verdict">
+  <div class="v-tag">Verdict YAASAP · Yacine AOUABED · 3 octobre 2026</div>
+  <p class="v-hl">Le chemin le plus court vers l'expertise FICO est <strong>structure → grand livre → paiements → clôture → S/4HANA</strong>, dans cet ordre, avec un système de test à chaque étape.</p>
+  <div class="v-list">
+    <div class="v-li"><span><strong>Commencer</strong> par la phase 2 (OBY6, FS00, OBA7) si les bases comptables sont acquises : c'est là que 70 % des erreurs de projet naissent.</span></div>
+    <div class="v-li"><span><strong>Prioriser FBZP et F110</strong> : cinq niveaux de configuration, des dizaines de messages d'erreur, et la compétence la plus demandée en support et en projet.</span></div>
+    <div class="v-li"><span><strong>Condition de passage</strong> à la phase 5 : savoir créer une société de test sans aide et diagnostiquer un paiement rejeté en moins de 15 minutes.</span></div>
+    <div class="v-li"><span><strong>Apprendre l'ECC avant S/4HANA</strong> : le modèle ancien explique les simplifications du nouveau et reste présent dans la plupart des environnements.</span></div>
+    <div class="v-li"><span><strong>Catalyseur</strong> : la certification C_TS4FI, à passer entre le mois 10 et le mois 12, une fois les trois projets fil rouge terminés.</span></div>
+    <div class="v-li"><span><strong>Risque principal</strong> : apprendre des T-codes sans comprendre la table de paramétrage derrière. Chaque écran doit se rattacher à une table T* ou à un chemin SPRO.</span></div>
+    <div class="v-li"><span><strong>Second risque</strong> : un T-code obsolète. Valider chaque transaction dans la release cible avant de l'enseigner ou de l'utiliser en production.</span></div>
+  </div>
+  <div class="v-disc">Sources : SAP Help Portal · SAP Learning · SAP Community (<a style="color:#7fb2e5" href="https://community.sap.com/t5/enterprise-resource-planning-blog-posts-by-sap/new-data-architecture-in-sap-fi-on-s-4hana-cloud-what-every-functional/ba-p/14129021">architecture de données FI sur S/4HANA</a> · <a style="color:#7fb2e5" href="https://community.sap.com/t5/enterprise-resource-planning-blog-posts-by-sap/sap-certifications-for-sap-s-4hana-finance/ba-p/13367717">certifications SAP S/4HANA Finance</a>) · openSAP · 3 oct. 2026.<br>
+  Contenu pédagogique indicatif : transactions et tables à valider selon la release et le mode de déploiement. Ne constitue pas une documentation officielle SAP. Par Yacine AOUABED · YAASAP Notes · yaasap.github.io/dailywatch</div>
+</section>
+
+<!-- NEWSLETTER -->
+<div class="nl">
+  <div class="nl-hl">Recevoir les prochaines notes YAASAP</div>
+  <div class="nl-row">
+    <input class="nl-input" type="email" id="nlEmail" placeholder="votre@email.com">
+    <button class="nl-btn" onclick="nlSubmit()">S'abonner →</button>
+  </div>
+  <div class="nl-ok" id="nlOk">✓ Inscrit — vérifiez votre boite mail</div>
+</div>
+
+</main>
+
+<footer>
+  <div class="ft-in">
+    <div class="ft-nav">
+      <a href="./index.html">Accueil</a>
+      <a href="./docs/index.html">Archives</a>
+    </div>
+    <div class="ft-c">YAASAP Notes · Yacine AOUABED · yaasap.github.io/dailywatch</div>
+  </div>
+</footer>
+
+<script>
+/* QR code masthead */
+(function tryQR(){
+  var el=document.getElementById('qr-mast');
+  if(!el||typeof QRCode==='undefined'){setTimeout(tryQR,80);return;}
+  new QRCode(el,{text:'https://yaasap.github.io/dailywatch/yaasap_sap_fico_mode_operatoire.html',width:36,height:36,colorDark:'#1c1814',colorLight:'#fff',correctLevel:QRCode.CorrectLevel.M});
+})();
+
+/* Charts */
+(function tryCharts(){
+  if(typeof Chart==='undefined'){setTimeout(tryCharts,80);return;}
+  var tc='#6a5f52', tf={size:9,family:"'Source Code Pro','Courier New',monospace"};
+  var tt={backgroundColor:'rgba(28,24,20,.95)',titleColor:'#f9f6f0',bodyColor:'rgba(255,255,255,.7)',borderColor:'rgba(0,0,0,.1)',borderWidth:1,padding:8};
+
+  new Chart(document.getElementById('chHours'),{
+    type:'bar',
+    data:{
+      labels:['1 · Fondamentaux','2 · Structure + GL','3 · AP / AR / Banque','4 · AA / CO / Clôture','5 · S/4HANA','6 · Expert'],
+      datasets:[{label:'Heures',data:[32,64,96,96,64,64],backgroundColor:['#9a8f82','#1a3a5c','#1a3a5c','#1a3a5c','#8a5c00','#1e5c32'],borderWidth:0}]
+    },
+    options:{
+      indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:tt},
+      scales:{
+        x:{grid:{color:'rgba(0,0,0,.06)'},ticks:{color:tc,font:tf},title:{display:true,text:'Heures',color:tc,font:tf}},
+        y:{grid:{display:false},ticks:{color:tc,font:tf}}
+      }
+    }
+  });
+
+  new Chart(document.getElementById('chRadar'),{
+    type:'radar',
+    data:{
+      labels:['Grand livre','Fournisseurs / Clients','Banque / Paiements','Immobilisations','Contrôle de gestion','Modèle S/4HANA','Technique (debug, CDS)','Intégration MM / SD'],
+      datasets:[{label:'Niveau cible',data:[5,5,4,4,4,5,3,4],backgroundColor:'rgba(26,58,92,.18)',borderColor:'#1a3a5c',borderWidth:2,pointBackgroundColor:'#1a3a5c'}]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:tt},
+      scales:{r:{min:0,max:5,ticks:{stepSize:1,color:tc,font:tf,backdropColor:'transparent'},grid:{color:'rgba(0,0,0,.08)'},angleLines:{color:'rgba(0,0,0,.08)'},pointLabels:{color:tc,font:{size:9,family:"'Source Sans 3',Arial,sans-serif"}}}}
+    }
+  });
+})();
+
+/* Newsletter */
+function nlSubmit(){
+  var el=document.getElementById('nlEmail');
+  var email=el?el.value.trim():'';
+  if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){if(el)el.style.borderColor='rgba(200,41,10,.6)';return;}
+  var body=new FormData();
+  body.append('email',email);
+  body.append('source','yaasap-sap-fico-mode-operatoire');
+  body.append('_subject','Inscription YAASAP Notes');
+  body.append('_next','false');
+  fetch('https://formspree.io/f/meewwqep',{method:'POST',body:body,headers:{'Accept':'application/json'}})
+  .then(function(r){if(r.ok){
+    var row=el.parentElement;if(row)row.style.display='none';
+    var ok=document.getElementById('nlOk');if(ok)ok.style.display='block';
+  }});
+}
+</script>
+</body>
+</html>
