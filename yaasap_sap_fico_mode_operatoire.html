@@ -1,6 +1,43 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+<!-- ACCESS GATE -->
+<style>
+html.locked body>*:not(#gate){display:none!important}
+#gate{position:fixed;inset:0;background:#1c1814;display:flex;align-items:center;justify-content:center;padding:22px;z-index:99999;font-family:'Source Sans 3','Helvetica Neue',Arial,sans-serif}
+#gate .box{background:#f9f6f0;border-top:3px solid #1a3a5c;border-radius:2px;max-width:380px;width:100%;padding:26px 24px}
+#gate .nm{font-family:'Libre Baskerville',Georgia,serif;font-size:22px;font-weight:700;color:#1c1814}
+#gate .nm em{font-style:italic;color:#1a3a5c}
+#gate .sb{font-family:'Source Code Pro',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#9a8f82;margin:3px 0 18px}
+#gate p{font-family:'Libre Baskerville',Georgia,serif;font-size:13.5px;color:#3a342c;line-height:1.6;margin-bottom:12px}
+#gate input{width:100%;padding:10px 11px;border:1px solid rgba(0,0,0,.2);background:#fff;font-family:'Source Code Pro',monospace;font-size:14px;border-radius:2px;margin-bottom:10px}
+#gate button{width:100%;padding:10px;background:#1c1814;color:#fff;border:none;font-family:'Source Code Pro',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border-radius:2px}
+#gate button:hover{background:#1a3a5c}
+#gate .err{display:none;font-family:'Source Code Pro',monospace;font-size:11px;color:#b01c1c;margin-top:10px}
+</style>
+<script>
+(function(){
+  var HASH="94155e35e7db7537098fa537ddfef4a16dafd9bf6d4b537699b28df585efdcc7";
+  try{if(sessionStorage.getItem("yaasap_ok")===HASH)return;}catch(e){}
+  document.documentElement.classList.add("locked");
+  function sha(s){return crypto.subtle.digest("SHA-256",new TextEncoder().encode(s)).then(function(b){return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,"0")}).join("")})}
+  document.addEventListener("DOMContentLoaded",function(){
+    var g=document.createElement("div");g.id="gate";
+    g.innerHTML='<div class="box"><div class="nm">YAASAP <em>Notes</em></div><div class="sb">Accès réservé · SAP FICO Expert</div><p>Saisissez votre clé d\'accès pour consulter le mode opératoire.</p><input id="gk" type="password" placeholder="Clé d\'accès" autocomplete="off"><button id="gb">Accéder →</button><div class="err" id="ge">Clé incorrecte</div></div>';
+    document.body.appendChild(g);
+    var i=document.getElementById("gk"),e=document.getElementById("ge");
+    function go(){sha(i.value.trim()).then(function(h){
+      if(h===HASH){try{sessionStorage.setItem("yaasap_ok",HASH)}catch(x){}
+        document.documentElement.classList.remove("locked");g.remove();window.dispatchEvent(new Event("resize"));}
+      else{e.style.display="block";i.value="";i.focus();}
+    })}
+    document.getElementById("gb").onclick=go;
+    i.addEventListener("keydown",function(ev){if(ev.key==="Enter")go()});
+    i.focus();
+  });
+})();
+</script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SAP FICO expert : 6 phases, 12 mois, du T-code au paramétrage — YAASAP Notes</title>
