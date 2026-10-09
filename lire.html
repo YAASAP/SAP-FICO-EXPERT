@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Lecture — SAP FICO EXPERT</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600&display=swap">
+<link rel="stylesheet" href="assets/access.css">
+</head>
+<body class="reader">
+<div class="rbar"><a href="acces.html">← Mes notes</a><span id="who"></span></div>
+<div class="box hide" id="problem" style="margin:24px auto"></div>
+<!-- Note servie par le Worker, isolée : pas de allow-same-origin, donc aucun accès au jeton de cette page -->
+<iframe id="frame" title="Note" sandbox="allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox" referrerpolicy="no-referrer"></iframe>
+<script src="config.js"></script>
+<script src="assets/access.js"></script>
+<script>
+(function () {
+  var slug = (new URLSearchParams(location.search).get('n') || '').toLowerCase();
+  var box = document.getElementById('problem');
+  function problem(html) { box.innerHTML = html; box.classList.remove('hide'); document.getElementById('frame').style.display = 'none'; }
+  if (!/^[a-z0-9][a-z0-9-]{1,60}$/.test(slug)) return problem('Note introuvable. <a href="acces.html">Retour</a>');
+  if (!Fico.getToken()) return location.replace('acces.html');
+  Fico.note(slug).then(function (html) {
+    document.getElementById('frame').srcdoc = html;
+  }).catch(function (e) {
+    if (e.status === 401) return location.replace('acces.html');
+    if (e.status === 403) return problem('Cette note n’est pas incluse dans votre accès. <a href="abonnement.html">Voir les abonnements</a>');
+    if (e.status === 404) return problem('Note introuvable. <a href="acces.html">Retour</a>');
+    problem('Chargement impossible. Réessayez. <a href="acces.html">Retour</a>');
+  });
+})();
+</script>
+</body>
+</html>

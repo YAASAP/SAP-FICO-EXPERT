@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Abonnement — SAP FICO EXPERT</title>
+<meta name="description" content="Toutes les notes SAP FICO EXPERT par abonnement : modes opératoires avec écrans, transactions, clés d'opération et clés de comptabilisation.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600&family=Source+Code+Pro:wght@400;600&display=swap">
+<link rel="stylesheet" href="assets/access.css">
+</head>
+<body>
+<header class="mast"><div class="in"><a class="brand" href="./">SAP FICO EXPERT</a><nav><a href="abonnement.html">Abonnement</a><a href="acces.html">Mon accès</a></nav></div></header>
+<main>
+  <div class="kicker">Package complet</div>
+  <h1>Toutes les notes, une seule inscription</h1>
+  <p class="lead">Un abonnement ouvre l’ensemble des notes SAP FICO EXPERT, y compris les nouvelles notes publiées pendant la durée de l’abonnement. L’accès se fait par votre adresse e-mail : pas de mot de passe, un code à 6 chiffres vous est envoyé.</p>
+
+  <div class="plans">
+    <section class="plan">
+      <h3>Mensuel</h3>
+      <div class="price" id="pm">—</div>
+      <ul><li>Toutes les notes</li><li>Nouvelles notes incluses</li><li>Résiliable à tout moment</li></ul>
+      <button class="btn" data-plan="monthly">S’abonner</button>
+    </section>
+    <section class="plan">
+      <h3>Annuel</h3>
+      <div class="price" id="py">—</div>
+      <ul><li>Toutes les notes</li><li>Nouvelles notes incluses</li><li>Le meilleur tarif</li></ul>
+      <button class="btn" data-plan="yearly">S’abonner</button>
+    </section>
+  </div>
+
+  <div class="box">
+    <label for="em">Votre e-mail (utilisé pour recevoir le code d’accès)</label>
+    <input id="em" type="email" autocomplete="email" placeholder="vous@exemple.fr">
+    <div class="msg err hide" id="err"></div>
+    <p class="lock">Utilisez la même adresse au paiement et à la connexion. Paiement sécurisé par Stripe.</p>
+  </div>
+
+  <h2>Contenu du package</h2>
+  <ul class="lib" id="lib"><li><span class="s">Chargement…</span></li></ul>
+
+  <p>Déjà abonné ? <a href="acces.html">Accéder à mes notes</a></p>
+
+  <div class="faq">
+    <h2>Questions fréquentes</h2>
+    <details><summary>J’ai acheté une note à l’unité</summary><p>Votre achat reste valable. Écrivez-nous avec l’adresse utilisée : votre note est rattachée à votre e-mail, et vous pouvez vous connecter avec un code.</p></details>
+    <details><summary>Comment résilier ?</summary><p>Depuis « Mon accès », bouton « Gérer mon abonnement » (portail Stripe). L’accès reste ouvert jusqu’à la fin de la période payée.</p></details>
+    <details><summary>Puis-je partager mon accès ?</summary><p>Non : l’accès est personnel, lié à votre e-mail, et chaque note affichée porte votre adresse en filigrane.</p></details>
+  </div>
+</main>
+<footer>© SAP FICO EXPERT · <a href="mailto:">contact</a></footer>
+<script src="config.js"></script>
+<script src="assets/access.js"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  $('pm').textContent = Fico.cfg.PRICE_MONTHLY || '';
+  $('py').textContent = Fico.cfg.PRICE_YEARLY || '';
+  document.querySelector('footer a').href = 'mailto:' + (Fico.cfg.SUPPORT_EMAIL || '');
+  document.querySelectorAll('[data-plan]').forEach(function (b) {
+    b.addEventListener('click', async function () {
+      var email = $('em').value.trim();
+      $('err').classList.add('hide');
+      if (!email) { $('err').textContent = 'Indiquez votre e-mail pour recevoir le code d’accès.'; $('err').classList.remove('hide'); $('em').focus(); return; }
+      b.disabled = true;
+      try { var d = await Fico.checkout({ plan: b.dataset.plan, email: email }); location.href = d.url; }
+      catch (e) { $('err').textContent = Fico.errText(e); $('err').classList.remove('hide'); b.disabled = false; }
+    });
+  });
+  Fico.catalog().then(function (d) {
+    $('lib').innerHTML = d.items.length ? d.items.map(function (n) {
+      return '<li><div><div class="t">' + Fico.esc(n.title) + '</div><div class="s">' + Fico.esc(n.summary) + '</div></div></li>';
+    }).join('') : '<li><span class="s">Les notes arrivent bientôt.</span></li>';
+  }).catch(function () { $('lib').innerHTML = ''; });
+})();
+</script>
+</body>
+</html>

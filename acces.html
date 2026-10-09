@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Mon accès — SAP FICO EXPERT</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600&family=Source+Code+Pro:wght@400;600&display=swap">
+<link rel="stylesheet" href="assets/access.css">
+</head>
+<body>
+<header class="mast"><div class="in"><a class="brand" href="./">SAP FICO EXPERT</a><nav><a href="abonnement.html">Abonnement</a><a href="acces.html">Mon accès</a></nav></div></header>
+<main>
+  <h1>Mon accès</h1>
+  <div class="msg ok hide" id="paid">Paiement reçu. Saisissez l’adresse utilisée au paiement pour recevoir votre code (comptez quelques secondes d’activation).</div>
+
+  <!-- étape 1 : e-mail -->
+  <form class="box hide" id="f1" novalidate>
+    <label for="em">Votre e-mail</label>
+    <input id="em" type="email" autocomplete="email" required placeholder="vous@exemple.fr">
+    <p><button class="btn" id="b1">Recevoir mon code</button></p>
+    <div class="msg err hide" id="e1"></div>
+    <p class="lock">Un code à 6 chiffres est envoyé à l’adresse liée à votre abonnement ou à votre achat.</p>
+  </form>
+
+  <!-- étape 2 : code -->
+  <form class="box hide" id="f2" novalidate>
+    <p id="sent">Si un accès est lié à cette adresse, un code vient d’être envoyé (valable 10 minutes).</p>
+    <label for="cd">Code à 6 chiffres</label>
+    <input id="cd" class="code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="\d{6}">
+    <p><button class="btn" id="b2">Valider</button> <button class="btn ghost" type="button" id="back">Changer d’e-mail</button></p>
+    <div class="msg err hide" id="e2"></div>
+  </form>
+
+  <!-- étape 3 : bibliothèque -->
+  <section class="hide" id="home">
+    <div class="status" id="st"></div>
+    <ul class="lib" id="lib"></ul>
+    <p>
+      <button class="btn ghost hide" id="portal">Gérer mon abonnement</button>
+      <button class="btn ghost" id="out">Se déconnecter</button>
+    </p>
+    <div class="msg err hide" id="e3"></div>
+  </section>
+</main>
+<script src="config.js"></script>
+<script src="assets/access.js"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var show = function (id, on) { $(id).classList[on === false ? 'add' : 'remove']('hide'); };
+  var email = '';
+  function err(id, e) { $(id).textContent = typeof e === 'string' ? e : Fico.errText(e); show(id); }
+
+  if (/[?&]paid=1/.test(location.search)) show('paid');
+
+  async function home() {
+    show('f1', false); show('f2', false); show('home');
+    var d;
+    try { d = await Fico.catalog(); } catch (e) { err('e3', e); return; }
+    if (!d.me) { Fico.clearToken(); return start(); }
+    var me = d.me, line;
+    if (me.lifetime) line = 'Accès complet à vie.';
+    else if (me.sub && me.all) line = 'Abonnement actif — accès à toutes les notes' + (me.sub.status === 'past_due' ? ' (paiement en retard : régularisez-le)' : ', période en cours jusqu’au ' + Fico.fmtDate(me.sub.end) + '.');
+    else if (me.all) line = 'Accès complet.';
+    else if (me.sub) line = 'Abonnement terminé. Réabonnez-vous pour retrouver toutes les notes.';
+    else line = 'Notes achetées à l’unité.';
+    $('st').innerHTML = '<strong>' + Fico.esc(me.email) + '</strong><br>' + line + (me.all ? '' : ' <a href="abonnement.html">Voir les abonnements</a>');
+    show('portal', me.portal);
+    $('lib').innerHTML = d.items.map(function (n) {
+      return '<li><div><div class="t">' + Fico.esc(n.title) + '</div><div class="s">' + Fico.esc(n.summary) + '</div></div>' +
+        (n.access ? '<a class="btn" href="lire.html?n=' + encodeURIComponent(n.slug) + '">Lire</a>'
+                  : '<a class="lock" href="abonnement.html">🔒 Non inclus</a>') + '</li>';
+    }).join('') || '<li><span class="s">Aucune note publiée.</span></li>';
+  }
+  function start() { show('home', false); show('f2', false); show('f1'); $('em').focus(); }
+
+  $('f1').addEventListener('submit', async function (ev) {
+    ev.preventDefault(); show('e1', false); $('b1').disabled = true;
+    email = $('em').value.trim();
+    try { await Fico.requestCode(email); show('f1', false); show('f2'); $('cd').focus(); }
+    catch (e) { err('e1', e); }
+    $('b1').disabled = false;
+  });
+  $('f2').addEventListener('submit', async function (ev) {
+    ev.preventDefault(); show('e2', false); $('b2').disabled = true;
+    try { await Fico.verifyCode(email, $('cd').value.trim()); $('cd').value = ''; await home(); }
+    catch (e) { err('e2', e); if (e.code === 'too_many_attempts') start(); }
+    $('b2').disabled = false;
+  });
+  $('back').addEventListener('click', start);
+  $('out').addEventListener('click', function () { Fico.clearToken(); start(); });
+  $('portal').addEventListener('click', async function () {
+    try { var d = await Fico.portal(); location.href = d.url; } catch (e) { err('e3', e); }
+  });
+
+  if (Fico.getToken()) home(); else start();
+})();
+</script>
+</body>
+</html>
