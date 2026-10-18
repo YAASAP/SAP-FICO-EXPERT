@@ -1,0 +1,65 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SAP FICO EXPERT | Atlas SAP FI, MM-FI, facturation électronique et notes YAASAP</title>
+<meta name="description" content="SAP FICO EXPERT par Yacine Aouabed : Atlas de paramétrage SAP FI (OB, OA), MM-FI (T030, OBYC, OMJJ), facturation électronique (UBL, SAP DRC) et notes d'analyse YAASAP. En français.">
+<link rel="canonical" href="https://yaasap.github.io/SAP-FICO-EXPERT/"><meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:type" content="website"><meta property="og:site_name" content="SAP FICO EXPERT"><meta property="og:locale" content="fr_FR"><meta property="og:title" content="SAP FICO EXPERT | Atlas SAP et notes YAASAP"><meta property="og:description" content="Atlas SAP FI, MM-FI et facturation électronique, notes d'analyse YAASAP. En français."><meta property="og:url" content="https://yaasap.github.io/SAP-FICO-EXPERT/"><meta property="og:image" content="https://yaasap.github.io/SAP-FICO-EXPERT/og-formations.png"><meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"SAP FICO EXPERT","url":"https://yaasap.github.io/SAP-FICO-EXPERT/","inLanguage":"fr","publisher":{"@type":"Organization","name":"YAASAP"}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+:root{--bg:#f2f4f7;--panel:#fff;--ink:#142033;--mute:#5b6a7e;--line:#d9dfe7;--ob:#0b5fc2;--mm:#12795f;--ef:#a8670b;--gold:#e8a13a;--dark:#0e1b2c;--f-body:'Archivo',system-ui,-apple-system,'Segoe UI',sans-serif;--f-mono:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1622;--panel:#16212f;--ink:#e6ecf4;--mute:#93a2b6;--line:#27364a;--ob:#6aa8f5;--mm:#58c9a6;--ef:#e8a13a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0e1622;--panel:#16212f;--ink:#e6ecf4;--mute:#93a2b6;--line:#27364a;--ob:#6aa8f5;--mm:#58c9a6;--ef:#e8a13a;color-scheme:dark}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 var(--f-body);padding-inline:max(16px,env(safe-area-inset-left,0px)) max(16px,env(safe-area-inset-right,0px));padding-bottom:56px}
+.wrap{max-width:1000px;margin:0 auto}
+nav.top{display:flex;gap:6px;flex-wrap:wrap;align-items:center;padding-block:14px;border-bottom:1px solid var(--line)}
+nav.top b{font:800 15px var(--f-body);margin-right:auto;letter-spacing:-.01em}nav.top a{font-size:14px;font-weight:600;color:var(--mute);text-decoration:none;padding:6px 10px;border-radius:6px}nav.top a:hover{background:var(--panel);color:var(--ink)}
+header{padding-block:46px 18px}.eyebrow{font:700 12px var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+h1{font-size:clamp(34px,6vw,62px);line-height:1.02;margin:10px 0 14px;font-weight:800;letter-spacing:-.03em;text-wrap:balance}h1 em{font-style:normal;color:var(--ob)}
+.lede{max-width:60ch;color:var(--mute);font-size:17.5px;margin:0 0 18px}
+.cta{display:flex;gap:10px;flex-wrap:wrap}.btn{display:inline-block;text-align:center;font-weight:800;text-decoration:none;padding:12px 18px;border-radius:8px;background:var(--ink);color:var(--bg)}.btn:hover{filter:brightness(1.15)}.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.stats{display:flex;gap:22px;flex-wrap:wrap;margin-top:26px;padding-top:18px;border-top:1px solid var(--line)}.stats div{font:500 12px var(--f-mono);color:var(--mute);text-transform:uppercase;letter-spacing:.06em}.stats b{display:block;font:800 26px var(--f-body);color:var(--ink);letter-spacing:-.02em;text-transform:none}
+section{margin-top:44px;scroll-margin-top:12px}h2{font-size:26px;margin:0 0 4px;font-weight:800;letter-spacing:-.015em}.sec-sub{margin:0 0 16px;color:var(--mute);max-width:64ch}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:14px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 18px 16px;display:flex;flex-direction:column;gap:8px;min-width:0;border-top:5px solid var(--ob);text-decoration:none;color:inherit;transition:transform .15s,box-shadow .15s}
+a.card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(10,30,60,.12)}
+.card.mm{border-top-color:var(--mm)}.card.ef{border-top-color:var(--gold)}.card.nt{border-top-color:var(--mute)}
+.tag{font:700 11px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ob)}.mm .tag{color:var(--mm)}.ef .tag{color:var(--ef)}.nt .tag{color:var(--mute)}
+.card h3{font-size:19px;line-height:1.2;margin:0;font-weight:800;text-wrap:balance}.card p{margin:0;color:var(--mute);font-size:14.5px}
+.meta{margin-top:auto;padding-top:8px;display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap;font-size:13.5px}.meta b{font-weight:800}.meta span{color:var(--ob);font-weight:700}.mm .meta span{color:var(--mm)}.ef .meta span{color:var(--ef)}
+.pack{margin-top:14px;background:var(--dark);color:#fff;border-radius:12px;padding:18px 20px;display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;border-top:5px solid var(--gold)}.pack p{margin:0;color:rgba(255,255,255,.75);font-size:14.5px}.pack b{font-size:18px}.pack s{opacity:.55}.pack .btn{background:var(--gold);color:#1a1204}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.steps div{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px}.steps b{display:block;font:700 12px var(--f-mono);color:var(--ob);margin-bottom:4px}.steps span{font-size:14.5px;color:var(--mute)}
+.about{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 22px;color:var(--mute);max-width:70ch}.about b{color:var(--ink)}
+a:focus-visible{outline:2px solid var(--ob);outline-offset:2px}
+footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);color:var(--mute);font-size:13px;display:flex;gap:14px;flex-wrap:wrap;justify-content:space-between}footer a{color:var(--ob)}
+</style></head><body><div class="wrap">
+<nav class="top" aria-label="Navigation principale"><b>SAP FICO EXPERT</b><a href="#atlas">Atlas SAP</a><a href="#notes">Notes YAASAP</a><a href="#acces">Accès</a><a href="#auteur">Auteur</a></nav>
+<header><div class="eyebrow">Références SAP pour consultants · en français</div>
+<h1>Le <em>SAP FICO</em> qu'on utilise vraiment en projet</h1>
+<p class="lede">Des Atlas interactifs pour retrouver en quelques secondes la transaction, la table et le piège, et des notes d'analyse pour suivre les marchés.</p>
+<div class="cta"><a class="btn" href="#atlas">Voir les Atlas</a><a class="btn ghost" href="#notes">Lire les notes</a></div>
+<div class="stats"><div><b>285</b>fiches SAP</div><div><b>3</b>Atlas</div><div><b>3 fiches</b>gratuites par Atlas</div></div></header>
+<main>
+<section id="atlas"><h2>Atlas SAP</h2><p class="sec-sub">Chaque Atlas se consulte en ligne, avec recherche, filtres et suivi des fiches lues. Un aperçu gratuit est ouvert avant achat.</p>
+<div class="grid">
+<a class="card" href="atlas_ob_oa.html"><div class="tag">SAP FI · paramétrage</div><h3>Atlas OB et OA</h3><p>Toutes les transactions de paramétrage FI qui commencent par OB et OA : périodes, plan comptable, pièces, taxes, immobilisations.</p><div class="meta"><b>184 fiches · 25 €</b><span>Ouvrir →</span></div></a>
+<a class="card mm" href="atlas_mmfi.html"><div class="tag">SAP MM-FI · comptes</div><h3>Atlas MM-FI : T030, OBYC, OMJJ</h3><p>De la clé d'opération à la classe de valorisation : la détermination des comptes du mouvement de stock au compte comptable.</p><div class="meta"><b>59 fiches · 25 €</b><span>Ouvrir →</span></div></a>
+<a class="card ef" href="atlas_efacture.html"><div class="tag">Facturation électronique</div><h3>Atlas UBL et SAP DRC</h3><p>La réforme française vue par un projet SAP : calendrier, plateforme agréée, annuaire, statuts, formats et plan de projet.</p><div class="meta"><b>42 fiches · 25 €</b><span>Ouvrir →</span></div></a>
+</div>
+<div class="pack"><div><b>Pack des trois Atlas : 39 € <s>75 €</s></b><p>Trois codes d'accès, 36 € d'économie, accès à vie.</p></div><a class="btn" href="formations.html">Voir l'offre</a></div>
+</section>
+<section id="notes"><h2>Notes YAASAP</h2><p class="sec-sub">Analyses financières indépendantes, en français. Accès par e-mail et code, ou abonnement à 3 € par mois.</p>
+<div class="grid">
+<a class="card nt" href="yaasap_carte_marche_oct2026.html"><div class="tag">Abonnés · octobre 2026</div><h3>Carte du marché</h3><p>23 actions et 3 chocs en un mois.</p><div class="meta"><span>Lire →</span></div></a>
+<a class="card nt" href="yaasap_flash_quoi_prendre_oct2026.html"><div class="tag">Flash · 14 octobre 2026</div><h3>Quoi prendre ?</h3><p>La note flash du moment : où se positionner.</p><div class="meta"><span>Lire →</span></div></a>
+<a class="card nt" href="yaasap_top10_potentiel_hausse_oct2026.html"><div class="tag">Top 10 · 14 octobre 2026</div><h3>Actions à potentiel de hausse</h3><p>Les dix valeurs au plus fort potentiel.</p><div class="meta"><span>Lire →</span></div></a>
+<a class="card nt" href="yaasap_top10_ia_oct2026.html"><div class="tag">Top 10 · 14 octobre 2026</div><h3>Actions IA à potentiel de hausse</h3><p>Les dix valeurs de l'intelligence artificielle.</p><div class="meta"><span>Lire →</span></div></a>
+<a class="card nt" href="yaasap_nokia.html"><div class="tag">Analyse</div><h3>Nokia</h3><p>L'IA pèse 9 % des ventes, le titre 23 fois les bénéfices.</p><div class="meta"><span>Lire →</span></div></a>
+</div></section>
+<section id="acces"><h2>Comment accéder</h2><p class="sec-sub">Pas de compte à créer.</p>
+<div class="steps"><div><b>1 · Paiement</b><span>Tu paies sur Stripe avec ton e-mail et tu reçois reçu et facture.</span></div><div><b>2 · Code</b><span>Ton code personnel arrive par e-mail sous 24 h.</span></div><div><b>3 · Accès</b><span>Tu saisis e-mail et code sur la page. Elle reste ouverte sur ton navigateur.</span></div></div>
+<div class="cta" style="margin-top:14px"><a class="btn ghost" href="formations.html">Tarifs et questions fréquentes</a><a class="btn ghost" href="https://buy.stripe.com/cNi00j9ST4dC36Oa4mgIo04" target="_blank" rel="noopener noreferrer">Abonnement notes : 3 €/mois</a></div></section>
+<section id="auteur"><h2>Auteur</h2><div class="about"><b>Yacine Aouabed</b>, consultant SAP FICO senior (GL, AR, AP, AA, TR, CO, S/4HANA, Fiori, IDoc, ABAP), fondateur de YAASAP. Les Atlas sont écrits depuis le terrain : chaque fiche donne le rôle, la table et le piège à éviter. À vérifier dans ton système et en recette, les écrans varient selon la release.</div></section>
+</main>
+<footer><span>© 2026 YAASAP · SAP FICO EXPERT</span><span><a href="formations.html">Formations</a> · <a href="https://yaasap.github.io/dailywatch/">YAASAP Notes</a></span></footer>
+</div></body></html>
