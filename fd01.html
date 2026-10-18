@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FD01 : Création client | SAP FICO EXPERT</title>
+<meta name="description" content="FD01 crée un client côté comptabilité. Il porte le compte de rapprochement et les conditions de paiement ; les données de ventes se complètent ensuite par les transactions commerciales.">
+<link rel="canonical" href="https://yaasap.github.io/SAP-FICO-EXPERT/fiches/fd01.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FD01 : Création client | SAP FICO EXPERT">
+<meta property="og:description" content="FD01 crée un client côté comptabilité. Il porte le compte de rapprochement et les conditions de paiement ; les données de ventes se complètent ensuite par les transactions commerciales.">
+<meta property="og:url" content="https://yaasap.github.io/SAP-FICO-EXPERT/fiches/fd01.html">
+<meta property="og:image" content="https://yaasap.github.io/SAP-FICO-EXPERT/og-formations.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="FD01 : Création client | SAP FICO EXPERT">
+<meta name="twitter:description" content="FD01 crée un client côté comptabilité. Il porte le compte de rapprochement et les conditions de paiement ; les données de ventes se complètent ensuite par les transactions commerciales.">
+<meta name="twitter:image" content="https://yaasap.github.io/SAP-FICO-EXPERT/og-formations.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"FD01 : Création client","datePublished":"2026-10-18","author":{"@type":"Person","name":"Yacine Aouabed"},"publisher":{"@type":"Organization","name":"YAASAP"}}</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>:root{--bg:#f2f4f7;--panel:#fff;--ink:#142033;--mute:#5b6a7e;--line:#d9dfe7;--c:#0b5fc2;--gold:#e8a13a;--dark:#0e1b2c;--f-body:'Archivo',system-ui,-apple-system,'Segoe UI',sans-serif;--f-mono:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace}@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1622;--panel:#16212f;--ink:#e6ecf4;--mute:#93a2b6;--line:#27364a;--c:#6aa8f5;color-scheme:dark}}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:400 16.5px/1.6 var(--f-body);padding-inline:16px;padding-bottom:56px}.wrap{max-width:760px;margin:0 auto}.back{display:inline-block;padding:14px 0 0;font:600 13.5px var(--f-body);color:var(--mute);text-decoration:none}header{padding-block:26px 8px}.eyebrow{font:700 12px var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--c)}h1{font-size:clamp(28px,5vw,44px);line-height:1.08;margin:10px 0 12px;font-weight:800;letter-spacing:-.025em;text-wrap:balance}.code{display:inline-block;font:700 14px var(--f-mono);background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:3px 9px;margin-right:6px}.lede{color:var(--mute);font-size:18px;margin:0}.box{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-top:16px}.box h2{font:700 12px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--c);margin:0 0 8px}.box p{margin:0}.box ol,.box ul{margin:0;padding-left:22px;display:grid;gap:7px}.box.trap{border-left:5px solid var(--gold)}.where{font:500 13.5px var(--f-mono);color:var(--mute)}.cta{margin-top:26px;background:var(--dark);color:#fff;border-radius:12px;padding:20px;border-top:5px solid var(--gold)}.cta b{font-size:18px}.cta p{margin:6px 0 14px;color:rgba(255,255,255,.75);font-size:15px}.cta a.b{display:inline-block;background:var(--gold);color:#1a1204;font-weight:800;text-decoration:none;padding:11px 16px;border-radius:8px}.cta a.s{color:var(--gold);margin-left:14px;font-weight:600;font-size:14px}footer{margin-top:30px;padding-top:14px;border-top:1px solid var(--line);color:var(--mute);font-size:13px}footer a{color:var(--c)}
+.lock{border-top:5px solid var(--gold)}.lock p{margin:0 0 10px}.lock form{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.lock input{flex:1 1 220px;min-width:0;font:500 14px var(--f-mono);padding:11px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}.lock button{background:var(--c);color:#fff;border:0;border-radius:8px;padding:11px 16px;font:700 15px var(--f-body);cursor:pointer}.msg{font-size:14px;color:#c0392b;min-height:1.2em;margin-top:8px}
+.prices{display:grid;gap:12px;margin-top:16px}@media(min-width:640px){.prices{grid-template-columns:repeat(3,1fr)}}.price{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:6px}.price.hot{border-color:var(--gold);border-width:2px}.price .n{font:800 28px var(--f-body)}.price .d{color:var(--mute);font-size:14px;flex:1}.price a{display:inline-block;text-align:center;background:var(--gold);color:#1a1204;font-weight:800;text-decoration:none;padding:10px 14px;border-radius:8px}.price a.off{background:var(--line);color:var(--mute);pointer-events:none}.note{color:var(--mute);font-size:13.5px;margin-top:10px}
+.list{list-style:none;margin:20px 0 0;padding:0;display:grid;gap:8px}.list a{display:block;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 16px;color:var(--ink);text-decoration:none}.list a:hover{border-color:var(--c)}.list .k{display:block;font:700 11px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}.list b{font-weight:700}.list span.i{display:block;color:var(--mute);font-size:14.5px;margin-top:2px}</style>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Toutes les fiches</a>
+<header><div class="eyebrow">Fiche SAP FICO · SAP FI</div><h1><span class="code">FD01</span>Création client</h1><p class="lede">FD01 crée un client côté comptabilité. Il porte le compte de rapprochement et les conditions de paiement ; les données de ventes se complètent ensuite par les transactions commerciales.</p></header>
+<main>
+<div class="box"><h2>Où ça se passe</h2><p class="where">Transaction FD01, création de client (tables KNA1, KNB1 et KNVV)</p></div>
+<div class="box lock" id="lock"><h2>Fiche complète</h2><p>La fiche complète contient 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées.</p><p><b>Tu as un code d'accès ?</b></p><form id="f"><input id="c" type="text" autocomplete="off" spellcheck="false" placeholder="Ton code d'accès"><button type="submit">Débloquer</button></form><div class="msg" id="msg"></div></div>
+<div class="prices"><div class="price"><b>1 fiche</b><span class="n">25 € TTC</span><span class="d">soit 20,83 € HT + 4,17 € de TVA (20 %)<br>La fiche complète de ton choix.</span><a href="https://buy.stripe.com/14AdR9c11eSggXEa4mgIo0e">Commander</a></div><div class="price"><b>3 fiches</b><span class="n">39 € TTC</span><span class="d">soit 32,50 € HT + 6,50 € de TVA (20 %)<br>Trois fiches à ton choix. Indique-les à la commande.</span><a href="https://buy.stripe.com/14A28r4yz39ydLs3FYgIo0f">Commander</a></div><div class="price hot"><b>Catalogue complet</b><span class="n">99 € TTC</span><span class="d">soit 82,50 € HT + 16,50 € de TVA (20 %)<br>Les 30 fiches et les prochaines mises à jour du catalogue.</span><a href="https://buy.stripe.com/28E8wP5CDh0o9vc4K2gIo0g">Commander</a></div></div><p class="note">Prix TTC, TVA 20 % incluse. Tu reçois ton code d'accès après paiement.</p>
+</main>
+<div class="cta"><b>Aller plus loin : Atlas OB et OA</b><p>Le paramétrage FI pas à pas, avec les transactions OB et OA expliquées.</p><a class="b" href="../atlas_ob_oa.html">Voir l'Atlas</a><a class="s" href="../formations.html">Tous les Atlas et le pack</a></div>
+<footer><a href="../index.html">SAP FICO EXPERT</a> · Contenu à vérifier dans ton système : les écrans et paramètres varient selon la release et la réglementation évolue.</footer>
+</div>
+<script type="application/json" id="d">{"e":"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","w":"JZ9mapGJ7HHR+RSn7Iq1SN1ChGTR1Rv4LlTxU7aoBUMT5wXFWqrJ4XptVQk="}</script>
+<script>(function(){
+var D=JSON.parse(document.getElementById('d').textContent);
+var A='ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+function B(s){var b=atob(s),a=new Uint8Array(b.length);for(var i=0;i<b.length;i++)a[i]=b.charCodeAt(i);return a}
+function B32(s){var bits=0,v=0,o=[];for(var i=0;i<s.length;i++){var x=A.indexOf(s.charAt(i));if(x<0)return null;v=(v<<5)|x;bits+=5;if(bits>=8){o.push((v>>>(bits-8))&255);bits-=8;v&=(1<<bits)-1}}return new Uint8Array(o)}
+async function dec(kb,blob){var k=await crypto.subtle.importKey('raw',kb,'AES-GCM',false,['decrypt']);var d=B(blob);return new Uint8Array(await crypto.subtle.decrypt({name:'AES-GCM',iv:d.slice(0,12)},k,d.slice(12)))}
+async function open(code){
+var s=String(code).toUpperCase().replace(/[^A-Z2-7]/g,'');
+if(s.length<26||s.length%26)return null;
+for(var i=0;i<s.length;i+=26){var kb=B32(s.slice(i,i+26));if(!kb||kb.length!==16)continue;
+try{return new TextDecoder().decode(await dec(kb,D.e))}catch(e){}
+try{var fk=await dec(kb,D.w);return new TextDecoder().decode(await dec(fk,D.e))}catch(e){}}
+return null}
+var L=document.getElementById('lock'),M=document.getElementById('msg');
+function show(h){L.outerHTML=h}
+async function tryCode(c,quiet){
+if(!window.crypto||!crypto.subtle){if(!quiet)M.textContent='Ton navigateur ne permet pas le déchiffrement sur cette page.';return false}
+var h=await open(c);
+if(h){show(h);try{localStorage.setItem('yaasap_fiches_code',c)}catch(e){}return true}
+if(!quiet)M.textContent='Ce code ne donne pas accès à cette fiche. Vérifie-le ou écris-nous.';return false}
+document.getElementById('f').addEventListener('submit',function(ev){ev.preventDefault();tryCode(document.getElementById('c').value,false)});
+try{var st=localStorage.getItem('yaasap_fiches_code');if(st)tryCode(st,true)}catch(e){}
+})();</script>
+</body>
+</html>

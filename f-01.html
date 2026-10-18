@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>F.01 : États financiers | SAP FICO EXPERT</title>
+<meta name="description" content="F.01 édite le bilan et le compte de résultat à partir d'une version d'état financier. C'est la vue de synthèse la plus utilisée pour contrôler une clôture.">
+<link rel="canonical" href="https://yaasap.github.io/SAP-FICO-EXPERT/fiches/f-01.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="F.01 : États financiers | SAP FICO EXPERT">
+<meta property="og:description" content="F.01 édite le bilan et le compte de résultat à partir d'une version d'état financier. C'est la vue de synthèse la plus utilisée pour contrôler une clôture.">
+<meta property="og:url" content="https://yaasap.github.io/SAP-FICO-EXPERT/fiches/f-01.html">
+<meta property="og:image" content="https://yaasap.github.io/SAP-FICO-EXPERT/og-formations.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="F.01 : États financiers | SAP FICO EXPERT">
+<meta name="twitter:description" content="F.01 édite le bilan et le compte de résultat à partir d'une version d'état financier. C'est la vue de synthèse la plus utilisée pour contrôler une clôture.">
+<meta name="twitter:image" content="https://yaasap.github.io/SAP-FICO-EXPERT/og-formations.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"F.01 : États financiers","datePublished":"2026-10-18","author":{"@type":"Person","name":"Yacine Aouabed"},"publisher":{"@type":"Organization","name":"YAASAP"}}</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>:root{--bg:#f2f4f7;--panel:#fff;--ink:#142033;--mute:#5b6a7e;--line:#d9dfe7;--c:#0b5fc2;--gold:#e8a13a;--dark:#0e1b2c;--f-body:'Archivo',system-ui,-apple-system,'Segoe UI',sans-serif;--f-mono:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace}@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1622;--panel:#16212f;--ink:#e6ecf4;--mute:#93a2b6;--line:#27364a;--c:#6aa8f5;color-scheme:dark}}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:400 16.5px/1.6 var(--f-body);padding-inline:16px;padding-bottom:56px}.wrap{max-width:760px;margin:0 auto}.back{display:inline-block;padding:14px 0 0;font:600 13.5px var(--f-body);color:var(--mute);text-decoration:none}header{padding-block:26px 8px}.eyebrow{font:700 12px var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--c)}h1{font-size:clamp(28px,5vw,44px);line-height:1.08;margin:10px 0 12px;font-weight:800;letter-spacing:-.025em;text-wrap:balance}.code{display:inline-block;font:700 14px var(--f-mono);background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:3px 9px;margin-right:6px}.lede{color:var(--mute);font-size:18px;margin:0}.box{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-top:16px}.box h2{font:700 12px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--c);margin:0 0 8px}.box p{margin:0}.box ol,.box ul{margin:0;padding-left:22px;display:grid;gap:7px}.box.trap{border-left:5px solid var(--gold)}.where{font:500 13.5px var(--f-mono);color:var(--mute)}.cta{margin-top:26px;background:var(--dark);color:#fff;border-radius:12px;padding:20px;border-top:5px solid var(--gold)}.cta b{font-size:18px}.cta p{margin:6px 0 14px;color:rgba(255,255,255,.75);font-size:15px}.cta a.b{display:inline-block;background:var(--gold);color:#1a1204;font-weight:800;text-decoration:none;padding:11px 16px;border-radius:8px}.cta a.s{color:var(--gold);margin-left:14px;font-weight:600;font-size:14px}footer{margin-top:30px;padding-top:14px;border-top:1px solid var(--line);color:var(--mute);font-size:13px}footer a{color:var(--c)}
+.lock{border-top:5px solid var(--gold)}.lock p{margin:0 0 10px}.lock form{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.lock input{flex:1 1 220px;min-width:0;font:500 14px var(--f-mono);padding:11px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}.lock button{background:var(--c);color:#fff;border:0;border-radius:8px;padding:11px 16px;font:700 15px var(--f-body);cursor:pointer}.msg{font-size:14px;color:#c0392b;min-height:1.2em;margin-top:8px}
+.prices{display:grid;gap:12px;margin-top:16px}@media(min-width:640px){.prices{grid-template-columns:repeat(3,1fr)}}.price{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:6px}.price.hot{border-color:var(--gold);border-width:2px}.price .n{font:800 28px var(--f-body)}.price .d{color:var(--mute);font-size:14px;flex:1}.price a{display:inline-block;text-align:center;background:var(--gold);color:#1a1204;font-weight:800;text-decoration:none;padding:10px 14px;border-radius:8px}.price a.off{background:var(--line);color:var(--mute);pointer-events:none}.note{color:var(--mute);font-size:13.5px;margin-top:10px}
+.list{list-style:none;margin:20px 0 0;padding:0;display:grid;gap:8px}.list a{display:block;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 16px;color:var(--ink);text-decoration:none}.list a:hover{border-color:var(--c)}.list .k{display:block;font:700 11px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}.list b{font-weight:700}.list span.i{display:block;color:var(--mute);font-size:14.5px;margin-top:2px}</style>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Toutes les fiches</a>
+<header><div class="eyebrow">Fiche SAP FICO · SAP FI</div><h1><span class="code">F.01</span>États financiers</h1><p class="lede">F.01 édite le bilan et le compte de résultat à partir d'une version d'état financier. C'est la vue de synthèse la plus utilisée pour contrôler une clôture.</p></header>
+<main>
+<div class="box"><h2>Où ça se passe</h2><p class="where">Transaction F.01, états financiers (versions d'état financier, balances de comptes)</p></div>
+<div class="box lock" id="lock"><h2>Fiche complète</h2><p>La fiche complète contient 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées.</p><p><b>Tu as un code d'accès ?</b></p><form id="f"><input id="c" type="text" autocomplete="off" spellcheck="false" placeholder="Ton code d'accès"><button type="submit">Débloquer</button></form><div class="msg" id="msg"></div></div>
+<div class="prices"><div class="price"><b>1 fiche</b><span class="n">25 € TTC</span><span class="d">soit 20,83 € HT + 4,17 € de TVA (20 %)<br>La fiche complète de ton choix.</span><a href="https://buy.stripe.com/14AdR9c11eSggXEa4mgIo0e">Commander</a></div><div class="price"><b>3 fiches</b><span class="n">39 € TTC</span><span class="d">soit 32,50 € HT + 6,50 € de TVA (20 %)<br>Trois fiches à ton choix. Indique-les à la commande.</span><a href="https://buy.stripe.com/14A28r4yz39ydLs3FYgIo0f">Commander</a></div><div class="price hot"><b>Catalogue complet</b><span class="n">99 € TTC</span><span class="d">soit 82,50 € HT + 16,50 € de TVA (20 %)<br>Les 30 fiches et les prochaines mises à jour du catalogue.</span><a href="https://buy.stripe.com/28E8wP5CDh0o9vc4K2gIo0g">Commander</a></div></div><p class="note">Prix TTC, TVA 20 % incluse. Tu reçois ton code d'accès après paiement.</p>
+</main>
+<div class="cta"><b>Aller plus loin : Atlas OB et OA</b><p>Le paramétrage FI pas à pas, avec les transactions OB et OA expliquées.</p><a class="b" href="../atlas_ob_oa.html">Voir l'Atlas</a><a class="s" href="../formations.html">Tous les Atlas et le pack</a></div>
+<footer><a href="../index.html">SAP FICO EXPERT</a> · Contenu à vérifier dans ton système : les écrans et paramètres varient selon la release et la réglementation évolue.</footer>
+</div>
+<script type="application/json" id="d">{"e":"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","w":"Q6mdbOlxTgck0vGHgrQCXiVabCoP6GCxSVFUTZaNwUZ2PoGwsbYxZL92moM="}</script>
+<script>(function(){
+var D=JSON.parse(document.getElementById('d').textContent);
+var A='ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+function B(s){var b=atob(s),a=new Uint8Array(b.length);for(var i=0;i<b.length;i++)a[i]=b.charCodeAt(i);return a}
+function B32(s){var bits=0,v=0,o=[];for(var i=0;i<s.length;i++){var x=A.indexOf(s.charAt(i));if(x<0)return null;v=(v<<5)|x;bits+=5;if(bits>=8){o.push((v>>>(bits-8))&255);bits-=8;v&=(1<<bits)-1}}return new Uint8Array(o)}
+async function dec(kb,blob){var k=await crypto.subtle.importKey('raw',kb,'AES-GCM',false,['decrypt']);var d=B(blob);return new Uint8Array(await crypto.subtle.decrypt({name:'AES-GCM',iv:d.slice(0,12)},k,d.slice(12)))}
+async function open(code){
+var s=String(code).toUpperCase().replace(/[^A-Z2-7]/g,'');
+if(s.length<26||s.length%26)return null;
+for(var i=0;i<s.length;i+=26){var kb=B32(s.slice(i,i+26));if(!kb||kb.length!==16)continue;
+try{return new TextDecoder().decode(await dec(kb,D.e))}catch(e){}
+try{var fk=await dec(kb,D.w);return new TextDecoder().decode(await dec(fk,D.e))}catch(e){}}
+return null}
+var L=document.getElementById('lock'),M=document.getElementById('msg');
+function show(h){L.outerHTML=h}
+async function tryCode(c,quiet){
+if(!window.crypto||!crypto.subtle){if(!quiet)M.textContent='Ton navigateur ne permet pas le déchiffrement sur cette page.';return false}
+var h=await open(c);
+if(h){show(h);try{localStorage.setItem('yaasap_fiches_code',c)}catch(e){}return true}
+if(!quiet)M.textContent='Ce code ne donne pas accès à cette fiche. Vérifie-le ou écris-nous.';return false}
+document.getElementById('f').addEventListener('submit',function(ev){ev.preventDefault();tryCode(document.getElementById('c').value,false)});
+try{var st=localStorage.getItem('yaasap_fiches_code');if(st)tryCode(st,true)}catch(e){}
+})();</script>
+</body>
+</html>
