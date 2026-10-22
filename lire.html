@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex">
 <title>Lecture — SAP FICO EXPERT</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600&display=swap">
-<link rel="stylesheet" href="assets/access.css">
+<link rel="stylesheet" href="access.css">
 </head>
 <body class="reader">
 <div class="rbar"><a href="acces.html">← Mes notes</a><span id="who"></span></div>
@@ -14,7 +14,7 @@
 <!-- Note servie par le Worker, isolée : pas de allow-same-origin, donc aucun accès au jeton de cette page -->
 <iframe id="frame" title="Note" sandbox="allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox" referrerpolicy="no-referrer"></iframe>
 <script src="config.js"></script>
-<script src="assets/access.js"></script>
+<script src="access.js"></script>
 <script>
 (function () {
   var slug = (new URLSearchParams(location.search).get('n') || '').toLowerCase();
