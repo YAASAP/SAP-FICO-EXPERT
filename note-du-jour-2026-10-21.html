@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Note du jour YAASAP · 21 octobre 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600;700&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{--paper:#f9f6f0;--paper2:#f2ede4;--paper3:#e8e1d5;--ink:#1c1814;--ink2:#3a342c;--ink3:#6a5f52;--ink4:#9a8f82;--rule:rgba(0,0,0,.12);--rule2:rgba(0,0,0,.07);--accent:#8b3a1a;--green:#1e5c32;--amber:#8a5c00;--blue:#1a3a5c;--red:#b01c1c;--serif:'Libre Baskerville',Georgia,serif;--sans:'Source Sans 3','Helvetica Neue',Arial,sans-serif;--mono:'Source Code Pro','Courier New',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans)}
+a{color:var(--accent)}
+.masthead{background:var(--ink);border-bottom:3px solid var(--accent);padding:11px 22px 9px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.pub-name{font-family:var(--serif);font-size:20px;font-weight:700;color:#fff}.pub-name em{font-style:italic;color:var(--accent)}
+.mast-r{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.4);letter-spacing:.08em;text-transform:uppercase}
+#qr-mast{background:#fff;padding:2px;width:40px;height:40px}
+.hero{background:linear-gradient(135deg,rgba(26,58,92,.93),rgba(28,24,20,.95)),url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1200&q=80&fit=crop') center/cover,#1a3a5c;padding:44px 22px 34px;color:#fff}
+.hero-in{max-width:760px;margin:0 auto}
+.eyebrow{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.tag{font-family:var(--mono);font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:3px 8px;background:var(--accent);color:#fff;border-radius:1px}.tag.o{background:transparent;border:1px solid rgba(255,255,255,.3);color:rgba(255,255,255,.7)}
+h1{font-family:var(--serif);font-size:28px;line-height:1.2;margin-bottom:12px}
+.deck{font-family:var(--serif);font-style:italic;font-size:14.5px;line-height:1.6;color:rgba(255,255,255,.8)}
+.kpi-strip{display:grid;grid-template-columns:repeat(6,1fr);background:var(--ink)}
+.kpi{padding:10px 0 10px 14px;border-right:1px solid rgba(255,255,255,.06)}
+.kpi-v{font-family:var(--mono);font-size:14px;font-weight:700;line-height:1;display:block;color:#e0d8cc}.kpi-v.up{color:#4ade80}.kpi-v.dn{color:#f87171}.kpi-v.am{color:#fbbf24}
+.kpi-l{font-family:var(--mono);font-size:7px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-top:3px;display:block}
+.kicker{overflow-x:auto;background:var(--paper2);border-bottom:1px solid var(--rule)}.kicker::-webkit-scrollbar{display:none}
+.kicker-inner{display:flex;min-width:max-content}.kk{padding:8px 14px;border-right:1px solid var(--rule2);flex-shrink:0}
+.kk-l{font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink4);margin-bottom:2px}.kk-v{font-family:var(--mono);font-size:13px;font-weight:600;line-height:1}.kk-n{font-size:9px;color:var(--ink4);font-style:italic;margin-top:1px}
+.wrap{max-width:760px;margin:0 auto;padding:10px 22px 30px}
+.sec-rule{display:flex;align-items:center;gap:8px;margin:28px 0 14px}.sec-rule::before{content:'';width:20px;height:2px;background:var(--accent);flex-shrink:0}
+.sec-rule-txt{font-size:8px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent)}.sec-rule::after{content:'';flex:1;height:1px;background:var(--rule)}
+.lead-hl{font-family:var(--serif);font-size:20px;font-weight:700;line-height:1.2;margin:18px 0 8px}
+.lead-deck{font-family:var(--serif);font-size:14px;font-style:italic;color:var(--ink3);line-height:1.6;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--rule2)}
+.body-p{font-family:var(--serif);font-size:14px;color:var(--ink2);line-height:1.75;margin-bottom:11px}.body-p strong{color:var(--ink)}
+.src{font-family:var(--mono);font-size:9px;color:var(--ink4)}
+.pull{border-left:3px solid var(--accent);padding:10px 16px;margin:16px 0;background:var(--paper2)}.pull-t{font-family:var(--serif);font-size:15px;font-style:italic;line-height:1.5}.pull-a{font-family:var(--mono);font-size:8px;color:var(--ink4);margin-top:5px;letter-spacing:.06em;text-transform:uppercase}
+.chart-card{background:#fff;border:1px solid var(--rule);border-top:3px solid var(--ink);padding:14px;margin-bottom:16px}.chart-t{font-family:var(--mono);font-size:8.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px}
+.tbl-card{background:#fff;border:1px solid var(--rule);border-top:3px solid var(--ink);border-radius:2px;overflow:hidden;margin-bottom:16px;overflow-x:auto}
+.tbl-hd{padding:8px 14px;background:var(--paper2);border-bottom:1px solid var(--rule2)}.tbl-hd-t{font-family:var(--mono);font-size:8.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3)}
+.tbl{width:100%;border-collapse:collapse}.tbl th{font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink4);padding:8px 13px;text-align:left;border-bottom:1.5px solid var(--ink);background:var(--paper2)}
+.tbl td{font-size:13px;padding:7px 13px;border-bottom:1px solid var(--rule2);color:var(--ink2);vertical-align:top}
+.b-up,.b-dn,.b-am{font-family:var(--mono);font-size:9px;font-weight:700;padding:2px 6px;border-radius:1px}.b-up{background:rgba(30,92,50,.1);color:var(--green)}.b-dn{background:rgba(176,28,28,.1);color:var(--red)}.b-am{background:rgba(138,92,0,.1);color:var(--amber)}
+.verdict{background:var(--ink);border-radius:2px;padding:20px 22px;margin:24px 0}
+.v-tag{font-family:var(--mono);font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;background:var(--accent);color:#fff;padding:3px 8px;display:inline-block;margin-bottom:12px}
+.v-hl{font-family:var(--serif);font-size:17px;font-style:italic;color:rgba(255,255,255,.9);line-height:1.45;margin-bottom:12px}.v-hl strong{font-style:normal;color:#fbbf24}
+.v-list{border-top:1px solid rgba(255,255,255,.1);padding-top:12px;display:flex;flex-direction:column;gap:7px}
+.v-li{display:flex;gap:10px;font-family:var(--serif);font-size:13.5px;color:rgba(255,255,255,.75);align-items:baseline;line-height:1.55}.v-li::before{content:'—';color:#fbbf24;flex-shrink:0;font-family:var(--mono)}.v-li strong{color:#fff}
+.v-disc{margin-top:14px;padding-top:10px;border-top:1px solid rgba(255,255,255,.08);font-family:var(--mono);font-size:8px;color:rgba(255,255,255,.45);line-height:1.6}
+.nl{background:var(--paper2);border:1px solid var(--rule);padding:18px 20px;margin:22px 0}.nl-hl{font-family:var(--serif);font-size:16px;font-weight:700;margin-bottom:10px}
+.nl-row{display:flex;gap:8px}.nl-input{flex:1;padding:9px 11px;border:1px solid var(--rule);font-size:14px;background:#fff}.nl-btn{background:var(--accent);color:#fff;border:0;padding:9px 16px;font-weight:700;cursor:pointer}.nl-ok{display:none;color:var(--green);font-weight:600}
+.footer{background:var(--ink);color:rgba(255,255,255,.6);padding:22px;text-align:center;font-size:12px}.footer a{color:#fbbf24;margin:0 8px;text-decoration:none}.footer .d{margin-top:10px;font-family:var(--mono);font-size:8px;color:rgba(255,255,255,.4)}
+@media(max-width:640px){.kpi-strip{grid-template-columns:repeat(3,1fr)}h1{font-size:23px}.mast-r span{display:none}}
+</style>
+</head>
+<body>
+<div class="masthead"><div class="pub-name">YAASAP <em>Notes</em></div><div class="mast-r"><span>Note du jour · <span id="dt">21 octobre 2026</span></span><div id="qr-mast"></div></div></div>
+
+<div class="hero"><div class="hero-in">
+<div class="eyebrow"><span class="tag">Marchés</span><span class="tag o">Note du jour</span><span class="tag o">Mercredi 21 octobre 2026</span></div>
+<h1>Le CAC 40 à 7 838 : la dette française et le doute sur l'IA pèsent, Wall Street tourne vers la santé</h1>
+<p class="deck">Mardi, l'OAT 10 ans a frôlé 5 % et l'écart avec le Bund a atteint 1,54 point, plus haut depuis 2011-2012. À New York, le Dow a gagné 1 % pendant que le Nasdaq faisait du surplace et que Netflix décrochait d'environ 6 % après ses résultats.</p>
+</div></div>
+
+<div class="kpi-strip">
+<div class="kpi"><span class="kpi-v dn">7 838,49</span><span class="kpi-l">CAC 40 · −0,38 %</span></div>
+<div class="kpi"><span class="kpi-v up">52 495,88</span><span class="kpi-l">Dow · +1,02 %</span></div>
+<div class="kpi"><span class="kpi-v up">7 712,57</span><span class="kpi-l">S&amp;P 500 · +0,28 %</span></div>
+<div class="kpi"><span class="kpi-v">26 424,82</span><span class="kpi-l">Nasdaq · −0,02 %</span></div>
+<div class="kpi"><span class="kpi-v am">108-110 $</span><span class="kpi-l">Brent · repli</span></div>
+<div class="kpi"><span class="kpi-v am">4,92 %</span><span class="kpi-l">OAT 10 ans</span></div>
+</div>
+
+<div class="kicker"><div class="kicker-inner">
+<div class="kk"><div class="kk-l">Stoxx 600</div><div class="kk-v">−0,14 %</div><div class="kk-n">clôture 20/10</div></div>
+<div class="kk"><div class="kk-l">Écart OAT-Bund</div><div class="kk-v">~152 pb</div><div class="kk-n">pic 154 pb</div></div>
+<div class="kk"><div class="kk-l">EUR/USD</div><div class="kk-v">1,1229</div><div class="kk-n">+0,1 %</div></div>
+<div class="kk"><div class="kk-l">ZEW Allemagne</div><div class="kk-v">28,1</div><div class="kk-n">vs 34,7</div></div>
+<div class="kk"><div class="kk-l">ZEW zone euro</div><div class="kk-v">18,5</div><div class="kk-n">vs 25,8</div></div>
+<div class="kk"><div class="kk-l">VIX</div><div class="kk-v">17,31</div><div class="kk-n">Boursorama</div></div>
+<div class="kk"><div class="kk-l">Santé S&amp;P 500</div><div class="kk-v">+2,3 %</div><div class="kk-n">meilleur secteur</div></div>
+<div class="kk"><div class="kk-l">Nikkei 225</div><div class="kk-v">+1,1 %</div><div class="kk-n">ce matin</div></div>
+</div></div>
+
+<div class="wrap">
+<div class="lead-hl">Deux inquiétudes, une séance : la dette française et le financement de l'IA</div>
+<div class="lead-deck">Le CAC 40 a perdu 0,38 % à 7 838,49 points, après avoir cédé plus de 1 % dans l'après-midi. L'indice a réduit ses pertes, mais rien n'est réglé côté taux.</div>
+
+<div class="sec-rule"><span class="sec-rule-txt">Clôtures · Europe et États-Unis, mardi 20 octobre</span></div>
+<p class="body-p">En Europe, le <strong>CAC 40 a terminé à 7 838,49 points (−0,38 %)</strong>, dans une fourchette de 7 783,22 à 7 871,32, et le <strong>Stoxx 600 a cédé 0,14 %</strong>. Trois facteurs ressortent : les doutes sur la valorisation de la tech et des data centers après la chute de 32 % de l'Elice à ses débuts à Séoul, l'OAT 10 ans proche de ses plus hauts depuis 2002, et le ZEW allemand tombé à 28,1 contre 34,7 (zone euro : 18,5 contre 25,8), sous les attentes. <span class="src">[JKN, 21/10 · BFM Bourse, 20/10 · Boursorama, 20/10]</span></p>
+<p class="body-p">À New York, la rotation a dominé. <strong>Dow Jones 52 495,88 (+1,02 %)</strong>, <strong>S&amp;P 500 7 712,57 (+0,28 %)</strong>, <strong>Nasdaq 26 424,82 (−0,02 %)</strong> selon le tableau de cotation de Zonebourse publié après la clôture américaine ; cette page affichait aussi des chiffres de mi-séance différents, ces niveaux sont donc à considérer comme provisoires. La santé a progressé de 2,3 % (Eli Lilly près de +4 %), l'indice des semi-conducteurs de Philadelphie de 0,5 % seulement, après le rebond de lundi. <span class="src">[Zonebourse/Reuters, 20/10 à 20h53]</span></p>
+
+<div class="chart-card"><div class="chart-t">Variation des indices · séance du 20 octobre 2026 (%)</div><canvas id="c1" height="150"></canvas>
+<div class="src" style="margin-top:6px">Sources : Boursorama (CAC 40, Stoxx 600), Zonebourse/Reuters (Dow, S&amp;P 500, Nasdaq, niveaux provisoires), 20/10/2026.</div></div>
+
+<div class="pull"><div class="pull-t">« L'écart entre l'OAT et le Bund, vers 152 points de base, n'a plus été vu depuis début 2012. »</div><div class="pull-a">Paraphrase d'après JKN / BFM Bourse · 20-21 octobre 2026</div></div>
+
+<div class="sec-rule"><span class="sec-rule-txt">Taux, pétrole, devises · ce qui est confirmé et ce qui ne l'est pas</span></div>
+<p class="body-p"><strong>France :</strong> l'OAT 10 ans a clôturé autour de 4,92-4,94 %, après un pic à 4,987 % dans l'après-midi ; l'écart avec le Bund a touché 1,54 point. L'arrivée des violences des 17-18 octobre dans le débat s'ajoute à un décrochage engagé depuis plusieurs semaines. Un gérant (Neuberger) juge l'écartement excessif et rappelle que 92 % du programme d'émission annuel est déjà réalisé. <span class="src">[BFM Bourse, 20/10 à 21h]</span></p>
+<p class="body-p"><strong>Brent :</strong> repli d'environ 1 % à 108,47 $ à la clôture de Paris (BFM Bourse), contre 110,2-110,3 $ affiché ensuite par Boursorama ; les sources divergent selon l'heure de relevé. Le recul suit l'espoir d'une désescalade au Moyen-Orient, après un plus haut de cinq mois. <strong>EUR/USD : environ 1,123.</strong></p>
+<p class="body-p"><strong>Taux américain 10 ans :</strong> donnée introuvable de façon fiable. Reuters/Boursorama indique que les rendements américains ont reculé mardi, mais sans niveau pour le 10 ans ; un autre relevé trouvé (5,12 %) provient d'une page aux données mélangées et n'est pas retenu.</p>
+
+<div class="sec-rule"><span class="sec-rule-txt">Valeurs suivies · mouvements de plus de 5 % (veille et matinée)</span></div>
+<div class="tbl-card"><div class="tbl-hd"><span class="tbl-hd-t">Un seul mouvement supérieur à 5 % confirmé sur les 23 valeurs suivies</span></div>
+<table class="tbl"><tr><th>Valeur</th><th>Mouvement</th><th>Cause</th><th>Source</th></tr>
+<tr><td><strong>NFLX</strong></td><td><span class="b-dn">≈ −6 % après clôture</span></td><td>BPA T3 0,87 $ vs 0,82 $ attendu, CA 12,87 Md$ (+11,8 %) en ligne ; mais objectif 2026 de CA ramené en bas de fourchette (51,1 Md$), ventes pub vers 2,7 Md$ (vs 3 Md$) et croissance T4 à +11,5 % contre +17,6 un an plus tôt.</td><td>TheWrap, 20/10</td></tr>
+</table></div>
+<p class="body-p">Sous le seuil mais à suivre : <strong>Schneider Electric (SU) −3,29 % à 244,30 €</strong>, après une augmentation de capital de 6 Md€ pour financer en partie l'achat de PTC (Zonebourse, 20/10) ; <strong>ASML −2,63 %</strong> en matinée européenne (Zonebourse, 20/10), dans un secteur européen des semi-conducteurs sous pression (Soitec −5,25 %, Siltronic −5,71 %, valeurs non suivies) ; <strong>Alphabet (GOOGL) environ −1 %</strong> en séance à New York (Zonebourse, 20/10). Pour NVDA, la dernière donnée trouvée est celle du 19/10 : 217,09 $ (+1,38 %), à 10,8 % sous son plus haut de 52 semaines (HeyGoTrade, 19/10).</p>
+<p class="body-p"><strong>Données manquantes :</strong> je n'ai pas trouvé de cotation du jour, sourcée, pour TSM, LRCX, MU, AVGO, AMZN, ORCL, BNP, GLE, ISP, VRT, CEG, NEX, AIR, FRVIA, URW, NOKIA, UBER ni GRAB. Aucun mouvement de plus de 5 % n'est donc affirmé pour elles ; l'absence de donnée n'est pas une preuve d'absence de mouvement. Dernière donnée datée trouvée pour Forvia : +5,1 % à 9,98 € le 7 octobre, après un relèvement de Bank of America (Zonebourse, 07/10).</p>
+
+<div class="sec-rule"><span class="sec-rule-txt">Agenda du mercredi 21 octobre 2026</span></div>
+<div class="tbl-card"><div class="tbl-hd"><span class="tbl-hd-t">Résultats et rendez-vous · source Zonebourse, agenda du 19/10</span></div>
+<table class="tbl"><tr><th>Zone</th><th>Publications</th></tr>
+<tr><td>France</td><td>Carrefour, Bureau Veritas, Klépierre, Edenred, Covivio, FDJ United, Interparfums, Altarea, Fnac Darty, Atos</td></tr>
+<tr><td>Europe / US</td><td>SAP, Iberdrola, Texas Instruments, IBM, Abbott, Philip Morris ; <strong>Tesla et Meta après la clôture américaine</strong> (CNBC, 20/10)</td></tr>
+<tr><td>Valeurs suivies</td><td>Aucune publication de vos 23 valeurs listée aujourd'hui. Unibail-Rodamco-Westfield publie jeudi 22 octobre.</td></tr>
+<tr><td>Macro</td><td>Indicateurs du jour : <strong>introuvables</strong> dans les sources consultées (l'agenda Boursorama détaillé n'était pas lisible). Contexte : vote du budget en France, négociations autour de l'Iran.</td></tr>
+</table></div>
+<p class="body-p">Le test du jour se situe aux résultats de Meta et Tesla ce soir : ils diront si le débat sur la rentabilité des dépenses d'IA, au cœur de la baisse de la semaine dernière, se calme ou repart. Le SOX avait perdu environ 15,7 % en huit séances avant le rebond de lundi (Boursorama, 19/10).</p>
+
+<div class="verdict">
+<div class="v-tag">Verdict YAASAP · Yacine AOUABED · 21 octobre 2026</div>
+<div class="v-hl">Sur les valeurs IA et semi-conducteurs : <strong>Attendre</strong>. Le rebond de lundi n'a pas été confirmé mardi, et la rotation vers les défensives continue.</div>
+<div class="v-list">
+<div class="v-li"><span><strong>Décision : Attendre</strong> avant de renforcer le thème IA/semis ; <strong>Tenir</strong> les positions existantes sans les augmenter.</span></div>
+<div class="v-li"><span><strong>Condition de sortie / d'allègement :</strong> nouvelle séance du SOX à plus de −3 % ou rechute du Nasdaq sous ses plus bas de la semaine passée (niveau non vérifié ici) ; à définir sur vos propres seuils.</span></div>
+<div class="v-li"><span><strong>Condition de retour :</strong> deux séances consécutives de hausse du SOX avec Meta et Tesla qui rassurent sur les dépenses d'investissement.</span></div>
+<div class="v-li"><span><strong>Netflix :</strong> Tenir sous surveillance ; la baisse d'environ 6 % porte sur la guidance, pas sur les résultats, à confirmer à l'ouverture américaine.</span></div>
+<div class="v-li"><span><strong>Risque principal :</strong> un OAT 10 ans durablement au-dessus de 5 % et un écart au Bund au-delà de 1,55 point, qui pèseraient sur BNP, Société Générale et le CAC 40.</span></div>
+<div class="v-li"><span><strong>Limite de cette note :</strong> 1 seul mouvement supérieur à 5 % vérifié sur les 23 valeurs ; taux US 10 ans et macro du jour non trouvés.</span></div>
+</div>
+<div class="v-disc">Sources : Boursorama · Zonebourse/Reuters · BFM Bourse · JKN · TheWrap · HeyGoTrade · CNBC · Agenda Zonebourse · données du 19 au 21/10/2026, niveaux US provisoires.<br>Ne constitue pas un conseil en investissement. Par Yacine AOUABED · YAASAP Notes · yaasap.github.io/dailywatch</div>
+</div>
+
+<div class="nl"><div class="nl-hl">Recevoir les prochaines notes YAASAP</div>
+<div class="nl-row"><input class="nl-input" type="email" id="nlEmail" placeholder="votre@email.com"><button class="nl-btn" onclick="nlSubmit()">S'abonner →</button></div>
+<div class="nl-ok" id="nlOk">✓ Inscrit — vérifiez votre boite mail</div></div>
+</div>
+
+<div class="footer"><a href="./index.html">Accueil</a><a href="./docs/note-du-jour.html">Note du jour</a><a href="./docs/index.html">Archives</a>
+<div class="d">Ne constitue pas un conseil en investissement. Par Yacine AOUABED · YAASAP Notes · yaasap.github.io/dailywatch</div></div>
+
+<script>
+function nlSubmit(){var el=document.getElementById('nlEmail');var email=el?el.value.trim():'';
+if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){if(el)el.style.borderColor='rgba(200,41,10,.6)';return;}
+var body=new FormData();body.append('email',email);body.append('source','yaasap-note-du-jour-2026-10-21');body.append('_subject','Inscription YAASAP Notes');body.append('_next','false');
+fetch('https://formspree.io/f/meewwqep',{method:'POST',body:body,headers:{'Accept':'application/json'}}).then(function(r){if(r.ok){el.parentElement.style.display='none';document.getElementById('nlOk').style.display='block';}});}
+(function tryQR(){var el=document.getElementById('qr-mast');if(!el||typeof QRCode==='undefined'){setTimeout(tryQR,80);return;}
+new QRCode(el,{text:'https://yaasap.github.io/dailywatch/docs/note-du-jour-2026-10-21.html',width:36,height:36,colorDark:'#1c1814',colorLight:'#fff',correctLevel:QRCode.CorrectLevel.M});})();
+(function tryChart(){if(typeof Chart==='undefined'){setTimeout(tryChart,80);return;}
+var tc='#6a5f52',tf={size:9,family:"'Source Code Pro','Courier New',monospace"};
+var tt={backgroundColor:'rgba(28,24,20,.95)',titleColor:'#f9f6f0',bodyColor:'rgba(255,255,255,.7)',borderColor:'rgba(0,0,0,.1)',borderWidth:1,padding:8};
+var v=[-0.38,-0.14,1.02,0.28,-0.02];
+new Chart(document.getElementById('c1'),{type:'bar',data:{labels:['CAC 40','Stoxx 600','Dow Jones','S&P 500','Nasdaq'],datasets:[{data:v,backgroundColor:v.map(function(x){return x>=0?'#1e5c32':'#b01c1c'}),borderRadius:1}]},
+options:{plugins:{legend:{display:false},tooltip:tt},scales:{x:{ticks:{color:tc,font:tf},grid:{display:false}},y:{ticks:{color:tc,font:tf,callback:function(x){return x+' %'}},grid:{color:'rgba(0,0,0,.06)'}}}}});})();
+</script>
+</body>
+</html>
