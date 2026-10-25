@@ -117,7 +117,7 @@ function prices(){
 const mk=(n,d,u,hot)=>'<div class="price'+(hot?' hot':'')+'"><b>'+n[0]+'</b><span class="n">'+n[1]+' TTC</span><span class="d">'+n[2]+'<br>'+d+'</span>'+(u?'<a href="'+esc(u)+'">Commander</a>':'<a class="off" href="#">Bientôt disponible</a>')+'</div>';
 return '<div class="prices">'
 +mk(['1 fiche','2,90 €','soit 2,42 € HT + 0,48 € de TVA (20 %)'],'La fiche complète de ton choix.',CFG.l1,false)
-+mk(['Catalogue complet','14,90 €','soit 12,42 € HT + 2,48 € de TVA (20 %)'],'Les 30 fiches et les prochaines mises à jour du catalogue.',CFG.l30,true)
++mk(['Catalogue complet','14,90 €','soit 12,42 € HT + 2,48 € de TVA (20 %)'],'Toutes les fiches du catalogue et les prochaines mises à jour.',CFG.l30,true)
 +'</div><p class="note">Prix TTC, TVA 20 % incluse. Tu reçois ton code d\'accès après paiement'+(CFG.mail?' (contact : '+esc(CFG.mail)+')':'')+'.</p>';}
 
 function head(title,desc,url,extra){
