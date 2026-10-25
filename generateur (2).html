@@ -26,9 +26,9 @@ td.m{font-family:ui-monospace,Menlo,Consolas,monospace;word-break:break-all}
 
 <div class="b"><h2>1. Tes liens de paiement Stripe</h2>
 <p class="s">Déjà remplis avec tes trois liens Stripe. Tu peux les modifier.</p>
-<label>Lien pour 1 fiche (25 €)</label><input type="url" id="l1" value="https://buy.stripe.com/14AdR9c11eSggXEa4mgIo0e">
+<label>Lien pour 1 fiche (2,90 €)</label><input type="url" id="l1" value="https://buy.stripe.com/8x25kD5CDcK8azg5O6gIo0j">
 <label>Lien pour 3 fiches (39 €)</label><input type="url" id="l3" value="https://buy.stripe.com/14A28r4yz39ydLs3FYgIo0f">
-<label>Lien pour le catalogue complet (99 €)</label><input type="url" id="l30" value="https://buy.stripe.com/28E8wP5CDh0o9vc4K2gIo0g">
+<label>Lien pour le catalogue complet (14,90 €)</label><input type="url" id="l30" value="https://buy.stripe.com/fZu00j7KLfWk9vca4mgIo0k">
 <label>Adresse de contact pour la commande (facultatif, affichée sur les pages)</label><input type="text" id="mail" placeholder="adresse e-mail professionnelle">
 </div>
 
@@ -116,9 +116,8 @@ return '<div id="lock">'
 function prices(){
 const mk=(n,d,u,hot)=>'<div class="price'+(hot?' hot':'')+'"><b>'+n[0]+'</b><span class="n">'+n[1]+' TTC</span><span class="d">'+n[2]+'<br>'+d+'</span>'+(u?'<a href="'+esc(u)+'">Commander</a>':'<a class="off" href="#">Bientôt disponible</a>')+'</div>';
 return '<div class="prices">'
-+mk(['1 fiche','25 €','soit 20,83 € HT + 4,17 € de TVA (20 %)'],'La fiche complète de ton choix.',CFG.l1,false)
-+mk(['3 fiches','39 €','soit 32,50 € HT + 6,50 € de TVA (20 %)'],'Trois fiches à ton choix. Indique-les à la commande.',CFG.l3,false)
-+mk(['Catalogue complet','99 €','soit 82,50 € HT + 16,50 € de TVA (20 %)'],'Les 30 fiches et les prochaines mises à jour du catalogue.',CFG.l30,true)
++mk(['1 fiche','2,90 €','soit 2,42 € HT + 0,48 € de TVA (20 %)'],'La fiche complète de ton choix.',CFG.l1,false)
++mk(['Catalogue complet','14,90 €','soit 12,42 € HT + 2,48 € de TVA (20 %)'],'Les 30 fiches et les prochaines mises à jour du catalogue.',CFG.l30,true)
 +'</div><p class="note">Prix TTC, TVA 20 % incluse. Tu reçois ton code d\'accès après paiement'+(CFG.mail?' (contact : '+esc(CFG.mail)+')':'')+'.</p>';}
 
 function head(title,desc,url,extra){
