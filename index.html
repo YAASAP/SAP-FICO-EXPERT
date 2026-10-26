@@ -75,6 +75,10 @@ a{color:inherit}
 .tile{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);border-radius:var(--r);padding:18px 18px 16px;backdrop-filter:blur(4px)}
 .tile .n{font:800 38px/1 var(--f-body);letter-spacing:-.02em}
 .tile .l{margin-top:8px;font-size:13px;color:#cfe0fa;font-weight:500}
+a.tile{display:block;color:inherit;text-decoration:none;position:relative;transition:background .15s,transform .15s}
+a.tile::after{content:"→";position:absolute;top:14px;right:16px;font-weight:700;opacity:.6;transition:transform .15s,opacity .15s}
+a.tile:hover,a.tile:focus-visible{background:rgba(255,255,255,.18);transform:translateY(-2px)}
+a.tile:hover::after,a.tile:focus-visible::after{opacity:1;transform:translateX(3px)}
 .tile.wide{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:12px}
 .tile.wide .n{font-size:30px}
 .tag-gold{font:700 11px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;background:var(--gold);color:#1d2d3e;border-radius:999px;padding:5px 10px;white-space:nowrap}
@@ -171,10 +175,10 @@ footer .legal{font-size:12.5px;line-height:1.5;color:#8fa3ba;max-width:62ch}
         </div>
       </div>
       <div class="tiles" aria-label="Chiffres clés">
-        <div class="tile"><div class="n">97</div><div class="l">fiches de paramétrage</div></div>
-        <div class="tile"><div class="n">4</div><div class="l">Atlas thématiques</div></div>
-        <div class="tile"><div class="n">4</div><div class="l">domaines : FI, CO, FI-AA, MM-FI</div></div>
-        <div class="tile"><div class="n">100&nbsp;%</div><div class="l">en français, valable sur SAP standard</div></div>
+        <a class="tile" href="catalogue.html"><div class="n">97</div><div class="l">fiches de paramétrage</div></a>
+        <a class="tile" href="formations.html"><div class="n">4</div><div class="l">Atlas thématiques</div></a>
+        <a class="tile" href="#fiches"><div class="n">4</div><div class="l">domaines : FI, CO, FI-AA, MM-FI</div></a>
+        <a class="tile" href="#fonctionnement"><div class="n">100&nbsp;%</div><div class="l">en français, valable sur SAP standard</div></a>
         <div class="tile wide"><div><div class="n">dès 2,90&nbsp;€</div><div class="l">TTC la fiche, aperçu gratuit</div></div><span class="tag-gold">Accès par code</span></div>
       </div>
     </div>
