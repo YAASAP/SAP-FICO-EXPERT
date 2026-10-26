@@ -5,5 +5,5 @@ window.FICO_CONFIG = {
   // Libellés de prix affichés (le prix réel est celui du Price Stripe)
   PRICE_MONTHLY: '12 € / mois',
   PRICE_YEARLY: '99 € / an',
-  SUPPORT_EMAIL: 'y.aouabed@hotmail.fr',
+  SUPPORT_EMAIL: 'yacine.aouabed@yaasap.com',
 };
