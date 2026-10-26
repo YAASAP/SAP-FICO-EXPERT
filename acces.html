@@ -9,10 +9,31 @@
 <link rel="stylesheet" href="access.css">
 </head>
 <body>
-<header class="mast"><div class="in"><a class="brand" href="./">SAP FICO EXPERT</a><nav><a href="abonnement.html">Abonnement</a><a href="acces.html">Mon accès</a></nav></div></header>
+<header class="mast"><div class="in"><a class="brand" href="./">SAP FICO EXPERT</a><nav><a href="catalogue.html">Catalogue</a><a href="acces.html">Mon accès</a></nav></div></header>
 <main>
   <h1>Mon accès</h1>
-  <div class="msg ok hide" id="paid">Paiement reçu. Saisissez l’adresse utilisée au paiement pour recevoir votre code (comptez quelques secondes d’activation).</div>
+  <div class="msg ok hide" id="paid">Paiement reçu. Ton code d’accès t’est envoyé par e-mail : saisis-le ci-dessous.</div>
+
+  <!-- saisie du code d'accès (fiches) -->
+  <form class="box" id="fc" novalidate>
+    <label for="cc">Ton code d’accès</label>
+    <input id="cc" type="text" autocomplete="off" spellcheck="false" placeholder="Colle ici le code reçu par e-mail" style="font-family:'Source Code Pro',monospace">
+    <p><button class="btn" id="bc">Enregistrer mon code</button></p>
+    <div class="msg err hide" id="ec"></div>
+    <p class="lock">Le code est envoyé par e-mail après le paiement. Il reste sur cet appareil et ouvre automatiquement tes fiches.</p>
+  </form>
+
+  <!-- code enregistré -->
+  <section class="hide" id="mine">
+    <div class="status" id="ms"></div>
+    <div class="msg hide" id="prog" role="status"></div>
+    <ul class="lib" id="ml"></ul>
+    <p>
+      <a class="btn" href="catalogue.html">Parcourir le catalogue</a>
+      <button class="btn ghost" type="button" id="show">Voir mes fiches débloquées</button>
+      <button class="btn ghost" type="button" id="rm">Retirer mon code</button>
+    </p>
+  </section>
 
   <!-- étape 1 : e-mail -->
   <form class="box hide" id="f1" novalidate>
@@ -45,11 +66,13 @@
 </main>
 <script src="config.js"></script>
 <script src="access.js"></script>
+<script src="site.js"></script>
 <script>
 (function () {
   var $ = function (id) { return document.getElementById(id); };
   var show = function (id, on) { $(id).classList[on === false ? 'add' : 'remove']('hide'); };
   var email = '';
+  var apiOk = !!Fico.cfg.API_BASE && !/VOTRE-COMPTE/.test(Fico.cfg.API_BASE);
   function err(id, e) { $(id).textContent = typeof e === 'string' ? e : Fico.errText(e); show(id); }
 
   if (/[?&]paid=1/.test(location.search)) show('paid');
@@ -73,7 +96,7 @@
                   : '<a class="lock" href="abonnement.html">🔒 Non inclus</a>') + '</li>';
     }).join('') || '<li><span class="s">Aucune note publiée.</span></li>';
   }
-  function start() { show('home', false); show('f2', false); show('f1'); $('em').focus(); }
+  function start() { show('home', false); show('f2', false); if (apiOk) { show('f1'); $('em').focus(); } }
 
   $('f1').addEventListener('submit', async function (ev) {
     ev.preventDefault(); show('e1', false); $('b1').disabled = true;
@@ -93,6 +116,36 @@
   $('portal').addEventListener('click', async function () {
     try { var d = await Fico.portal(); location.href = d.url; } catch (e) { err('e3', e); }
   });
+
+  // code d'accès aux fiches
+  var FS = window.FicoSite;
+  function render() {
+    var has = !!FS.norm(FS.get());
+    show('fc', !has); show('mine', has);
+    if (has) $('ms').innerHTML = '<strong>Code enregistré sur cet appareil.</strong><br>Il ouvre automatiquement tes fiches.';
+  }
+  async function list() {
+    $('show').disabled = true; $('prog').classList.remove('hide'); $('prog').textContent = 'Vérification…';
+    var hit = await FS.scan(FS.get(), true, function (n, t) { $('prog').textContent = 'Vérification… ' + n + ' / ' + t; });
+    $('prog').classList.add('hide'); $('show').disabled = false;
+    $('ml').innerHTML = hit.length ? hit.map(function (f) {
+      return '<li><div><div class="t">' + Fico.esc(f.t) + '</div><div class="s">' + Fico.esc(f.k) + '</div></div><a class="btn" href="' + Fico.esc(f.h) + '">Lire</a></li>';
+    }).join('') : '<li><span class="s">Ce code n’ouvre aucune fiche pour le moment.</span></li>';
+    if (hit.length) $('ms').innerHTML = '<strong>Code enregistré.</strong><br>' + hit.length + ' fiche' + (hit.length > 1 ? 's' : '') + ' débloquée' + (hit.length > 1 ? 's' : '') + '.';
+  }
+  $('fc').addEventListener('submit', async function (ev) {
+    ev.preventDefault(); show('ec', false);
+    var c = $('cc').value, s = FS.norm(c);
+    if (s.length < 26 || s.length % 26) return err('ec', 'Code incomplet : il contient 26 caractères (lettres A–Z et chiffres 2–7).');
+    $('bc').disabled = true; $('bc').textContent = 'Vérification…';
+    var hit = await FS.scan(c, false);
+    $('bc').disabled = false; $('bc').textContent = 'Enregistrer mon code';
+    if (!hit.length) return err('ec', 'Ce code n’ouvre aucune fiche. Vérifie-le ou écris-nous.');
+    FS.save(c); $('cc').value = ''; render(); list();
+  });
+  $('show').addEventListener('click', list);
+  $('rm').addEventListener('click', function () { FS.clear(); $('ml').innerHTML = ''; render(); $('cc').focus(); });
+  render();
 
   if (Fico.getToken()) home(); else start();
 })();
