@@ -79,6 +79,7 @@ a.tile{display:block;color:inherit;text-decoration:none;position:relative;transi
 a.tile::after{content:"→";position:absolute;top:14px;right:16px;font-weight:700;opacity:.6;transition:transform .15s,opacity .15s}
 a.tile:hover,a.tile:focus-visible{background:rgba(255,255,255,.18);transform:translateY(-2px)}
 a.tile:hover::after,a.tile:focus-visible::after{opacity:1;transform:translateX(3px)}
+a.tile.wide::after{display:none}
 .tile.wide{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:12px}
 .tile.wide .n{font-size:30px}
 .tag-gold{font:700 11px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;background:var(--gold);color:#1d2d3e;border-radius:999px;padding:5px 10px;white-space:nowrap}
@@ -179,7 +180,7 @@ footer .legal{font-size:12.5px;line-height:1.5;color:#8fa3ba;max-width:62ch}
         <a class="tile" href="formations.html"><div class="n">4</div><div class="l">Atlas thématiques</div></a>
         <a class="tile" href="#fiches"><div class="n">4</div><div class="l">domaines : FI, CO, FI-AA, MM-FI</div></a>
         <a class="tile" href="#fonctionnement"><div class="n">100&nbsp;%</div><div class="l">en français, valable sur SAP standard</div></a>
-        <div class="tile wide"><div><div class="n">dès 2,90&nbsp;€</div><div class="l">TTC la fiche, aperçu gratuit</div></div><span class="tag-gold">Accès par code</span></div>
+        <a class="tile wide" href="#acces"><div><div class="n">dès 2,90&nbsp;€</div><div class="l">TTC la fiche, aperçu gratuit</div></div><span class="tag-gold">Accès par code</span></a>
       </div>
     </div>
   </section>
