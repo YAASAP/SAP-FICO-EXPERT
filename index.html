@@ -63,6 +63,11 @@ a{color:inherit}
 .eyebrow{font:700 12px var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:#bcd6ff}
 .hero h1{margin:12px 0 16px;font-size:clamp(32px,5vw,54px);line-height:1.06;font-weight:800;letter-spacing:-.02em}
 .hero p.lede{margin:0 0 28px;font-size:18px;color:#dbe8fb;max-width:56ch}
+
+/* Logo YAASAP */
+.hero-logo{margin:0 0 26px;max-width:520px;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.22);box-shadow:0 10px 30px rgba(0,0,0,.28)}
+.hero-logo img{display:block;width:100%;height:auto}
+
 .cta{display:flex;flex-wrap:wrap;gap:12px}
 .btn{display:inline-flex;align-items:center;gap:8px;font:700 15px var(--f-body);text-decoration:none;padding:13px 22px;border-radius:999px;border:1px solid transparent;transition:background .15s,border-color .15s}
 .btn.primary{background:#fff;color:#0b2a57}
@@ -167,6 +172,10 @@ footer .legal{font-size:12.5px;line-height:1.5;color:#8fa3ba;max-width:62ch}
   <section class="hero" aria-labelledby="titre">
     <div class="wrap">
       <div>
+        <!-- LOGO YAASAP : fichier yaasap-logo.jpg à déposer à la racine du dépôt -->
+        <div class="hero-logo">
+          <img src="yaasap-logo.jpg" alt="YAASAP — SAP FICO Expert" width="1260" height="691" loading="eager" decoding="async">
+        </div>
         <div class="eyebrow">SAP FI · CO · MM-FI · Immobilisations</div>
         <h1 id="titre">Le paramétrage SAP FICO, expliqué pas à pas.</h1>
         <p class="lede">97 fiches et 4 Atlas en français, écrits par un consultant SAP FICO : où se trouve la transaction, les étapes, les pièges et comment contrôler son résultat.</p>
