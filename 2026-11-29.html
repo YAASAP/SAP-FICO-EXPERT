@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>F.01 : Sortir les états financiers | SAP FICO EXPERT</title>
+<meta name="description" content="F.01 produit le bilan et le compte de résultat à partir d'une version d'états financiers. Le résultat n'est juste que si la version couvre tous tes comptes.">
+<link rel="canonical" href="https://yaasap.github.io/SAP-FICO-EXPERT/astuce-du-jour/2026-11-29.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="F.01 : Sortir les états financiers | SAP FICO EXPERT">
+<meta property="og:description" content="F.01 produit le bilan et le compte de résultat à partir d'une version d'états financiers. Le résultat n'est juste que si la version couvre tous tes comptes.">
+<meta property="og:url" content="https://yaasap.github.io/SAP-FICO-EXPERT/astuce-du-jour/2026-11-29.html">
+<meta property="og:image" content="https://yaasap.github.io/SAP-FICO-EXPERT/og-formations.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="F.01 : Sortir les états financiers | SAP FICO EXPERT">
+<meta name="twitter:description" content="F.01 produit le bilan et le compte de résultat à partir d'une version d'états financiers. Le résultat n'est juste que si la version couvre tous tes comptes.">
+<meta name="twitter:image" content="https://yaasap.github.io/SAP-FICO-EXPERT/og-formations.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"F.01 : Sortir les états financiers","datePublished":"2026-11-29","author":{"@type":"Person","name":"Yacine Aouabed"},"publisher":{"@type":"Organization","name":"YAASAP"},"mainEntityOfPage":"https://yaasap.github.io/SAP-FICO-EXPERT/astuce-du-jour/2026-11-29.html"}</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>:root{--bg:#f2f4f7;--panel:#fff;--ink:#142033;--mute:#5b6a7e;--line:#d9dfe7;--c:#0b5fc2;--gold:#e8a13a;--dark:#0e1b2c;--f-body:'Archivo',system-ui,-apple-system,'Segoe UI',sans-serif;--f-mono:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace}@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1622;--panel:#16212f;--ink:#e6ecf4;--mute:#93a2b6;--line:#27364a;--c:#6aa8f5;color-scheme:dark}}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:400 16.5px/1.6 var(--f-body);padding-inline:16px;padding-bottom:56px}.wrap{max-width:760px;margin:0 auto}.back{display:inline-block;padding:14px 0 0;font:600 13.5px var(--f-body);color:var(--mute);text-decoration:none}header{padding-block:26px 8px}.eyebrow{font:700 12px var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--c)}h1{font-size:clamp(28px,5vw,44px);line-height:1.08;margin:10px 0 12px;font-weight:800;letter-spacing:-.025em;text-wrap:balance}.code{display:inline-block;font:700 14px var(--f-mono);background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:3px 9px;margin-right:6px}.lede{color:var(--mute);font-size:18px;margin:0}.box{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-top:16px}.box h2{font:700 12px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--c);margin:0 0 8px}.box p{margin:0}.box ol{margin:0;padding-left:22px;display:grid;gap:7px}.box.trap{border-left:5px solid var(--gold)}.where{font:500 13.5px var(--f-mono);color:var(--mute)}.cta{margin-top:26px;background:var(--dark);color:#fff;border-radius:12px;padding:20px;border-top:5px solid var(--gold)}.cta b{font-size:18px}.cta p{margin:6px 0 14px;color:rgba(255,255,255,.75);font-size:15px}.cta a.b{display:inline-block;background:var(--gold);color:#1a1204;font-weight:800;text-decoration:none;padding:11px 16px;border-radius:8px}.cta a.s{color:var(--gold);margin-left:14px;font-weight:600;font-size:14px}footer{margin-top:30px;padding-top:14px;border-top:1px solid var(--line);color:var(--mute);font-size:13px}footer a{color:var(--c)}</style>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="index.html">← Toutes les astuces</a>
+<header>
+<div class="eyebrow">Astuce du jour · dimanche 29 novembre 2026 · SAP FI</div>
+<h1><span class="code">F.01</span>Sortir les états financiers</h1>
+<p class="lede">F.01 produit le bilan et le compte de résultat à partir d'une version d'états financiers. Le résultat n'est juste que si cette version couvre tous tes comptes.</p>
+</header>
+<main>
+<div class="box"><h2>Où ça se passe</h2><p class="where">Transaction F.01 · la version d'états financiers se maintient dans OB58</p></div>
+<div class="box"><h2>Les étapes</h2><ol>
+<li>Lance F.01 et renseigne le plan comptable, la société et la version d'états financiers.</li>
+<li>Saisis l'exercice et la période de la déclaration, avec un exercice de comparaison si tu veux un écart.</li>
+<li>Règle le niveau de détail à afficher, puis exécute le rapport.</li>
+<li>Descends dans un nœud de la hiérarchie jusqu'au compte pour retrouver l'origine d'un montant.</li>
+</ol></div>
+<div class="box trap"><h2>Le piège</h2><p>Un compte absent de la version d'états financiers n'est pas dans la bonne rubrique : il tombe dans une zone « non affecté » ou disparaît de la lecture que tu attends. Après la création de comptes, vérifie que la version les couvre avant la clôture.</p></div>
+<div class="box"><h2>Pour vérifier</h2><p>Contrôle que le total de l'actif égale celui du passif, résultat de l'exercice inclus, et qu'aucun montant ne reste dans la zone non affectée.</p></div>
+</main>
+<div class="cta"><b>Aller plus loin : Atlas OB et OA</b><p>Les fiches de paramétrage pas à pas, pour retrouver chaque réglage au bon endroit.</p><a class="b" href="../atlas_ob_oa.html">Voir l'Atlas</a><a class="s" href="../formations.html">Tous les Atlas et le pack</a></div>
+<footer><a href="../index.html">SAP FICO EXPERT</a> · Contenu à vérifier dans ton système : les écrans et paramètres varient selon la release et la réglementation évolue.</footer>
+</div>
+</body>
+</html>
