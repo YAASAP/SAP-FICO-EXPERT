@@ -27,11 +27,22 @@ jobs:
           ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
         run: |
           mkdir -p "$HOME/private_keys"
-          printf '%s\n' "$ASC_KEY_P8" | tr -d '\r' > "$HOME/private_keys/AuthKey_${KEY_ID}.p8"
-          chmod 600 "$HOME/private_keys/AuthKey_${KEY_ID}.p8"
-          head -n 1 "$HOME/private_keys/AuthKey_${KEY_ID}.p8" | grep -q "BEGIN PRIVATE KEY" \
-            || { echo "ERREUR : le secret ASC_KEY_P8 ne commence pas par -----BEGIN PRIVATE KEY-----"; exit 1; }
+          OUT="$HOME/private_keys/AuthKey_${KEY_ID}.p8"
+          CLEAN=$(printf '%s\n' "$ASC_KEY_P8" | tr -d '\r')
+          # Garde uniquement le bloc entre BEGIN et END (ignore lignes vides et espaces autour)
+          printf '%s\n' "$CLEAN" | sed -n '/-----BEGIN/,/-----END/p' > "$OUT"
+          if [ ! -s "$OUT" ]; then
+            # Essai : le secret contient peut-être le fichier encodé en base64
+            printf '%s' "$CLEAN" | base64 --decode 2>/dev/null | sed -n '/-----BEGIN/,/-----END/p' > "$OUT" || true
+          fi
+          chmod 600 "$OUT"
+          echo "Secret ASC_KEY_P8 : ${#ASC_KEY_P8} caractères, $(printf '%s\n' "$CLEAN" | wc -l | tr -d ' ') lignes (un fichier .p8 fait environ 250 caractères et 5 lignes)"
           echo "ID de clé : ${#KEY_ID} caractères (attendu : 10) ; ID émetteur : ${#ISSUER_ID} caractères (attendu : 36)"
+          if [ ! -s "$OUT" ]; then
+            echo "ERREUR : ASC_KEY_P8 ne contient pas de clé (-----BEGIN PRIVATE KEY----- ... -----END PRIVATE KEY-----)."
+            echo "Ouvre le fichier .p8 avec le Bloc-notes, copie tout son contenu et recolle-le dans le secret."
+            exit 1
+          fi
 
       - name: Vérifier la clé auprès d'Apple
         run: |
