@@ -28,6 +28,8 @@ struct ContentView: View {
 
     var body: some View {
         VStack(spacing: 0) {
+            topBar
+
             ZStack {
                 Color(AppConfig.nightBlue)
 
@@ -62,8 +64,6 @@ struct ContentView: View {
                     .padding()
                 }
             }
-
-            bottomBar
         }
         .background(Color(AppConfig.nightBlue).ignoresSafeArea())
         .sheet(isPresented: $showFavorites) {
@@ -74,20 +74,19 @@ struct ContentView: View {
         }
     }
 
-    private var bottomBar: some View {
-        HStack {
+    /// Barre d'en-tête native, icônes seules. La navigation principale
+    /// (Accueil, Catalogue, Atlas, Formations, Accès) reste la barre du bas du site.
+    private var topBar: some View {
+        HStack(spacing: 6) {
             barButton("chevron.backward", label: "Retour", enabled: model.canGoBack) {
                 model.goBack()
             }
             Spacer()
-            barButton("house", label: "Accueil") { model.home() }
-            Spacer()
-            barButton(favorites.contains(model.url) ? "star.fill" : "star", label: "Favori") {
+            barButton(favorites.contains(model.url) ? "star.fill" : "star",
+                      label: favorites.contains(model.url) ? "Retirer des favoris" : "Ajouter aux favoris") {
                 favorites.toggle(title: model.title, url: model.url)
             }
-            Spacer()
             barButton("list.star", label: "Favoris") { showFavorites = true }
-            Spacer()
             if let url = model.url {
                 ShareLink(item: url, subject: Text(model.title)) {
                     barIcon("square.and.arrow.up", label: "Partager")
@@ -95,16 +94,14 @@ struct ContentView: View {
             } else {
                 barIcon("square.and.arrow.up", label: "Partager").opacity(0.35)
             }
-            Spacer()
             barButton(store.isPremium ? "checkmark.seal.fill" : "lock.open", label: "Premium") {
                 showPremium = true
             }
         }
-        .padding(.horizontal, 18)
-        .padding(.top, 8)
-        .padding(.bottom, 4)
+        .padding(.horizontal, 12)
+        .frame(height: 40)
         .background(Color(AppConfig.nightBlue))
-        .overlay(Rectangle().fill(Color.white.opacity(0.08)).frame(height: 1), alignment: .top)
+        .overlay(Rectangle().fill(Color.white.opacity(0.08)).frame(height: 1), alignment: .bottom)
     }
 
     private func barButton(_ symbol: String, label: String, enabled: Bool = true,
@@ -117,12 +114,11 @@ struct ContentView: View {
     }
 
     private func barIcon(_ symbol: String, label: String) -> some View {
-        VStack(spacing: 2) {
-            Image(systemName: symbol).font(.system(size: 18))
-            Text(label).font(.system(size: 9, design: .monospaced))
-        }
-        .foregroundColor(Color(red: 0.88, green: 0.9, blue: 0.93))
-        .frame(minWidth: 44)
+        Image(systemName: symbol)
+            .font(.system(size: 18))
+            .foregroundColor(Color(red: 0.88, green: 0.9, blue: 0.93))
+            .frame(minWidth: 44, minHeight: 40)
+            .accessibilityLabel(label)
     }
 }
 
