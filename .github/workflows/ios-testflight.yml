@@ -70,11 +70,12 @@ jobs:
       - name: Injecter les codes Premium (secrets, jamais commités)
         env:
           FICO_PREMIUM_CODES: ${{ secrets.FICO_PREMIUM_CODES }}
+          FICO_TIPS_CODES: ${{ secrets.FICO_TIPS_CODES }}
           FICO_ATLAS_ENTRIES: ${{ secrets.FICO_ATLAS_ENTRIES }}
         run: |
           python3 - <<'PY'
           import json, os, re
-          raw = (os.environ.get("FICO_PREMIUM_CODES") or "").upper()
+          raw = ((os.environ.get("FICO_PREMIUM_CODES") or "") + "\n" + (os.environ.get("FICO_TIPS_CODES") or "")).upper()
           # Ne garde que des codes de 26 caractères (A-Z, 2-7) : ignore accolades, guillemets, noms de clés
           tokens = re.findall(r"(?<![A-Z0-9])[A-Z2-7]{26}(?![A-Z0-9])", raw)
           codes = "".join(dict.fromkeys(tokens))
