@@ -1,12 +1,50 @@
-<!doctype html><html lang='fr'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Funds Management dans S/4HANA : erreur FICUSTOM401 à la facture</title><style>
-:root{--bg:#fff;--fg:#1a1a2e;--mut:#5b5b72;--acc:#3b3bd6;--warn:#b42318;--ok:#067647;--card:#f5f5fb;--bd:#dcdce8}
-@media(prefers-color-scheme:dark){:root{--bg:#12121c;--fg:#ececf6;--mut:#a3a3ba;--acc:#8c8cff;--warn:#ff8a80;--ok:#6ee7a8;--card:#1c1c2b;--bd:#2f2f45}}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 -apple-system,Segoe UI,Arial,sans-serif;padding:16px;max-width:760px;margin:auto}
-h1{font-size:1.35rem;margin:.2em 0}h2{font-size:1.05rem;color:var(--acc);margin:1.4em 0 .4em;text-transform:uppercase;letter-spacing:.03em}
-.tag{display:inline-block;background:var(--card);border:1px solid var(--bd);border-radius:99px;padding:2px 10px;font-size:.78rem;margin:2px 4px 2px 0;color:var(--mut)}
-.box{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:10px 14px;margin:8px 0}
-.trap{border-left:4px solid var(--warn)}.tip{border-left:4px solid var(--ok)}
-.trap b.l{color:var(--warn)}.tip b.l{color:var(--ok)}
-code{background:var(--card);border:1px solid var(--bd);border-radius:4px;padding:0 5px;font-size:.9em}
-ul{padding-left:20px}a{color:var(--acc)}.foot{color:var(--mut);font-size:.8rem;margin-top:2em}
-</style></head><body><p><a href='index.html'>← Toutes les fiches</a></p><h1>Funds Management dans S/4HANA : erreur FICUSTOM401 à la facture</h1><span class='tag'>PSM-FM</span><span class='tag'>FICUSTOM401</span><span class='tag'>MIRO</span><span class='tag'>MIGO</span><span class='tag'>FMDERIVE</span><h2>Symptôme</h2><p>Après migration ou upgrade vers S/4HANA avec Funds Management actif, l'erreur FICUSTOM401 apparaît à la comptabilisation des factures (MIRO / MIGO), alors qu'elle n'existait pas avant avec les mêmes réglages FMDERIVE.</p><h2>Cause</h2><p>Le KBA 2491908 relie le problème à la détermination des affectations comptables FM (composant PSM-FM-UP-AD) dans S/4HANA.</p><h2>Solution (fils et KBA)</h2><ul><li>Lire le KBA 2491908 et revoir la dérivation FM (FMDERIVE) en tenant compte du nouveau comportement S/4HANA.</li></ul><h2>Pièges</h2><div class='box trap'><b class='l'>Piège</b> Une dérivation qui fonctionnait en ECC peut échouer après upgrade sans changement de réglage.</div><h2>Tips</h2><div class='box tip'><b class='l'>Tip</b> Inclure des tests MIRO/MIGO avec FM actif dans la recette de migration.</div><h2>Notes OSS / KBA</h2><ul><li>2491908 : FICUSTOM401, MIRO/MIGO</li></ul><h2>Sources</h2><ul><li><a href='https://userapps.support.sap.com/sap/support/knowledge/en/2491908'>KBA 2491908</a></li></ul><p class='foot'>YAASAP · fiche issue de fils SAP Community et de KBA. Contenu des notes non consulté en intégral (aperçus publics) : vérifier l'applicabilité à votre release dans SAP for Me.</p></body></html>
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Funds Management dans S/4HANA : erreur FICUSTOM401 à la facture | SAP FICO EXPERT</title>
+<meta name="description" content="Après migration ou upgrade vers S/4HANA avec Funds Management actif, l&#x27;erreur FICUSTOM401 apparaît à la comptabilisation des factures (MIRO / MIGO), alors…">
+<link rel="canonical" href="https://yaasap.github.io/SAP-FICO-EXPERT/tips-pieges/fm-ficustom401-facturation-s4.html">
+<style>:root{--bg:#f2f4f7;--panel:#fff;--ink:#142033;--mute:#5b6a7e;--line:#d9dfe7;--c:#0b5fc2;--gold:#e8a13a;--dark:#0e1b2c;--f-body:'Archivo',system-ui,-apple-system,'Segoe UI',sans-serif;--f-mono:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace}@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1622;--panel:#16212f;--ink:#e6ecf4;--mute:#93a2b6;--line:#27364a;--c:#6aa8f5;color-scheme:dark}}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:400 16.5px/1.6 var(--f-body);padding-inline:16px;padding-bottom:56px}.wrap{max-width:760px;margin:0 auto}.back{display:inline-block;padding:14px 0 0;font:600 13.5px var(--f-body);color:var(--mute);text-decoration:none}header{padding-block:26px 8px}.eyebrow{font:700 12px var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--c)}h1{font-size:clamp(28px,5vw,44px);line-height:1.08;margin:10px 0 12px;font-weight:800;letter-spacing:-.025em;text-wrap:balance}.code{display:inline-block;font:700 14px var(--f-mono);background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:3px 9px;margin-right:6px}.lede{color:var(--mute);font-size:18px;margin:0}.box{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-top:16px}.box h2{font:700 12px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--c);margin:0 0 8px}.box p{margin:0}.box ol,.box ul{margin:0;padding-left:22px;display:grid;gap:7px}.box.trap{border-left:5px solid var(--gold)}.where{font:500 13.5px var(--f-mono);color:var(--mute)}.cta{margin-top:26px;background:var(--dark);color:#fff;border-radius:12px;padding:20px;border-top:5px solid var(--gold)}.cta b{font-size:18px}.cta p{margin:6px 0 14px;color:rgba(255,255,255,.75);font-size:15px}.cta a.b{display:inline-block;background:var(--gold);color:#1a1204;font-weight:800;text-decoration:none;padding:11px 16px;border-radius:8px}.cta a.s{color:var(--gold);margin-left:14px;font-weight:600;font-size:14px}footer{margin-top:30px;padding-top:14px;border-top:1px solid var(--line);color:var(--mute);font-size:13px}footer a{color:var(--c)}
+.lock{border-top:5px solid var(--gold)}.lock p{margin:0 0 10px}.lock form{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.lock input{flex:1 1 220px;min-width:0;font:500 14px var(--f-mono);padding:11px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}.lock button{background:var(--c);color:#fff;border:0;border-radius:8px;padding:11px 16px;font:700 15px var(--f-body);cursor:pointer}.msg{font-size:14px;color:#c0392b;min-height:1.2em;margin-top:8px}
+.prices{display:grid;gap:12px;margin-top:16px}@media(min-width:640px){.prices{grid-template-columns:repeat(3,1fr)}}.price{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:6px}.price.hot{border-color:var(--gold);border-width:2px}.price .n{font:800 28px var(--f-body)}.price .d{color:var(--mute);font-size:14px;flex:1}.price a{display:inline-block;text-align:center;background:var(--gold);color:#1a1204;font-weight:800;text-decoration:none;padding:10px 14px;border-radius:8px}.price a.off{background:var(--line);color:var(--mute);pointer-events:none}.note{color:var(--mute);font-size:13.5px;margin-top:10px}
+.list{list-style:none;margin:20px 0 0;padding:0;display:grid;gap:8px}.list a{display:block;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 16px;color:var(--ink);text-decoration:none}.list a:hover{border-color:var(--c)}.list .k{display:block;font:700 11px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}.list b{font-weight:700}.list span.i{display:block;color:var(--mute);font-size:14.5px;margin-top:2px}.bk{display:inline-block;padding:14px 0 0;font:600 13.5px var(--f-body);color:var(--mute);text-decoration:none}.tags{margin:6px 0 0}.nt{color:var(--mute);font-size:13.5px;margin-top:10px}.nt a{color:var(--c)}.lock .nt{margin-top:10px}</style>
+</head>
+<body>
+<div class="wrap">
+<a class="bk" href="index.html">← Tips &amp; pièges</a>
+<header><div class="eyebrow">Tip SAP FICO · PSM-FM</div><h1>Funds Management dans S/4HANA : erreur FICUSTOM401 à la facture</h1><div class="tags"><span class="code">PSM-FM</span><span class="code">FICUSTOM401</span><span class="code">MIRO</span><span class="code">MIGO</span><span class="code">FMDERIVE</span></div></header>
+<main>
+<div class="box"><h2>Symptôme</h2><p>Après migration ou upgrade vers S/4HANA avec Funds Management actif, l'erreur FICUSTOM401 apparaît à la comptabilisation des factures (MIRO / MIGO), alors qu'elle n'existait pas avant avec les mêmes réglages FMDERIVE.</p></div>
+<div class="box lock" id="lock"><h2>Fiche complète</h2><p>La fiche complète contient la cause, 1 étape de solution, 1 piège, 1 tip, les notes OSS / KBA et les sources.</p><p><b>Tu as un code d'accès ?</b></p><form id="f"><input id="c" type="text" autocomplete="off" spellcheck="false" placeholder="Ton code d'accès"><button type="submit">Débloquer</button></form><div class="msg" id="msg"></div><p class="nt">Pas encore de code ? Écris à <a href="mailto:yacine.aouabed@yaasap.com">yacine.aouabed@yaasap.com</a>.</p></div>
+</main>
+<footer><a href="../index.html">SAP FICO EXPERT</a> · Contenu issu de fils SAP Community et de KBA, à vérifier dans ton système : les écrans et paramètres varient selon la release.</footer>
+</div>
+<script type="application/json" id="d">{"e": "T2WLAGxFKceMloHrs4ueqfNaeZb2yQXgcTsZNkAYXsxAHa6ErIaNcwCIfnBasfXZkD+H2NFkcYYmxC3aflbXoSF7+SO2w98lYk47rHpR5V76cnA+wlBx0dIhsw5qYonNdLswhOi555Gyxcw67AptWMYrMEQRJV5KKh/0/cTpdQ4dk/1/NAgYkZ2yp5ZUdepyVjUWQsSDbwvsfnFOsp9u3NDvWtPqyzQV8obXSMHjFebr/XXyWVFVSSpUFfcx5TOzcfVDJoKJgTCgmjQccohjcr4KweUfG5kWlkVzt1g0Lqsx38ZRoo+pZRipTQ06Cdc6TuQeVUFcenygxt4wYw8gm0esLzUB0KYrEvCOTxBnvAFfxcz6Ef9r3yvuByQr/KgK/7wwAgN9bHfqD5f/or7PPxquFDlSVvyuOAwMint/Jbn5lkNJ3iy+uRlIGPNNBLrtc1n1RNobPzr5F0y/bqkIzGP/yjE7eIAkqgN156ZMrv7hXNsnQr18H2/3uPCsr82hOsAHn5C2XDnMXqpWAiPef98i41aOpnKFYf1QmGG4sN4Ri3aEIZ+8b+bsuXUdOqje5lDD9cU3wqKbwieWFLpqBIwA4oJD7Ylelw5cIY5ZQ/75XSQCIlpnWihnpTELKocPRBhlUW8HCKLJPM9gliSUdNoHslNP4u4LQCYWhomE7l2ctfkvWgkfGe9eARzTzAIIAEMw5Mxiwsi1WY8+v0PwpnQ1YM1HgkQwJrKMf6R9ILdNDzxyOR18NSrNLhAE0lgu6XUGOlP6YFnWEbWh7+MtbRifT6YikOaobtga+ioc+1KpHgzubNoO+VBxi2rKHco49FKR9dj9H9oiq0RmBG3QHem4CMiGR9Jz4Y3NYZDp4cboUS3bpQ2C/l5gp1cs4ITgf+ApovHfpbFJO1DdQDmd+JD5tPiFUO2L8SCQrsrDZkhksakSvWtnpdDXYGogHf2PdYayxhcY2+oHqtCVDaRwHeiQYQkpB3xwpSt0/j/6W6DinnSWdH2X8uRyhMDlwRP3mjh+r3DvKmYBZZ/3SSulS3CPg1gNqHczp0ZkT0K61Y0KYDynR5dVTahRt9LJcl+a80GrEVj+CKChhGFM2t7W/2SKw5jTY5/uM/fDbN+gxrH6lyAF6HtVsG0+BU6IByc0JtLOQ6hLI+YvGpenSLJMKhNE1E8plLKhXvog3ucy3sreAQA/jqj1ULk=", "w": "t9tKi5Uiu072I1w0sDFDx45Bmdng4cnT/n4qbDO5jqxqXvXKQeWOo4AsDuk="}</script>
+<script>(function(){
+var D=JSON.parse(document.getElementById('d').textContent);
+var A='ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+function B(s){var b=atob(s),a=new Uint8Array(b.length);for(var i=0;i<b.length;i++)a[i]=b.charCodeAt(i);return a}
+function B32(s){var bits=0,v=0,o=[];for(var i=0;i<s.length;i++){var x=A.indexOf(s.charAt(i));if(x<0)return null;v=(v<<5)|x;bits+=5;if(bits>=8){o.push((v>>>(bits-8))&255);bits-=8;v&=(1<<bits)-1}}return new Uint8Array(o)}
+async function dec(kb,blob){var k=await crypto.subtle.importKey('raw',kb,'AES-GCM',false,['decrypt']);var d=B(blob);return new Uint8Array(await crypto.subtle.decrypt({name:'AES-GCM',iv:d.slice(0,12)},k,d.slice(12)))}
+async function open(code){
+var s=String(code).toUpperCase().replace(/[^A-Z2-7]/g,'');
+if(s.length<26||s.length%26)return null;
+for(var i=0;i<s.length;i+=26){var kb=B32(s.slice(i,i+26));if(!kb||kb.length!==16)continue;
+try{return new TextDecoder().decode(await dec(kb,D.e))}catch(e){}
+try{var fk=await dec(kb,D.w);return new TextDecoder().decode(await dec(fk,D.e))}catch(e){}}
+return null}
+var L=document.getElementById('lock'),M=document.getElementById('msg');
+function show(h){L.outerHTML=h}
+async function tryCode(c,quiet){
+if(!window.crypto||!crypto.subtle){if(!quiet)M.textContent='Ton navigateur ne permet pas le déchiffrement sur cette page.';return false}
+var h=await open(c);
+if(h){show(h);try{window.FicoSite?FicoSite.save(c):localStorage.setItem('yaasap_fiches_code',c)}catch(e){}return true}
+if(!quiet)M.textContent='Ce code ne donne pas accès à cette fiche. Vérifie-le ou écris-nous.';return false}
+document.getElementById('f').addEventListener('submit',function(ev){ev.preventDefault();tryCode(document.getElementById('c').value,false)});
+try{var st=localStorage.getItem('yaasap_fiches_code');if(st)tryCode(st,true)}catch(e){}
+})();</script>
+<script src="../site.js"></script>
+</body>
+</html>
