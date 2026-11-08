@@ -67,6 +67,31 @@ jobs:
               sys.exit(1)
           PY
 
+      - name: Injecter les codes Premium (secrets, jamais commités)
+        env:
+          FICO_PREMIUM_CODES: ${{ secrets.FICO_PREMIUM_CODES }}
+          FICO_ATLAS_ENTRIES: ${{ secrets.FICO_ATLAS_ENTRIES }}
+        run: |
+          python3 - <<'PY'
+          import json, os
+          codes = "".join((os.environ.get("FICO_PREMIUM_CODES") or "").split())
+          atlas = []
+          for line in (os.environ.get("FICO_ATLAS_ENTRIES") or "").splitlines():
+              line = line.strip()
+              if ":" in line:
+                  email, code = line.split(":", 1)
+                  atlas.append((email.strip(), code.strip()))
+          entries = ", ".join("(email: %s, code: %s)" % (json.dumps(e), json.dumps(c)) for e, c in atlas)
+          src = "enum PremiumSecrets {\n"
+          src += "    static let ficheCodes = %s\n" % json.dumps(codes)
+          src += "    static let atlasEntries: [(email: String, code: String)] = [%s]\n" % entries
+          src += "    static var isConfigured: Bool { !ficheCodes.isEmpty || !atlasEntries.isEmpty }\n}\n"
+          open("FicoExpert/PremiumSecrets.swift", "w").write(src)
+          print("Codes fiches :", len(codes) // 26, "| entrées Atlas :", len(atlas))
+          if not codes and not atlas:
+              print("ATTENTION : aucun code Premium fourni, l'achat n'ouvrira aucune fiche.")
+          PY
+
       - name: Installer XcodeGen et générer le projet
         run: |
           brew install xcodegen

@@ -132,7 +132,15 @@ struct WebView: UIViewRepresentable {
     func makeCoordinator() -> Coordinator { Coordinator(self) }
 
     private static func nativeScript(premium: Bool) -> String {
-        "window.FICO_NATIVE = { platform: 'ios', premium: \(premium ? "true" : "false") };"
+        """
+        window.FICO_NATIVE = {
+          platform: 'ios',
+          premium: \(premium ? "true" : "false"),
+          getPremiumContent: function (id) {
+            return window.webkit.messageHandlers.ficoPremium.postMessage(String(id));
+          }
+        };
+        """
     }
 
     func makeUIView(context: Context) -> WKWebView {
@@ -146,6 +154,10 @@ struct WebView: UIViewRepresentable {
                                   injectionTime: .atDocumentStart,
                                   forMainFrameOnly: true)
         config.userContentController.addUserScript(script)
+        // Fournit les fiches déchiffrées au site, seulement si l'achat Premium est valide.
+        context.coordinator.premiumHandler.isPremium = isPremium
+        config.userContentController.addScriptMessageHandler(
+            context.coordinator.premiumHandler, contentWorld: .page, name: "ficoPremium")
 
         let web = WKWebView(frame: .zero, configuration: config)
         web.navigationDelegate = context.coordinator
@@ -169,6 +181,7 @@ struct WebView: UIViewRepresentable {
             context.coordinator.lastReloadToken = reloadToken
             web.load(URLRequest(url: AppConfig.startURL))
         }
+        context.coordinator.premiumHandler.isPremium = isPremium
         if context.coordinator.lastPremium != isPremium {
             context.coordinator.lastPremium = isPremium
             let js = Self.nativeScript(premium: isPremium)
@@ -181,6 +194,7 @@ struct WebView: UIViewRepresentable {
         var parent: WebView
         var lastReloadToken = 0
         var lastPremium = false
+        let premiumHandler = PremiumHandler()
 
         init(_ parent: WebView) { self.parent = parent }
 

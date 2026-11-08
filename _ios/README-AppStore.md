@@ -71,11 +71,12 @@ open FicoExpert.xcodeproj
 
 ## 5. Fonctions natives ajoutées (v1.1 du projet)
 
-- **Barre du bas** : retour, accueil, favori (étoile), liste des favoris, partage de la page, Premium.
+- **Barre d'en-tête native (icônes seules)** : retour, favori (étoile), liste des favoris, partage de la page, Premium. La navigation principale reste la barre du bas du site.
 - **Favoris** : enregistrés sur l'appareil (UserDefaults), suppression par balayage.
 - **Partage** : feuille de partage iOS avec l'URL de la fiche.
 - **Achat intégré (StoreKit 2)** : produit non consommable `com.yaasap.sapfico.premium`, bouton Débloquer, Restaurer mes achats, mise à jour automatique des droits.
-- **Pont vers le site** : l'app expose `window.FICO_NATIVE = { platform: 'ios', premium: true|false }` et déclenche l'événement `fico-native` quand l'achat change. Le site doit lire cette valeur pour ouvrir les fiches premium ; sans cette modification côté site, l'achat n'a pas d'effet sur le contenu.
+- **Pont vers le site** : l'app expose `window.FICO_NATIVE = { platform: 'ios', premium, getPremiumContent(id) }` et déclenche l'événement `fico-native` quand l'achat change. `getPremiumContent` appelle le code Swift (`PremiumVault`), qui ne répond que si l'achat Premium est valide : il télécharge la fiche chiffrée du site et la déchiffre avec les codes embarqués au build.
+- **Codes Premium du build** : secrets GitHub `FICO_PREMIUM_CODES` (codes fiches, 26 caractères chacun, séparés par des espaces ou retours à la ligne) et `FICO_ATLAS_ENTRIES` (une ligne `email:code` par Atlas). Le workflow les écrit dans `PremiumSecrets.swift` au build ; le fichier du dépôt reste vide (dépôt public). Sans secret, l'achat réussit mais aucune fiche premium ne s'ouvre.
 
 **À faire dans App Store Connect** : Monétisation > Achats intégrés > créer un produit *Non consommable* avec l'identifiant `com.yaasap.sapfico.premium`, un prix, un nom et une description en français, une capture de l'écran d'achat, puis le joindre à la version soumise. Pour tester dans Xcode : Product > Scheme > Edit Scheme > Run > Options > StoreKit Configuration, avec un fichier StoreKit créé via File > New > StoreKit Configuration File contenant le même identifiant.
 
