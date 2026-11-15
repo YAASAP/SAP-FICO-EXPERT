@@ -217,9 +217,19 @@ struct WebView: UIViewRepresentable {
         func webView(_ webView: WKWebView, decidePolicyFor action: WKNavigationAction,
                      decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
             guard let url = action.request.url else { return decisionHandler(.allow) }
+            let scheme = (url.scheme ?? "").lowercased()
+
+            // Adresses internes au moteur web : l'Atlas s'affiche dans un cadre chargé en
+            // about:srcdoc. Les annuler laissait ce cadre entièrement blanc.
+            if ["about", "data", "blob", "javascript"].contains(scheme) {
+                return decisionHandler(.allow)
+            }
+            // Chargements à l'intérieur d'un cadre de la page (iframe) : jamais vers Safari.
+            if let target = action.targetFrame, !target.isMainFrame, action.navigationType != .linkActivated {
+                return decisionHandler(.allow)
+            }
 
             // mailto:, tel:, etc. -> système
-            let scheme = url.scheme ?? ""
             if scheme != "http" && scheme != "https" {
                 UIApplication.shared.open(url)
                 return decisionHandler(.cancel)
