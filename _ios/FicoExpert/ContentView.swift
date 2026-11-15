@@ -150,10 +150,7 @@ struct WebView: UIViewRepresentable {
         config.websiteDataStore = .default()
 
         // Expose l'état natif au site : window.FICO_NATIVE.premium
-        let script = WKUserScript(source: Self.nativeScript(premium: isPremium),
-                                  injectionTime: .atDocumentStart,
-                                  forMainFrameOnly: true)
-        config.userContentController.addUserScript(script)
+        Self.installNativeScript(in: config.userContentController, premium: isPremium)
         // Fournit les fiches déchiffrées au site, seulement si l'achat Premium est valide.
         context.coordinator.premiumHandler.isPremium = isPremium
         config.userContentController.addScriptMessageHandler(
@@ -184,10 +181,25 @@ struct WebView: UIViewRepresentable {
         context.coordinator.premiumHandler.isPremium = isPremium
         if context.coordinator.lastPremium != isPremium {
             context.coordinator.lastPremium = isPremium
-            let js = Self.nativeScript(premium: isPremium)
-                + " window.dispatchEvent(new Event('fico-native'));"
-            web.evaluateJavaScript(js, completionHandler: nil)
+            // Le script injecté au démarrage contient l'état connu à ce moment-là (souvent « non
+            // Premium », l'achat étant relu après coup). Sans ce remplacement, chaque rechargement
+            // complet (tirer pour rafraîchir, Accueil, Réessayer) redonnait premium: false au site,
+            // qui affichait alors son formulaire de code d'accès.
+            Self.installNativeScript(in: web.configuration.userContentController, premium: isPremium)
+            Self.syncPremium(in: web, premium: isPremium)
         }
+    }
+
+    static func installNativeScript(in controller: WKUserContentController, premium: Bool) {
+        controller.removeAllUserScripts()
+        controller.addUserScript(WKUserScript(source: nativeScript(premium: premium),
+                                              injectionTime: .atDocumentStart,
+                                              forMainFrameOnly: true))
+    }
+
+    static func syncPremium(in web: WKWebView, premium: Bool) {
+        web.evaluateJavaScript(nativeScript(premium: premium)
+            + " window.dispatchEvent(new Event('fico-native'));", completionHandler: nil)
     }
 
     final class Coordinator: NSObject, WKNavigationDelegate {
@@ -229,6 +241,8 @@ struct WebView: UIViewRepresentable {
 
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
             webView.scrollView.refreshControl?.endRefreshing()
+            // Filet de sécurité : après chaque chargement, le site reçoit l'état Premium réel.
+            WebView.syncPremium(in: webView, premium: premiumHandler.isPremium)
             DispatchQueue.main.async {
                 self.parent.isLoading = false
                 self.parent.loadFailed = false
