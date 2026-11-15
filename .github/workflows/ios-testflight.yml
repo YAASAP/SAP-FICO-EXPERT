@@ -71,11 +71,13 @@ jobs:
         env:
           FICO_PREMIUM_CODES: ${{ secrets.FICO_PREMIUM_CODES }}
           FICO_TIPS_CODES: ${{ secrets.FICO_TIPS_CODES }}
+          FICO_TIPS_CODE: ${{ secrets.FICO_TIPS_CODE }}
           FICO_ATLAS_ENTRIES: ${{ secrets.FICO_ATLAS_ENTRIES }}
         run: |
           python3 - <<'PY'
           import json, os, re
-          raw = ((os.environ.get("FICO_PREMIUM_CODES") or "") + "\n" + (os.environ.get("FICO_TIPS_CODES") or "")).upper()
+          raw = ((os.environ.get("FICO_PREMIUM_CODES") or "") + "\n" + (os.environ.get("FICO_TIPS_CODES") or "") + "
+" + (os.environ.get("FICO_TIPS_CODE") or "")).upper()
           # Les fichiers de codes écrivent les codes par groupes (XXXX-XXXX-...-Q) : retirer
           # les tirets et espaces entre deux caractères de code avant de chercher les codes.
           joined = re.sub(r"(?<=[A-Z2-7])[ \t-]+(?=[A-Z2-7])", "", raw)
@@ -107,7 +109,7 @@ jobs:
               v = (v or "").upper()
               j = re.sub(r"(?<=[A-Z2-7])[ 	-]+(?=[A-Z2-7])", "", v)
               return len(set(re.findall(r"(?<![A-Z0-9])[A-Z2-7]{26}(?![A-Z0-9])", v) + re.findall(r"(?<![A-Z0-9])[A-Z2-7]{26}(?![A-Z0-9])", j)))
-          for n in ("FICO_PREMIUM_CODES", "FICO_TIPS_CODES"):
+          for n in ("FICO_PREMIUM_CODES", "FICO_TIPS_CODES", "FICO_TIPS_CODE"):
               v = os.environ.get(n) or ""
               print(f"::notice::{n} : {len(v)} caractères, {count(v)} codes trouvés")
           print(f"::notice::FICO_ATLAS_ENTRIES : {len(atlas_raw)} caractères, {len(atlas)} entrées, longueurs des codes : {[len(c) for _, c in atlas]}")
