@@ -102,6 +102,15 @@ jobs:
                   if m:
                       atlas.append((m.group(1), m.group(2)))
           atlas = [(e.strip(), c.strip()) for e, c in atlas if e.strip() and c.strip()]
+          # Diagnostic sans rien révéler : longueur de chaque secret et nombre de codes trouvés.
+          def count(v):
+              v = (v or "").upper()
+              j = re.sub(r"(?<=[A-Z2-7])[ 	-]+(?=[A-Z2-7])", "", v)
+              return len(set(re.findall(r"(?<![A-Z0-9])[A-Z2-7]{26}(?![A-Z0-9])", v) + re.findall(r"(?<![A-Z0-9])[A-Z2-7]{26}(?![A-Z0-9])", j)))
+          for n in ("FICO_PREMIUM_CODES", "FICO_TIPS_CODES"):
+              v = os.environ.get(n) or ""
+              print(f"::notice::{n} : {len(v)} caractères, {count(v)} codes trouvés")
+          print(f"::notice::FICO_ATLAS_ENTRIES : {len(atlas_raw)} caractères, {len(atlas)} entrées, longueurs des codes : {[len(c) for _, c in atlas]}")
           with open(os.path.join(os.environ["RUNNER_TEMP"], "premium.json"), "w") as f:
               json.dump({"codes": codes, "atlas": atlas}, f)
           entries = ", ".join("(email: %s, code: %s)" % (json.dumps(e), json.dumps(c)) for e, c in atlas)
