@@ -119,9 +119,11 @@ jobs:
         # Bloque le build si un Tip ou un Atlas ne s'ouvrirait pas après l'achat (refus Apple 2.1).
         run: |
           python3 -m venv "$RUNNER_TEMP/venv"
-          "$RUNNER_TEMP/venv/bin/pip" install --quiet cryptography
+          "$RUNNER_TEMP/venv/bin/pip" install --quiet cryptography certifi
           "$RUNNER_TEMP/venv/bin/python" - <<'PY'
-          import base64, glob, hashlib, json, os, re, sys, urllib.request
+          import base64, glob, hashlib, json, os, re, ssl, sys, urllib.request
+          import certifi
+          CTX = ssl.create_default_context(cafile=certifi.where())
           from cryptography.hazmat.primitives.ciphers.aead import AESGCM
           from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
           from cryptography.hazmat.primitives import hashes
@@ -156,32 +158,43 @@ jobs:
               return False
 
           def open_atlas(p):
+              email_known = False
               for email, code in secrets["atlas"]:
                   email = email.strip().lower(); code = code.strip().upper()
                   wid = hashlib.sha256((p["GS"] + email).encode()).hexdigest()[:12]
                   w = next((x for x in p["WR"] if x.get("id") == wid), None)
                   if not w: continue
+                  email_known = True
                   kdf = PBKDF2HMAC(hashes.SHA256(), 32, base64.b64decode(w["s"]), 200_000)
                   raw_key = gcm(kdf.derive(f"{email}:{code}".encode()), base64.b64decode(w["i"]), base64.b64decode(w["w"]))
-                  if raw_key and gcm(raw_key, base64.b64decode(p["PI"]), base64.b64decode(p["PL"])): return True
-              return False
+                  if raw_key and gcm(raw_key, base64.b64decode(p["PI"]), base64.b64decode(p["PL"])): return True, ""
+              return False, ("code faux pour cet e-mail" if email_known else "aucun e-mail du secret ne correspond")
+
+          def fetch(i):
+              req = urllib.request.Request(f"{start}/content/{i}.json", headers={"User-Agent": "Mozilla/5.0 FicoExpertBuild"})
+              return json.load(urllib.request.urlopen(req, timeout=30, context=CTX))
 
           groups = {
               "Tips": sorted(os.path.basename(f)[:-5] for f in glob.glob("../tips-pieges/*.html") if not f.endswith("index.html")),
               "Atlas": sorted(os.path.basename(f)[:-5] for f in glob.glob("../atlas_*.html")),
           }
+          # Les résultats sortent aussi en annotations (::notice:: / ::error::), lisibles sans connexion à GitHub.
+          print(f"::notice::Secrets lus : {len(keys)} codes fiches/tips, {len(secrets['atlas'])} entrées Atlas")
           failed = []
           for name, ids in groups.items():
               ok = 0
               for i in ids:
                   try:
-                      p = json.load(urllib.request.urlopen(f"{start}/content/{i}.json", timeout=30))
-                  except Exception:
-                      print(f"  {name} {i} : contenu introuvable en ligne"); failed.append(i); continue
-                  good = open_atlas(p) if p.get("type") == "atlas" else open_fiche(p)
+                      p = fetch(i)
+                  except Exception as e:
+                      print(f"::error::{name} {i} : contenu non téléchargé ({type(e).__name__}: {str(e)[:120]})"); failed.append(i); continue
+                  if p.get("type") == "atlas":
+                      good, why = open_atlas(p)
+                  else:
+                      good, why = open_fiche(p), "aucun code ne l'ouvre"
                   ok += good
-                  if not good: failed.append(i); print(f"  {name} {i} : NE S'OUVRE PAS avec les codes injectés")
-              print(f"{name} ouverts : {ok}/{len(ids)}")
+                  if not good: failed.append(i); print(f"::error::{name} {i} : ne s'ouvre pas ({why})")
+              print(f"::notice::{name} ouverts : {ok}/{len(ids)}")
           if failed:
               print("ÉCHEC : mettre à jour FICO_TIPS_CODES / FICO_ATLAS_ENTRIES, puis relancer.")
               sys.exit(1)
