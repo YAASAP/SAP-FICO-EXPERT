@@ -76,8 +76,7 @@ jobs:
         run: |
           python3 - <<'PY'
           import json, os, re
-          raw = ((os.environ.get("FICO_PREMIUM_CODES") or "") + "\n" + (os.environ.get("FICO_TIPS_CODES") or "") + "
-" + (os.environ.get("FICO_TIPS_CODE") or "")).upper()
+          raw = ((os.environ.get("FICO_PREMIUM_CODES") or "") + "\n" + (os.environ.get("FICO_TIPS_CODES") or "") + "\n" + (os.environ.get("FICO_TIPS_CODE") or "")).upper()
           # Les fichiers de codes écrivent les codes par groupes (XXXX-XXXX-...-Q) : retirer
           # les tirets et espaces entre deux caractères de code avant de chercher les codes.
           joined = re.sub(r"(?<=[A-Z2-7])[ \t-]+(?=[A-Z2-7])", "", raw)
