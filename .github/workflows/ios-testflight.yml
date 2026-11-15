@@ -76,14 +76,34 @@ jobs:
           python3 - <<'PY'
           import json, os, re
           raw = ((os.environ.get("FICO_PREMIUM_CODES") or "") + "\n" + (os.environ.get("FICO_TIPS_CODES") or "")).upper()
+          # Les fichiers de codes écrivent les codes par groupes (XXXX-XXXX-...-Q) : retirer
+          # les tirets et espaces entre deux caractères de code avant de chercher les codes.
+          joined = re.sub(r"(?<=[A-Z2-7])[ \t-]+(?=[A-Z2-7])", "", raw)
           # Ne garde que des codes de 26 caractères (A-Z, 2-7) : ignore accolades, guillemets, noms de clés
           tokens = re.findall(r"(?<![A-Z0-9])[A-Z2-7]{26}(?![A-Z0-9])", raw)
+          tokens += re.findall(r"(?<![A-Z0-9])[A-Z2-7]{26}(?![A-Z0-9])", joined)
           codes = "".join(dict.fromkeys(tokens))
           atlas = []
-          for line in (os.environ.get("FICO_ATLAS_ENTRIES") or "").splitlines():
-              m = re.search(r"([\w.+-]+@[\w.-]+)\s*[:=]\s*[\"']?([A-Za-z0-9_-]+)", line)
-              if m:
-                  atlas.append((m.group(1), m.group(2)))
+          atlas_raw = os.environ.get("FICO_ATLAS_ENTRIES") or ""
+          try:
+              data = json.loads(atlas_raw)
+          except ValueError:
+              data = None
+          if data is not None:
+              # Format JSON accepté : {"email": "code"}, [{"email": ..., "code": ...}] ou {"x": {"email": ..., "code": ...}}
+              items = data.values() if isinstance(data, dict) else data
+              if isinstance(data, dict) and all(isinstance(v, str) for v in data.values()):
+                  atlas = [(k, v) for k, v in data.items() if "@" in k]
+              else:
+                  atlas = [(i.get("email", ""), i.get("code", "")) for i in items if isinstance(i, dict)]
+          else:
+              for line in atlas_raw.splitlines():
+                  m = re.search(r"([\w.+-]+@[\w.-]+)[\"']?\s*[:=,;\s]\s*[\"']?([A-Za-z0-9_-]+)", line)
+                  if m:
+                      atlas.append((m.group(1), m.group(2)))
+          atlas = [(e.strip(), c.strip()) for e, c in atlas if e.strip() and c.strip()]
+          with open(os.path.join(os.environ["RUNNER_TEMP"], "premium.json"), "w") as f:
+              json.dump({"codes": codes, "atlas": atlas}, f)
           entries = ", ".join("(email: %s, code: %s)" % (json.dumps(e), json.dumps(c)) for e, c in atlas)
           src = "enum PremiumSecrets {\n"
           src += "    static let ficheCodes = %s\n" % json.dumps(codes)
@@ -93,6 +113,78 @@ jobs:
           print("Codes fiches :", len(codes) // 26, "| entrées Atlas :", len(atlas))
           if not codes and not atlas:
               print("ATTENTION : aucun code Premium fourni, l'achat n'ouvrira aucune fiche.")
+          PY
+
+      - name: Vérifier que les codes ouvrent le contenu Premium en ligne
+        # Bloque le build si un Tip ou un Atlas ne s'ouvrirait pas après l'achat (refus Apple 2.1).
+        run: |
+          python3 -m venv "$RUNNER_TEMP/venv"
+          "$RUNNER_TEMP/venv/bin/pip" install --quiet cryptography
+          "$RUNNER_TEMP/venv/bin/python" - <<'PY'
+          import base64, glob, hashlib, json, os, re, sys, urllib.request
+          from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+          from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+          from cryptography.hazmat.primitives import hashes
+
+          secrets = json.load(open(os.path.join(os.environ["RUNNER_TEMP"], "premium.json")))
+          start = re.search(r'startURL = URL\(string: "([^"]+)"', open("FicoExpert/FicoExpertApp.swift").read()).group(1)
+          A = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"
+
+          def b32(c):
+              bits = value = 0; out = bytearray()
+              for ch in c:
+                  value = (value << 5) | A.index(ch); bits += 5
+                  if bits >= 8:
+                      out.append((value >> (bits - 8)) & 255); bits -= 8; value &= (1 << bits) - 1
+              return bytes(out)
+
+          def gcm(key, iv, sealed):
+              try: return AESGCM(key).decrypt(iv, sealed, None)
+              except Exception: return None
+
+          def dec(key, b64):
+              raw = base64.b64decode(b64)
+              return gcm(key, raw[:12], raw[12:]) if len(raw) > 28 else None
+
+          keys = [b32(secrets["codes"][i:i + 26]) for i in range(0, len(secrets["codes"]), 26)]
+
+          def open_fiche(p):
+              for k in keys:
+                  if dec(k, p["e"]): return True
+                  fk = dec(k, p["w"]) if p.get("w") else None
+                  if fk and dec(fk, p["e"]): return True
+              return False
+
+          def open_atlas(p):
+              for email, code in secrets["atlas"]:
+                  email = email.strip().lower(); code = code.strip().upper()
+                  wid = hashlib.sha256((p["GS"] + email).encode()).hexdigest()[:12]
+                  w = next((x for x in p["WR"] if x.get("id") == wid), None)
+                  if not w: continue
+                  kdf = PBKDF2HMAC(hashes.SHA256(), 32, base64.b64decode(w["s"]), 200_000)
+                  raw_key = gcm(kdf.derive(f"{email}:{code}".encode()), base64.b64decode(w["i"]), base64.b64decode(w["w"]))
+                  if raw_key and gcm(raw_key, base64.b64decode(p["PI"]), base64.b64decode(p["PL"])): return True
+              return False
+
+          groups = {
+              "Tips": sorted(os.path.basename(f)[:-5] for f in glob.glob("../tips-pieges/*.html") if not f.endswith("index.html")),
+              "Atlas": sorted(os.path.basename(f)[:-5] for f in glob.glob("../atlas_*.html")),
+          }
+          failed = []
+          for name, ids in groups.items():
+              ok = 0
+              for i in ids:
+                  try:
+                      p = json.load(urllib.request.urlopen(f"{start}/content/{i}.json", timeout=30))
+                  except Exception:
+                      print(f"  {name} {i} : contenu introuvable en ligne"); failed.append(i); continue
+                  good = open_atlas(p) if p.get("type") == "atlas" else open_fiche(p)
+                  ok += good
+                  if not good: failed.append(i); print(f"  {name} {i} : NE S'OUVRE PAS avec les codes injectés")
+              print(f"{name} ouverts : {ok}/{len(ids)}")
+          if failed:
+              print("ÉCHEC : mettre à jour FICO_TIPS_CODES / FICO_ATLAS_ENTRIES, puis relancer.")
+              sys.exit(1)
           PY
 
       - name: Installer XcodeGen et générer le projet
@@ -140,4 +232,4 @@ jobs:
 
       - name: Nettoyer la clé
         if: always()
-        run: rm -f "$HOME/private_keys/AuthKey_${KEY_ID}.p8"
+        run: rm -f "$HOME/private_keys/AuthKey_${KEY_ID}.p8" "$RUNNER_TEMP/premium.json"
