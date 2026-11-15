@@ -81,9 +81,20 @@ actor PremiumVault {
                   let data = Self.open(key: rawKey, iv: iv, sealed: sealed),
                   let text = String(data: data, encoding: .utf8)
             else { continue }
-            return text
+            return Self.atlasDocument(text, styles: payload["styles"] as? String ?? "")
         }
         return nil
+    }
+
+    /// Le contenu chiffré d'un Atlas n'est qu'une partie de la page d'origine : son script remplit
+    /// aussi le bloc `#stats` de l'en-tête et sa mise en forme vit dans `styles`. Le site, en mode
+    /// natif, l'affiche sans styles et sans en-tête : le script plante et l'Atlas reste vide.
+    /// On ajoute donc le bloc manquant puis les styles. Le `<style>` vient APRÈS le premier élément :
+    /// placé en tête, l'analyseur HTML le range dans <head>, que le site ne garde pas.
+    static func atlasDocument(_ text: String, styles: String) -> String {
+        let css = styles.replacingOccurrences(of: "</style", with: "", options: .caseInsensitive)
+        let stats = text.contains("id=\"stats\"") ? "" : "<div class=\"stats\" id=\"stats\"></div>"
+        return "<div class=\"fico-atlas\">\(stats)</div><style>\(css)</style>\(text)"
     }
 
     // MARK: Outils
