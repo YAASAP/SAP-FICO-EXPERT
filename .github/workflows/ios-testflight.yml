@@ -182,19 +182,20 @@ jobs:
           print(f"::notice::Secrets lus : {len(keys)} codes fiches/tips, {len(secrets['atlas'])} entrées Atlas")
           failed = []
           for name, ids in groups.items():
-              ok = 0
+              ok = 0; bad = []
               for i in ids:
                   try:
                       p = fetch(i)
                   except Exception as e:
-                      print(f"::error::{name} {i} : contenu non téléchargé ({type(e).__name__}: {str(e)[:120]})"); failed.append(i); continue
+                      bad.append(f"{i} (non téléchargé : {type(e).__name__})"); failed.append(i); continue
                   if p.get("type") == "atlas":
                       good, why = open_atlas(p)
                   else:
                       good, why = open_fiche(p), "aucun code ne l'ouvre"
                   ok += good
-                  if not good: failed.append(i); print(f"::error::{name} {i} : ne s'ouvre pas ({why})")
+                  if not good: failed.append(i); bad.append(f"{i} ({why})")
               print(f"::notice::{name} ouverts : {ok}/{len(ids)}")
+              if bad: print(f"::error::{name} non ouverts : " + " ; ".join(bad))
           if failed:
               print("ÉCHEC : mettre à jour FICO_TIPS_CODES / FICO_ATLAS_ENTRIES, puis relancer.")
               sys.exit(1)
