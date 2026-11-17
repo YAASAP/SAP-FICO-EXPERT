@@ -16,12 +16,15 @@ final class WebModel: ObservableObject {
 struct ContentView: View {
     @StateObject private var model = WebModel()
     @StateObject private var favorites = FavoritesStore()
+    @StateObject private var recents = RecentsStore()
+    @StateObject private var notes = NotesStore()
     @StateObject private var store = StoreManager()
 
     @State private var isLoading = true
     @State private var loadFailed = false
     @State private var reloadToken = 0
-    @State private var showFavorites = false
+    @State private var showLibrary = false
+    @State private var showNote = false
     @State private var showPremium = false
 
     private let accent = Color(red: 58/255, green: 95/255, blue: 143/255)
@@ -66,8 +69,16 @@ struct ContentView: View {
             }
         }
         .background(Color(AppConfig.nightBlue).ignoresSafeArea())
-        .sheet(isPresented: $showFavorites) {
-            FavoritesView(favorites: favorites) { url in model.load(url) }
+        .sheet(isPresented: $showLibrary) {
+            LibraryView(favorites: favorites, recents: recents, notes: notes) { url in model.load(url) }
+        }
+        .sheet(isPresented: $showNote) {
+            if let url = model.url {
+                NoteEditorView(notes: notes, title: model.title, url: url)
+            }
+        }
+        .onChange(of: model.url) { _ in
+            recents.record(title: model.title, url: model.url)
         }
         .sheet(isPresented: $showPremium) {
             PaywallView(store: store)
@@ -86,7 +97,10 @@ struct ContentView: View {
                       label: favorites.contains(model.url) ? "Retirer des favoris" : "Ajouter aux favoris") {
                 favorites.toggle(title: model.title, url: model.url)
             }
-            barButton("list.star", label: "Favoris") { showFavorites = true }
+            barButton("books.vertical", label: "Ma bibliothèque") { showLibrary = true }
+            barButton(notes.hasNote(for: model.url) ? "note.text.badge.plus" : "square.and.pencil",
+                      label: notes.hasNote(for: model.url) ? "Modifier ma note" : "Ajouter une note",
+                      enabled: model.url != nil) { showNote = true }
             if let url = model.url {
                 ShareLink(item: url, subject: Text(model.title)) {
                     barIcon("square.and.arrow.up", label: "Partager")
