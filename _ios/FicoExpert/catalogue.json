@@ -1,0 +1,992 @@
+[
+{
+"id": "fs00",
+"module": "SAP FI",
+"code": "FS00",
+"title": "Compte de rapprochement",
+"summary": "Un compte de rapprochement relie un sous-ledger (clients, fournisseurs, immobilisations) à la comptabilité générale. Il se déclare dans les données de contrôle du compte, au niveau société.",
+"where": "Transaction FS00, vue société, onglet Type/Contrôle (tables SKA1 et SKB1)",
+"teaser": "La fiche complète contient 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "fb50",
+"module": "SAP FI",
+"code": "FB50",
+"title": "Saisie de pièce de compte général",
+"summary": "FB50 sert à comptabiliser une pièce dans la comptabilité générale : régularisation, provision, reclassement. L'écran est unique pour toutes les lignes, avec un solde à zéro obligatoire.",
+"where": "Transaction FB50, saisie d'une pièce de compte général (tables BKPF et BSEG, ACDOCA en S/4HANA)",
+"teaser": "La fiche complète contient 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "fb60",
+"module": "SAP FI",
+"code": "FB60",
+"title": "Facture fournisseur",
+"summary": "FB60 comptabilise une facture fournisseur hors flux logistique : frais généraux, honoraires, abonnements. La ligne fournisseur et les lignes de charge sont saisies sur le même écran.",
+"where": "Transaction FB60, saisie de facture fournisseur (tables BKPF, BSEG et BSIK, LFA1 et LFB1 pour le fournisseur)",
+"teaser": "La fiche complète contient 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "fb70",
+"module": "SAP FI",
+"code": "FB70",
+"title": "Facture client",
+"summary": "FB70 comptabilise une facture client directement en comptabilité, sans passer par la facturation commerciale. Idéal pour des refacturations ou des produits hors flux de ventes.",
+"where": "Transaction FB70, saisie de facture client (tables BKPF, BSEG et BSID, KNA1 et KNB1 pour le client)",
+"teaser": "La fiche complète contient 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "f-53",
+"module": "SAP FI",
+"code": "F-53",
+"title": "Paiement sortant manuel",
+"summary": "F-53 comptabilise un paiement fournisseur manuel et compense les factures sélectionnées. À utiliser pour les règlements hors campagne de paiement automatique.",
+"where": "Transaction F-53, comptabilisation d'un paiement sortant (tables BKPF, BSEG, BSAK et BSIK)",
+"teaser": "La fiche complète contient 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "f-28",
+"module": "SAP FI",
+"code": "F-28",
+"title": "Paiement entrant",
+"summary": "F-28 comptabilise un encaissement client et le compense avec les factures ouvertes. Le choix entre paiement partiel et poste résiduel est la décision clé.",
+"where": "Transaction F-28, comptabilisation d'un paiement entrant (tables BKPF, BSEG, BSAD et BSID)",
+"teaser": "La fiche complète contient 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "fbl1n",
+"module": "SAP FI",
+"code": "FBL1N",
+"title": "Postes fournisseur",
+"summary": "FBL1N affiche les lignes d'un fournisseur : postes ouverts, compensés ou tous. C'est l'écran de référence pour suivre une dette fournisseur et préparer un rapprochement.",
+"where": "Transaction FBL1N, postes individuels de fournisseur (tables BSIK pour les ouverts et BSAK pour les compensés)",
+"teaser": "La fiche complète contient 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "fbl5n",
+"module": "SAP FI",
+"code": "FBL5N",
+"title": "Postes client",
+"summary": "FBL5N est l'équivalent client de FBL1N : factures ouvertes, encaissements et compensations. Indispensable avant toute relance ou analyse d'impayés.",
+"where": "Transaction FBL5N, postes individuels de client (tables BSID pour les ouverts et BSAD pour les compensés)",
+"teaser": "La fiche complète contient 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "fagll03",
+"module": "SAP FI",
+"code": "FAGLL03",
+"title": "Postes de compte général",
+"summary": "FAGLL03 affiche les lignes d'un compte de comptabilité générale, avec le choix du ledger. C'est l'écran de contrôle des comptes de charge, de produit et de bilan.",
+"where": "Transaction FAGLL03, postes de compte général (table FAGLFLEXA en ECC, ACDOCA en S/4HANA)",
+"teaser": "La fiche complète contient 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "fbra",
+"module": "SAP FI",
+"code": "FBRA",
+"title": "Annulation de compensation",
+"summary": "FBRA annule la compensation d'un paiement ou d'une compensation de compte. Il remet les postes en poste ouvert, sans annuler la pièce de paiement lui-même.",
+"where": "Transaction FBRA, annulation de compensation (tables BKPF, BSEG)",
+"teaser": "La fiche complète contient 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "fb08",
+"module": "SAP FI",
+"code": "FB08",
+"title": "Annulation de pièce",
+"summary": "FB08 annule une pièce comptable en générant une pièce d'annulation. La pièce d'origine reste dans le système, liée à son annulation.",
+"where": "Transaction FB08, annulation individuelle de pièce (tables BKPF et BSEG)",
+"teaser": "La fiche complète contient 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "f-01",
+"module": "SAP FI",
+"code": "F.01",
+"title": "États financiers",
+"summary": "F.01 édite le bilan et le compte de résultat à partir d'une version d'état financier. C'est la vue de synthèse la plus utilisée pour contrôler une clôture.",
+"where": "Transaction F.01, états financiers (versions d'état financier, balances de comptes)",
+"teaser": "La fiche complète contient 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "faglgvtr",
+"module": "SAP FI",
+"code": "FAGLGVTR",
+"title": "Report de soldes",
+"summary": "FAGLGVTR reporte les soldes à l'ouverture du nouvel exercice : bilan en comptes de bilan, résultat vers le compte de report des résultats.",
+"where": "Transaction FAGLGVTR, report de soldes en comptabilité générale (nouveau Grand Livre)",
+"teaser": "La fiche complète contient 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "fagl-fcv",
+"module": "SAP FI",
+"code": "FAGL_FCV",
+"title": "Réévaluation des devises",
+"summary": "FAGL_FCV réévalue les postes en devise étrangère à la date de clôture et comptabilise les écarts de change latents, avec une extourne automatique à la période suivante.",
+"where": "Transaction FAGL_FCV, réévaluation des devises étrangères (nouveau Grand Livre)",
+"teaser": "La fiche complète contient 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "f110",
+"module": "SAP FI",
+"code": "F110",
+"title": "Proposition de paiement",
+"summary": "F110 pilote la campagne de paiement automatique : paramétrage, proposition, modification, exécution et édition. Il règle des centaines de factures en une fois.",
+"where": "Transaction F110, campagne de paiement automatique (paramétrage dans FBZP)",
+"teaser": "La fiche complète contient 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "fb03",
+"module": "SAP FI",
+"code": "FB03",
+"title": "Afficher une pièce",
+"summary": "FB03 affiche une pièce comptable avec ses lignes, sa devise et ses données d'en-tête. C'est la transaction de lecture que tu utilises le plus souvent pour contrôler une écriture.",
+"where": "Transaction FB03, affichage de pièce (tables BKPF et BSEG)",
+"teaser": "La fiche complète contient 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "fbv0",
+"module": "SAP FI",
+"code": "FBV0",
+"title": "Pièce préenregistrée",
+"summary": "FBV0 permet de reprendre, compléter, valider et comptabiliser une pièce préenregistrée. Une pièce préenregistrée n'a aucun effet sur les soldes tant qu'elle n'est pas comptabilisée.",
+"where": "Transaction FBV0, comptabiliser ou supprimer des pièces préenregistrées (transactions de saisie avec « préenregistrer »)",
+"teaser": "La fiche complète contient 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "fbd1",
+"module": "SAP FI",
+"code": "FBD1",
+"title": "Pièce récurrente",
+"summary": "FBD1 crée une pièce modèle qui sera comptabilisée automatiquement à intervalles réguliers : loyer, abonnement, assurance. L'exécution se fait par le programme de comptabilisation des pièces récurrentes.",
+"where": "Transaction FBD1, saisie d'une pièce récurrente (exécution avec F.14)",
+"teaser": "La fiche complète contient 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "fb65",
+"module": "SAP FI",
+"code": "FB65",
+"title": "Avoir fournisseur",
+"summary": "FB65 comptabilise un avoir reçu d'un fournisseur. Il génère un crédit au poste fournisseur qui devra être compensé avec la facture ou déduit du prochain paiement.",
+"where": "Transaction FB65, avoir fournisseur (tables BKPF, BSEG et BSIK)",
+"teaser": "La fiche complète contient 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "fd32",
+"module": "SAP FI",
+"code": "FD32",
+"title": "Limite de crédit client",
+"summary": "FD32 modifie les données de gestion du crédit d'un client : zone de gestion du crédit, limite, catégorie de risque. Il bloque ou alerte les commandes qui dépassent l'encours.",
+"where": "Transaction FD32, modification de la gestion du crédit (client, zone de gestion du crédit)",
+"teaser": "La fiche complète contient 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "fk01-xk01",
+"module": "SAP FI",
+"code": "FK01 / XK01",
+"title": "Création fournisseur",
+"summary": "FK01 crée un fournisseur côté comptabilité, XK01 le crée de façon centralisée (comptabilité et achats). En S/4HANA, la création passe par le partenaire commercial.",
+"where": "Transactions FK01 et XK01, création de fournisseur (tables LFA1, LFB1, LFBK et LFM1)",
+"teaser": "La fiche complète contient 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "fd01",
+"module": "SAP FI",
+"code": "FD01",
+"title": "Création client",
+"summary": "FD01 crée un client côté comptabilité. Il porte le compte de rapprochement et les conditions de paiement ; les données de ventes se complètent ensuite par les transactions commerciales.",
+"where": "Transaction FD01, création de client (tables KNA1, KNB1 et KNVV)",
+"teaser": "La fiche complète contient 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "migo",
+"module": "SAP MM-FI",
+"code": "MIGO",
+"title": "Entrée de marchandises 101",
+"summary": "MIGO enregistre l'entrée de marchandises sur commande avec le mouvement 101. Elle crée en même temps la pièce de stock et la pièce comptable, avec le compte GR/IR en contrepartie.",
+"where": "Transaction MIGO, entrée de marchandises sur commande (pièce matière puis pièce comptable ; table EKBE pour l'historique de commande)",
+"teaser": "La fiche complète contient 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "miro",
+"module": "SAP MM-FI",
+"code": "MIRO",
+"title": "Facture logistique",
+"summary": "MIRO enregistre la facture d'un fournisseur par rapport à une commande ou à une entrée de marchandises. Elle solde le compte GR/IR et enregistre les écarts de prix.",
+"where": "Transaction MIRO, saisie de facture entrante (tables RBKP et RSEG, historique de commande EKBE)",
+"teaser": "La fiche complète contient 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "mr11",
+"module": "SAP MM-FI",
+"code": "MR11",
+"title": "Apurement du compte GR/IR",
+"summary": "MR11 apure les soldes du compte GR/IR qui restent ouverts : marchandises reçues non facturées ou factures reçues sans réception. Elle s'utilise en clôture après analyse.",
+"where": "Transaction MR11, maintenance du compte GR/IR (liste et annulation avec MR11SHOW)",
+"teaser": "La fiche complète contient 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "f-03",
+"module": "SAP FI",
+"code": "F-03",
+"title": "Compensation de compte",
+"summary": "F-03 compense les postes ouverts d'un compte de comptabilité générale géré par postes ouverts. Elle sert à apurer des comptes d'attente ou de liaison.",
+"where": "Transaction F-03, compensation de compte de comptabilité générale (postes ouverts)",
+"teaser": "La fiche complète contient 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "abzon",
+"module": "Immobilisations",
+"code": "ABZON",
+"title": "Acquisition d'immobilisation",
+"summary": "ABZON comptabilise une acquisition d'immobilisation avec contrepartie automatique. Elle sert quand l'immobilisation est créée sans facture fournisseur correspondante.",
+"where": "Transaction ABZON, acquisition avec contrepartie automatique (immobilisation créée au préalable)",
+"teaser": "La fiche complète contient 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "abavn",
+"module": "Immobilisations",
+"code": "ABAVN",
+"title": "Mise au rebut",
+"summary": "ABAVN comptabilise la sortie d'une immobilisation sans produit de cession : casse, destruction, vol. La valeur nette comptable est constatée en perte.",
+"where": "Transaction ABAVN, mise au rebut sans produit (sortie d'immobilisation)",
+"teaser": "La fiche complète contient 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "aw01n",
+"module": "Immobilisations",
+"code": "AW01N",
+"title": "Analyse des immobilisations",
+"summary": "AW01N affiche les valeurs d'une immobilisation par zone d'amortissement et par exercice. C'est l'écran de contrôle de la valeur d'acquisition, des amortissements et de la valeur nette.",
+"where": "Transaction AW01N, analyse d'immobilisation (valeurs par zone d'amortissement)",
+"teaser": "La fiche complète contient 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "ksb1",
+"module": "SAP FI",
+"code": "KSB1",
+"title": "Postes de coûts",
+"summary": "KSB1 affiche les lignes comptabilisées sur un centre de coûts : charges réelles par type de coût. C'est l'écran de base pour justifier un écart de budget.",
+"where": "Transaction KSB1, postes individuels de centre de coûts réels (table COEP)",
+"teaser": "La fiche complète contient 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "obd4",
+"module": "SAP FI",
+"code": "OBD4",
+"title": "Groupes de comptes G/L",
+"summary": "Le groupe de comptes G/L fixe l'intervalle de numéros d'un compte et la disposition de ses zones à l'écran. Il se définit par plan comptable avec OBD4.",
+"where": "Transaction OBD4, chemin SPRO indiqué : Financial Accounting > General Ledger Accounting > G/L Accounts > Master Data > Preparations > Define Account Group (vue V_T077S, table T077S) ; chemin SPRO exact à confirmer dans ton IMG (selon release)",
+"teaser": "La fiche complète contient le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "ob52",
+"module": "SAP FI",
+"code": "OB52",
+"title": "Périodes comptables ouvertes",
+"summary": "OB52 ouvre et ferme les périodes comptables par type de compte, à partir d'une variante de périodes partagée entre sociétés. C'est le premier réflexe quand une écriture est refusée.",
+"where": "Transaction OB52 (table T001B, vue V_T001BB), variante définie avec OBBO et affectée à la société avec OBBP ; chemin SPRO exact à confirmer dans ton IMG (selon release)",
+"teaser": "La fiche complète contient le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "oba4",
+"module": "SAP FI",
+"code": "OBA4",
+"title": "Tolérances employé",
+"summary": "OBA4 définit les groupes de tolérances des employés : montants maximums de saisie et écarts acceptés. Il ne traite pas les tolérances clients et fournisseurs de la société (OBA3).",
+"where": "Transaction OBA4, vue V_T043T (SM30), activité IMG FIGLCL_T_OBA4 ; chemin SPRO exact à confirmer dans ton IMG (selon release)",
+"teaser": "La fiche complète contient le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "oba7",
+"module": "SAP FI",
+"code": "OBA7",
+"title": "Types de pièces",
+"summary": "Le type de pièce distingue les opérations et pilote le classement. Il porte la plage de numéros, les types de comptes autorisés et le type d'annulation.",
+"where": "Transaction OBA7, chemin SPRO indiqué : Financial Accounting > General Ledger Accounting > Business Transactions > G/L Account Posting > Carry out and Check Document Settings > Define Document Types (vue V_T003, table T003) ; chemin SPRO exact à confirmer dans ton IMG (selon release)",
+"teaser": "La fiche complète contient le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "obc4",
+"module": "SAP FI",
+"code": "OBC4",
+"title": "Variante de statut de zone",
+"summary": "La variante de statut de zone regroupe des groupes qui rendent les zones de saisie G/L modifiables, obligatoires ou masquées. Elle se définit avec OBC4 et s'affecte à la société avec OBC5.",
+"where": "Transaction OBC4, vue cluster V_T004V (SM34), activité IMG SIMG_CFMENUORFBOBC4 ; chemin SPRO exact à confirmer dans ton IMG (selon release)",
+"teaser": "La fiche complète contient le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "fbn1",
+"module": "SAP FI",
+"code": "FBN1",
+"title": "Plages de numéros de pièces",
+"summary": "FBN1 maintient les intervalles de numéros des pièces comptables, par société et par exercice. Chaque type de pièce pointe vers une clé de plage, en numérotation interne ou externe.",
+"where": "Transaction FBN1 (plages de numéros des pièces comptables, par société et exercice) ; chemin SPRO exact à confirmer dans ton IMG (selon release)",
+"teaser": "La fiche complète contient le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "devises-societe",
+"module": "SAP FI",
+"code": "FINSC_LEDGER",
+"title": "Devises de la société",
+"summary": "En S/4HANA, les devises d'une société se paramètrent par ledger avec les types de devise dans FINSC_LEDGER. Tu y choisis les devises parallèles stockées dans ACDOCA.",
+"where": "Transaction FINSC_LEDGER, chemin SPRO : Financial Accounting > Financial Accounting Global Settings > Ledgers > Ledger > Define Settings for Ledgers and Currency Types, dossier « Currency Types »",
+"teaser": "La fiche complète contient le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "ftxp",
+"module": "SAP FI",
+"code": "FTXP",
+"title": "Codes TVA",
+"summary": "FTXP crée et maintient les codes taxe à 2 caractères, par procédure de calcul de pays, avec leur type de taxe et leur taux. Les comptes de TVA se paramètrent à part, dans OB40.",
+"where": "Transaction FTXP, chemin SPRO exact à confirmer dans ton IMG (selon release) (tables T007A, T007S, KONP)",
+"teaser": "La fiche complète contient le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "ob08",
+"module": "SAP FI",
+"code": "OB08",
+"title": "Taux de change",
+"summary": "OB08 sert à saisir les taux de change par type de cours et par date de validité. La cotation directe ou indirecte et le cours inverse se règlent en amont.",
+"where": "Transaction OB08, chemin SPRO > SAP NetWeaver > General Settings > Currencies > Enter Exchange Rates (tables TCURR, TCURN, TCURV)",
+"teaser": "La fiche complète contient le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "oba1",
+"module": "SAP FI",
+"code": "OBA1",
+"title": "Écarts de change",
+"summary": "OBA1 détermine les comptes d'écarts de change (KDB, KDF) et de réévaluation. Tous les comptes doivent être renseignés, sinon la réévaluation en devise échoue.",
+"where": "Transaction OBA1, chemin SPRO Financial Accounting > General Ledger Accounting / Accounts Receivable and Accounts Payable > Business Transactions > Closing > Valuating > Foreign Currency Valuation > Prepare Automatic Postings for Foreign Currency Valuation",
+"teaser": "La fiche complète contient le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "finsc-ledger",
+"module": "SAP FI",
+"code": "FINSC_LEDGER",
+"title": "Ledgers",
+"summary": "FINSC_LEDGER définit les ledgers et leurs types de devise. Le ledger principal 0L est unique et obligatoire ; les ledgers non principaux sont optionnels.",
+"where": "Transaction FINSC_LEDGER, chemin SPRO Financial Accounting > Financial Accounting Global Settings > Ledgers > Ledger > Define Settings for Ledgers and Currency Types (table FINSC_LD_CMP)",
+"teaser": "La fiche complète contient le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "obya",
+"module": "SAP FI",
+"code": "OBYA",
+"title": "Postes inter-sociétés",
+"summary": "OBYA paramètre les comptes de compensation entre sociétés d'un même ensemble pour les écritures inter-sociétés. Il s'utilise avec OBY6.",
+"where": "Transaction OBYA, chemin SPRO exact à confirmer dans ton IMG (selon release)",
+"teaser": "La fiche complète contient le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "obb8",
+"module": "SAP FI",
+"code": "OBB8",
+"title": "Conditions de paiement",
+"summary": "OBB8 définit les conditions de paiement : date de base, tranches d'escompte, jour fixe et mois supplémentaires. Elles s'affectent ensuite aux fiches clients et fournisseurs.",
+"where": "Transaction OBB8, chemin SPRO exact à confirmer dans ton IMG (selon release) (table T052)",
+"teaser": "La fiche complète contient le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "oba3",
+"module": "SAP FI",
+"code": "OBA3",
+"title": "Tolérances clients et fournisseurs",
+"summary": "OBA3 définit par société les écarts de règlement qu'SAP solde automatiquement à la compensation d'un client ou d'un fournisseur : montant, pourcentage et ajustement d'escompte.",
+"where": "Transaction OBA3, groupes de tolérance clients/fournisseurs ; chemin SPRO exact à confirmer dans ton IMG (selon release)",
+"teaser": "La fiche complète contient le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "fbmp",
+"module": "SAP FI",
+"code": "FBMP",
+"title": "Procédure de relance",
+"summary": "FBMP permet de maintenir la procédure de relance : niveaux, jours de retard, délais de grâce, frais, montants minimaux et formulaires. L'exécution des relances se fait ensuite par F150.",
+"where": "Transaction FBMP, maintenance de la procédure de relance ; chemin SPRO exact à confirmer dans ton IMG (selon release). Zones, clés et motifs de blocage : OB61, OB17, OB18 (nœud Relance de l'IMG)",
+"teaser": "La fiche complète contient le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "ob46",
+"module": "SAP FI",
+"code": "OB46",
+"title": "Calcul d'intérêts",
+"summary": "OB46 définit l'indicateur de calcul d'intérêts : P pour les intérêts sur postes ouverts, S pour les intérêts sur solde. Il se complète par les taux, les conditions et les comptes.",
+"where": "Transaction OB46, types de calcul d'intérêts ; chemin SPRO exact à confirmer dans ton IMG (selon release)",
+"teaser": "La fiche complète contient le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "fbzp",
+"module": "SAP FI",
+"code": "FBZP",
+"title": "Paramétrage du programme de paiement",
+"summary": "FBZP est l'écran central de configuration du programme de paiement F110. Tu le parcours de haut en bas : codes société, sociétés payeuses, méthodes de paiement, puis détermination de banque.",
+"where": "Transaction FBZP, chemin SPRO : Gestion financière > Comptabilité clients et fournisseurs > Opérations commerciales > Paiements sortants > Paiements sortants automatiques > Sélection de la méthode de paiement et de la banque pour le programme de paiement",
+"teaser": "La fiche complète contient le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "obxl",
+"module": "SAP FI",
+"code": "OBXL",
+"title": "Différences de règlement",
+"summary": "OBXL affecte le compte G/L qui reçoit les différences de règlement clients et fournisseurs. Il s'utilise avec OBA3 (tolérances) et OBBE (motifs d'écart).",
+"where": "Transaction OBXL, comptes G/L des différences de règlement clients/fournisseurs ; chemin SPRO exact à confirmer dans ton IMG (selon release)",
+"teaser": "La fiche complète contient le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "ob74",
+"module": "SAP FI",
+"code": "OB74",
+"title": "Compensation automatique",
+"summary": "OB74 prépare la compensation automatique : il définit les critères de regroupement des postes ouverts d'un compte. Le programme F.13 les applique ensuite pour compenser.",
+"where": "Transaction OB74, préparer la compensation automatique ; chemin SPRO exact à confirmer dans ton IMG (selon release)",
+"teaser": "La fiche complète contient le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "ec08",
+"module": "Immobilisations",
+"code": "EC08",
+"title": "Plan d'amortissement",
+"summary": "Le plan d'amortissement regroupe les domaines d'amortissement d'un pays. Tu le crées en copiant le plan de référence SAP avec EC08, puis tu l'affectes à la société avec OAOB.",
+"where": "Transaction EC08, activité « Copier plan d'amortissement de référence / domaines d'amortissement », sous SPRO > Gestion financière > Comptabilité des immobilisations > Structures organisationnelles ; affectation à la société par OAOB ; chemin SPRO exact à confirmer dans ton IMG (selon release)",
+"teaser": "La fiche complète contient le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "oaoa",
+"module": "Immobilisations",
+"code": "OAOA",
+"title": "Classes d'immobilisations",
+"summary": "La classe d'immobilisations fixe la structure de la fiche immobilisation : écran, plage de numéros, clé de compte et valeurs par défaut d'amortissement. Tu la définis avec OAOA.",
+"where": "Transaction OAOA, chemin SPRO Gestion financière > Comptabilité des immobilisations > Structures organisationnelles > Classes d'immobilisations > « Définir les classes d'immobilisations » (table ANKA) ; chemin SPRO exact à confirmer dans ton IMG (selon release)",
+"teaser": "La fiche complète contient le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "afama",
+"module": "Immobilisations",
+"code": "AFAMA",
+"title": "Clés d'amortissement",
+"summary": "La clé d'amortissement définit comment SAP calcule la dotation : méthode de base, dégressif, multiniveaux, contrôle de période et arrondi. Elle peut combiner plusieurs phases.",
+"where": "Transaction AFAMA, chemin SPRO Gestion financière > Comptabilité des immobilisations > Amortissements > Méthodes d'évaluation > « Clé d'amortissement » ; contrôle de période via AFAMP ; chemin SPRO exact à confirmer dans ton IMG (selon release)",
+"teaser": "La fiche complète contient le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "ao90",
+"module": "Immobilisations",
+"code": "AO90",
+"title": "Comptes de comptabilité des immobilisations",
+"summary": "AO90 affecte les comptes de la comptabilité générale aux opérations FI-AA : acquisition, amortissement, cession. L'affectation dépend de la clé de compte, du domaine et du type de mouvement.",
+"where": "Transaction AO90, chemin SPRO Gestion financière > Comptabilité des immobilisations > Intégration avec la comptabilité générale > « Affecter les comptes de comptabilité générale » ; chemin SPRO exact à confirmer dans ton IMG (selon release)",
+"teaser": "La fiche complète contient le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "oayr",
+"module": "Immobilisations",
+"code": "OAYR",
+"title": "Intervalles de comptabilisation",
+"summary": "OAYR règle les intervalles et règles de comptabilisation des amortissements vers la comptabilité générale. OAYZ active les domaines par classe, AO71 définit le type de pièce.",
+"where": "Transactions OAYR « Spécifier intervalles et règles de comptabilisation », OAYZ « Déterminer les domaines d'amortissement dans la classe d'immobilisations » et AO71 (type de pièce pour la comptabilisation des amortissements) ; chemin SPRO exact à confirmer dans ton IMG (selon release)",
+"teaser": "La fiche complète contient le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "types-mouvement-aa",
+"module": "Immobilisations",
+"code": "IMG types de mouvement",
+"title": "Types de mouvement d'immobilisations",
+"summary": "Les types de mouvement classent les opérations FI-AA : acquisitions, cessions, transferts. Tu en crées de nouveaux en copiant un type standard, avec les clés réservées au client.",
+"where": "Chemin SPRO Gestion financière > Comptabilité des immobilisations > Transactions (Acquisitions, Cessions, Transferts), table TABW ; pour les transferts : « Définir les types de mouvement pour les transferts » ; chemin SPRO exact à confirmer dans ton IMG (selon release)",
+"teaser": "La fiche complète contient le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "okkp",
+"module": "SAP CO",
+"code": "OKKP",
+"title": "Périmètre analytique",
+"summary": "Le périmètre analytique est l'unité organisationnelle du contrôle de gestion. OKKP en fixe la devise, le plan comptable, la variante d'exercice, le mode d'affectation des sociétés et la hiérarchie standard.",
+"where": "Transaction OKKP « Maintain Controlling Area » (table TKA01) ; chemin SPRO exact à confirmer dans ton IMG (selon release)",
+"teaser": "La fiche complète contient le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "okeon",
+"module": "SAP CO",
+"code": "OKEON",
+"title": "Hiérarchie standard des centres de coûts",
+"summary": "La hiérarchie standard est l'arbre qui regroupe tous les centres de coûts d'un périmètre analytique. OKEON permet de la construire et de la contrôler avant de créer les centres.",
+"where": "Transaction OKEON (maintenance de la hiérarchie standard), hiérarchie référencée dans OKKP (champ KHINR de la table TKA01) ; chemin SPRO exact à confirmer dans ton IMG (selon release)",
+"teaser": "La fiche complète contient le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "ka01",
+"module": "SAP CO",
+"code": "KA01",
+"title": "Natures comptables de coûts",
+"summary": "En S/4HANA, une nature comptable de coûts est un compte de la comptabilité générale. Son rôle en CO se règle dans les données de contrôle de FS00 : type de compte et catégorie.",
+"where": "Transaction FS00 (ou app « Manage G/L Account Master Data »), onglet « Control Data » ; en ECC, KA01 créait la nature primaire et KA06 la nature secondaire ; postes réels et plan dans ACDOCA et ACDOCP ; chemin SPRO exact à confirmer dans ton IMG (selon release)",
+"teaser": "La fiche complète contient le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "ksv5",
+"module": "SAP CO",
+"code": "KSV5",
+"title": "Cycles de répartition",
+"summary": "KSV5 exécute les cycles de distribution réelle des coûts entre centres. Le cycle se définit en KSV1, son pendant de répartition (assessment) passe par KSU1 et KSU5.",
+"where": "Transaction KSV5 (exécution des cycles de distribution réelle, application on-premise) ; cycles définis en KSV1 ; répartition : KSU1 et KSU5 ; chemin SPRO exact à confirmer dans ton IMG (selon release)",
+"teaser": "La fiche complète contient le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "kot2-opa",
+"module": "SAP CO",
+"code": "KOT2_OPA",
+"title": "Types d'ordres internes",
+"summary": "Le type d'ordre fixe le comportement d'un ordre interne : profil de règlement, plage de numéros, profil de planification. KOT2_OPA est la transaction de maintenance de ces types.",
+"where": "Transaction KOT2_OPA, activité IMG « Define Order Types » (code complémentaire S_ALR_87005053) ; chemin SPRO exact à confirmer dans ton IMG (selon release)",
+"teaser": "La fiche complète contient le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "okb9",
+"module": "SAP CO",
+"code": "OKB9",
+"title": "Imputation CO automatique",
+"summary": "OKB9 fournit une imputation CO par défaut aux comptes de charges primaires quand une écriture générée par le système n'a pas d'objet CO : mouvements de stock, factures, facturation SD.",
+"where": "Transaction OKB9 (tables TKA3A par compte, TKA3P par centre de profit, TKA3C par zone de valorisation) ; chemin SPRO exact à confirmer dans ton IMG (selon release)",
+"teaser": "La fiche complète contient le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 5 étapes détaillées, 4 points à savoir, 3 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "cfg-fi-structure",
+"module": "SAP FI",
+"code": "OX02 · OX15 · OB13 · OB29 · OBBO · OBC4",
+"title": "Structure d'entreprise FI et variantes",
+"summary": "Société, code société, plan comptable et trois variantes (exercice, périodes ouvertes, statut de zone) forment le socle de toute comptabilité SAP. Tu les définis une fois, puis tu les affectes au code société.",
+"where": "Racine SPRO : Enterprise Structure > Definition / Assignment > Financial Accounting, puis Financial Accounting Global Settings (exercice, périodes, statuts de zone). Transactions principales : OX02, OX15, OX16, OB13, OB62, OB29, OB37, OBBO, OBBP, OBC4, OBC5.",
+"teaser": "La fiche complète contient 13 chemins SPRO, le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 11 étapes détaillées, 7 points à savoir, 7 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "cfg-fi-pieces",
+"module": "SAP FI",
+"code": "OBA7 · FBN1 · OB41 · OBC4 · OB32",
+"title": "Pièces comptables : types, numéros, clés",
+"summary": "Le contrôle des pièces FI repose sur le type de pièce, sa plage de numéros, la clé de comptabilisation et le statut de zone. Ces quatre paramètres déterminent ce que l'utilisateur peut saisir et comment la pièce est numérotée.",
+"where": "Racine SPRO : Financial Accounting > Financial Accounting Global Settings > Document (ou Documents selon release). Transactions principales : OBA7 (types de pièces), FBN1 (plages de numéros), OB41 (clés de comptabilisation), OBC4 (statuts de zone), OB32 (règles de modification).",
+"teaser": "La fiche complète contient 11 chemins SPRO, le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 10 étapes détaillées, 8 points à savoir, 7 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "cfg-fi-tolerances-devises",
+"module": "SAP FI",
+"code": "OBA4 · OBA3 · OBA0 · OB52 · OB07 · OB08",
+"title": "Tolérances, périodes, devises, taux",
+"summary": "Les tolérances limitent montants et écarts de lettrage, OB52 ouvre ou ferme les périodes, et les types de devises, types de taux et taux de change pilotent les conversions. Tu les règles ensemble car elles conditionnent la saisie.",
+"where": "Racine SPRO : Financial Accounting Global Settings > Document > Tolerance Groups, Ledgers > Fiscal Year and Posting Periods, et le paramétrage de devises (Currencies). Transactions principales : OBA4, OB57, OBA3, OBA0, OB52, OB07, OB08, OBBS.",
+"teaser": "La fiche complète contient 12 chemins SPRO, le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 10 étapes détaillées, 7 points à savoir, 7 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "cfg-gl-comptes",
+"module": "SAP FI",
+"code": "OBD4 · FS00 · FSP0 · FSS0",
+"title": "Comptes G/L et plan comptable",
+"summary": "Le plan comptable (niveau mandant) porte les comptes G/L ; le segment société en précise l'usage comptable. Les groupes de comptes OBD4 pilotent numérotation et statuts de zone, le type de compte S/4HANA remplace les éléments de coût.",
+"where": "SPRO > Financial Accounting > General Ledger Accounting (préparations des comptes G/L) et Enterprise Structure > Definition / Assignment > Financial Accounting. Transactions : OB13, OB62, OBD4, FS00, FSP0, FSS0.",
+"teaser": "La fiche complète contient 10 chemins SPRO, le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 11 étapes détaillées, 8 points à savoir, 7 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "cfg-gl-ledgers-splitting",
+"module": "SAP FI",
+"code": "FINSC_LEDGER · OB29 · OBBO",
+"title": "Ledgers, document splitting et segments",
+"summary": "Le ledger principal 0L et les ledgers non principaux portent la comptabilité parallèle via les principes comptables. Le document splitting et les segments assurent les états financiers complets par segment, centre de profit ou autre caractéristique.",
+"where": "SPRO > Financial Accounting > Financial Accounting Global Settings > Ledgers, et Financial Accounting > General Ledger Accounting > Business Transactions > Document Splitting. Transaction centrale : FINSC_LEDGER.",
+"teaser": "La fiche complète contient 14 chemins SPRO, le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 11 étapes détaillées, 8 points à savoir, 7 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "cfg-gl-cloture",
+"module": "SAP FI",
+"code": "FAGL_FCV · FAGLGVTR · OB52",
+"title": "Clôture périodique comptable",
+"summary": "La clôture enchaîne évaluation des devises, régularisations, reclassements, GR/IR, listes de postes ouverts, report de soldes et fermeture des périodes. Chaque étape a son paramétrage propre et un ordre à respecter pour des états financiers fiables.",
+"where": "SPRO > Financial Accounting > General Ledger Accounting > Periodic Processing (Valuate, Regroup) et Financial Accounting Global Settings > Document > Posting Periods. Transactions : FAGL_FCV, FAGLGVTR, OB52, F.13, F.19.",
+"teaser": "La fiche complète contient 13 chemins SPRO, le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 11 étapes détaillées, 8 points à savoir, 7 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "cfg-ap-donnees-base",
+"module": "SAP FI",
+"code": "OBD3 · XKN1 · OBAS · BP · OBB8",
+"title": "Fournisseurs : données de base",
+"summary": "Les groupes de comptes fournisseurs (OBD3), leurs plages de numéros (XKN1, OBAS), les conditions de paiement et le compte de rapprochement structurent chaque fiche. En S/4HANA, la création passe par le Business Partner et la CVI.",
+"where": "Racine SPRO : Financial Accounting > Accounts Receivable and Accounts Payable > Vendor Accounts > Master Data > Preparation for Creating Vendor Master Data (OBD3, XKN1, OBAS). En S/4HANA s'ajoutent Cross-Application Components > SAP Business Partner et Master Data Synchronization (CVI).",
+"teaser": "La fiche complète contient 14 chemins SPRO, le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 10 étapes détaillées, 8 points à savoir, 7 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "cfg-ap-operations",
+"module": "SAP FI",
+"code": "OBYR · OBA3 · OB27 · OB74",
+"title": "Opérations fournisseurs : acomptes, écarts, blocages",
+"summary": "Acomptes et postes spéciaux, tolérances d'écart (OBA3), motifs d'écart, blocages de paiement (OB27), retenue à la source, parking, effets et compensation. Ce paramétrage définit comment les postes fournisseurs vivent jusqu'au règlement.",
+"where": "Racine SPRO : Financial Accounting > Accounts Receivable and Accounts Payable > Business Transactions (Down Payment Made, Open Item Clearing, Outgoing Payments) et Financial Accounting Global Settings > Withholding Tax / Document. Transactions : OBYR, OBA3, OBBE, OB27, OB74.",
+"teaser": "La fiche complète contient 14 chemins SPRO, le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 10 étapes détaillées, 8 points à savoir, 7 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "cfg-ap-paiement-f110",
+"module": "SAP FI",
+"code": "FBZP · F110 · OBPM1 · DMEE",
+"title": "Paiement automatique F110 : FBZP complet",
+"summary": "FBZP définit comment F110 choisit les postes, la méthode de paiement, la banque et le format du fichier. Cinq zones à paramétrer de haut en bas (codes société, sociétés payeuses, méthodes, banques), puis formats DMEE ou SEPA et journal de paiement.",
+"where": "Racine SPRO : Financial Accounting > Accounts Receivable and Accounts Payable > Business Transactions > Outgoing Payments > Automatic Outgoing Payments > Payment Method/Bank Selection for Payment Program (FBZP) et ... > Payment Media. Exécution : F110.",
+"teaser": "La fiche complète contient 14 chemins SPRO, le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 10 étapes détaillées, 8 points à savoir, 7 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "cfg-ar-donnees-base",
+"module": "SAP FI",
+"code": "OBD2 · XDN1 · OBAR · BP · FS00",
+"title": "Clients : données de base et BP",
+"summary": "Un client repose sur son groupe de comptes, sa plage de numéros et son compte de rapprochement. En S/4HANA, la création passe par le Business Partner et l'intégration CVI, qui doit rester alignée sur le paramétrage FI.",
+"where": "Racine SPRO : Financial Accounting > Accounts Receivable and Accounts Payable > Customer Accounts > Master Data (OBD2, XDN1, OBAR). En S/4HANA : aussi Cross-Application Components > SAP Business Partner et Master Data Synchronization, avec la transaction BP.",
+"teaser": "La fiche complète contient 13 chemins SPRO, le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 11 étapes détaillées, 8 points à savoir, 7 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "cfg-ar-relances-interets",
+"module": "SAP FI",
+"code": "FBMP · OB46 · F150 · F107",
+"title": "Relances, intérêts et recouvrement",
+"summary": "La relance repose sur la procédure FBMP, le calcul d'intérêts sur les types OB46 et leurs taux, le recouvrement sur les avis de paiement, la lockbox et les corrections de valeur. Chaque brique a ses prérequis dans la fiche client.",
+"where": "Racine SPRO : Financial Accounting > Accounts Receivable and Accounts Payable > Business Transactions > Dunning et Interest Calculation. Exécutions : F150 (relances), calcul d'intérêts clients du menu Comptes clients, F107 (correction de valeur).",
+"teaser": "La fiche complète contient 14 chemins SPRO, le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 11 étapes détaillées, 8 points à savoir, 7 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "cfg-ar-credit-sepa",
+"module": "SAP FI",
+"code": "OVA8 · UKM_BP · SEPA_MNDT · UDM_DISPUTE",
+"title": "Crédit client, mandats SEPA, litiges",
+"summary": "En S/4HANA, le contrôle de crédit classique disparaît au profit de SAP Credit Management, administré dans le BP. Le prélèvement exige un mandat SEPA valide et les litiges se traitent par dossiers dans Dispute Management.",
+"where": "Racine SPRO : Financial Supply Chain Management > Credit Management (segments de crédit, classes de risque) et Sales and Distribution > Basic Functions > Credit Management/Risk Management (OVA8). Mandats : SEPA_MNDT ; litiges : UDM_DISPUTE.",
+"teaser": "La fiche complète contient 14 chemins SPRO, le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 11 étapes détaillées, 8 points à savoir, 7 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "cfg-banque-banques-maison",
+"module": "SAP FI",
+"code": "FI12 · FI12_HBANK · FI01",
+"title": "Banques maison et comptes bancaires",
+"summary": "La banque maison relie ta société à une banque réelle et à ses comptes, et chaque compte bancaire pointe vers un compte G/L. C'est le socle du paiement, du relevé bancaire et de la trésorerie, à poser avant tout flux.",
+"where": "SPRO > Financial Accounting > Bank Accounting > Bank Accounts > Define House Banks (FI12 en ECC). En S/4HANA : FI12_HBANK et applications Fiori « Manage Banks », « Manage House Banks », « Manage Bank Accounts », plus le paramétrage Bank Account Management sous Financial Supply Chain Management.",
+"teaser": "La fiche complète contient 12 chemins SPRO, le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 10 étapes détaillées, 8 points à savoir, 7 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "cfg-banque-releve",
+"module": "SAP FI",
+"code": "OT83 · FF_5 · FF67",
+"title": "Relevé bancaire électronique et manuel",
+"summary": "Le relevé bancaire (MT940, CAMT.053 ou saisie manuelle) met à jour le compte de banque, compense les postes ouverts et poste le reste. Le comportement vient des symboles de compte, des règles de comptabilisation et des types de transaction.",
+"where": "SPRO > Financial Accounting > Bank Accounting > Business Transactions > Payment Transactions > Electronic Bank Statement > Make Global Settings for Electronic Bank Statement (OT83) ; relevé manuel sous Manual Bank Statement. Import : FF_5, FF67 ; post-traitement : FEBAN, Fiori « Reprocess Bank Statement Items ».",
+"teaser": "La fiche complète contient 14 chemins SPRO, le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 10 étapes détaillées, 8 points à savoir, 7 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "cfg-banque-caisse-cash",
+"module": "SAP FI",
+"code": "FBCJC0 · FCHI · FF63",
+"title": "Caisse, chèques et Cash Management",
+"summary": "Le journal de caisse gère les espèces, la gestion des chèques et les effets complètent le paiement, et Cash and Liquidity Management projette la liquidité. Tu paramètres des comptes dédiés, des lots, des postes et des niveaux de planification.",
+"where": "SPRO > Financial Accounting > Bank Accounting > Business Transactions > Cash Journal (FBCJC0, FBCJC1, FBCJC2) ; chèques (FCHI, FCH1) ; SPRO > Financial Supply Chain Management > Cash and Liquidity Management (S/4HANA) ; mémos FF63.",
+"teaser": "La fiche complète contient 14 chemins SPRO, le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 10 étapes détaillées, 8 points à savoir, 7 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "cfg-taxe-tva",
+"module": "SAP FI",
+"code": "OBYZ · OBBG · FTXP · OB40",
+"title": "Taxe sur les ventes et achats",
+"summary": "La taxe sur les ventes et achats repose sur une procédure de calcul par pays, des codes taxe à deux caractères et des comptes de taxe par clé de processus. Cette fiche couvre le calcul, la détermination et l'autoliquidation.",
+"where": "SPRO > Financial Accounting > Financial Accounting Global Settings > Tax on Sales/Purchases (Basic Settings, Calculation, Posting). Transactions principales : OBYZ, OBBG, FTXP, OB40.",
+"teaser": "La fiche complète contient 12 chemins SPRO, le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 11 étapes détaillées, 8 points à savoir, 7 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "cfg-taxe-retenue",
+"module": "SAP FI",
+"code": "EWT · OBWW · FK01",
+"title": "Retenue à la source étendue",
+"summary": "La retenue à la source étendue (EWT) calcule et comptabilise la retenue sur factures ou paiements, selon le type, le code et les données du tiers. Elle s'active par société avant tout autre paramétrage.",
+"where": "SPRO > Financial Accounting > Financial Accounting Global Settings > Withholding Tax > Extended Withholding Tax. Données du tiers : FK01/FK02 (onglet Retenue à la source) et FD01/FD02.",
+"teaser": "La fiche complète contient 13 chemins SPRO, le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 11 étapes détaillées, 8 points à savoir, 7 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "cfg-taxe-declarations-efacture",
+"module": "SAP FI",
+"code": "CA3 · FEC · DRC · EDOC_COCKPIT",
+"title": "Déclarations légales et e-facturation France",
+"summary": "Les déclarations françaises (CA3/CA12, DES, FEC) et la facturation électronique reposent sur la TVA paramétrée, les eDocuments et DRC. Le calendrier de la réforme est à confirmer sur les sites officiels.",
+"where": "Rapports standard FI (RFUMSV00, RFASLM), Advanced Compliance Reporting / Document and Reporting Compliance (apps Fiori) et eDocument Cockpit (EDOC_COCKPIT).",
+"teaser": "La fiche complète contient 12 chemins SPRO, le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 11 étapes détaillées, 8 points à savoir, 7 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "cfg-aa-structure",
+"module": "Immobilisations",
+"code": "EC08 · OADB · OAOB · OAOA · AS08 · AO21",
+"title": "Structure FI-AA : plans et classes",
+"summary": "La structure FI-AA se construit dans l'ordre : plan d'amortissement copié, zones, affectation à la société, classes, plages de numéros et écrans. Toute erreur de structure est difficile à corriger une fois les immobilisations créées.",
+"where": "SPRO > Financial Accounting > Asset Accounting > Organizational Structures (ECC : Financial Accounting (New) > Asset Accounting). Transactions clés : EC08, OADB, OAOB, OAOA, AS08, AO21, OAYZ.",
+"teaser": "La fiche complète contient 12 chemins SPRO, le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 10 étapes détaillées, 8 points à savoir, 7 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "cfg-aa-valorisation",
+"module": "Immobilisations",
+"code": "AFAMA · AFAMP · AO90 · OAYR · AO71",
+"title": "Valorisation et amortissements FI-AA",
+"summary": "La valorisation combine clé d'amortissement, méthodes, contrôle de période et arrondi, puis l'intégration comptable par AO90. En nouveau FI-AA, chaque zone est rattachée à un principe comptable et donc à un ledger.",
+"where": "SPRO > Financial Accounting > Asset Accounting > Depreciation > Valuation Methods, puis Integration with General Ledger Accounting. Transactions clés : AFAMA, AFAMP, OAYR, AO71, AO90, OAYK, AFAB.",
+"teaser": "La fiche complète contient 12 chemins SPRO, le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 10 étapes détaillées, 8 points à savoir, 7 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "cfg-aa-mouvements-cloture",
+"module": "Immobilisations",
+"code": "AO73 · AIAB · AIBU · AFAB · AJAB · FAA_CMP",
+"title": "Mouvements, AuC et clôture FI-AA",
+"summary": "Types de mouvement, acquisitions, cessions, transferts, immobilisation en cours et règlement, puis clôture annuelle. S/4HANA change le modèle de données avec ACDOCA, la clôture multi-sociétés et les applications Fiori.",
+"where": "SPRO > Financial Accounting > Asset Accounting > Transactions (types de mouvement, acquisitions, cessions, transferts) et Year-End Closing. Transactions clés : AFAB, AJAB, FAA_CLOSE_FISC_YEARS, FAA_CMP, AIAB, AIBU, FAGLGVTR.",
+"teaser": "La fiche complète contient 14 chemins SPRO, le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 10 étapes détaillées, 8 points à savoir, 7 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "cfg-co-fondations",
+"module": "SAP CO",
+"code": "OKKP · OKEQ · OKEON · KL01 · KK01",
+"title": "Fondations du Contrôle de gestion",
+"summary": "Le périmètre analytique, ses versions, ses plages de numéros et la hiérarchie standard forment le socle de tout le CO. Catégories de centres, types d'activité, clés chiffrées et planification se greffent dessus.",
+"where": "SPRO > Controlling > General Controlling > Organization (OKKP, OKEQ, KANK) puis Controlling > Cost Center Accounting > Master Data (OKEON, catégories de centres de coûts). Données de base en menu applicatif : KS01, KL01, KK01.",
+"teaser": "La fiche complète contient 12 chemins SPRO, le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 10 étapes détaillées, 8 points à savoir, 7 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "cfg-co-imputations",
+"module": "SAP CO",
+"code": "KSU1 · KSU5 · KSV5 · KB21N · OK06 · OKB9",
+"title": "Imputations, répartitions et clôture CO",
+"summary": "Cycles de répartition et d'affectation, imputation universelle S/4HANA, imputation d'activité, imputation par défaut OKB9 et clôture de période CO. Tu y vois ce qui passe en Fiori et ce qui reste en SAP GUI.",
+"where": "Menu applicatif Accounting > Controlling > Cost Center Accounting > Period-End Closing (KSU1, KSU5, KSV5, KSII, KGI2) ; IMG Controlling > General Controlling > Automatic Account Assignment pour OKB9. S/4HANA : apps Manage Allocations et Run Allocations.",
+"teaser": "La fiche complète contient 12 chemins SPRO, le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 10 étapes détaillées, 8 points à savoir, 7 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "cfg-co-ordres-internes",
+"module": "SAP CO",
+"code": "KOT2_OPA · KONK · OK06 · OK07 · KO88",
+"title": "Ordres internes et décompte",
+"summary": "Types d'ordres KOT2_OPA, plages de numéros, profils de décompte et structures d'imputation, planification, budget et disponibilité de crédits, puis décompte KO88. Une chaîne cohérente évite les ordres non soldables.",
+"where": "SPRO > Controlling > Internal Orders > Order Master Data (KOT2_OPA, KONK) et Actual Postings > Settlement (OK06, OK07, OKOA). Menu applicatif : KO01, KO22, KO88, KOB1.",
+"teaser": "La fiche complète contient 13 chemins SPRO, le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 10 étapes détaillées, 8 points à savoir, 7 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "cfg-co-couts-produit",
+"module": "SAP CO",
+"code": "OKKN · OKK4 · KZA1 · OKZ2 · OKTZ",
+"title": "Calcul des coûts produit (CO-PC)",
+"summary": "Le calcul du coût standard repose sur une chaîne de paramètres : variante de calcul, variante de valorisation, schéma de calcul, clés de frais généraux et structure de composants. Cette fiche explique le rôle de chacun et leur ordre de création.",
+"where": "Racine SPRO : Controlling > Product Cost Controlling > Product Cost Planning. Transactions clés : OKKN, OKK4, OKY8, KZA1, OKZ2, OKTZ, CK11N, CK40N, CK24.",
+"teaser": "La fiche complète contient 12 chemins SPRO, le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 11 étapes détaillées, 8 points à savoir, 7 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "cfg-co-material-ledger",
+"module": "SAP CO",
+"code": "CKMLCP · CKM3 · OMX2 · CKMSTART",
+"title": "Material Ledger et actual costing S/4HANA",
+"summary": "En S/4HANA, le Material Ledger est obligatoire : chaque zone de valorisation reçoit un type ML. Seul l'actual costing, qui calcule le prix périodique unitaire à la clôture, reste optionnel et se décide avant la mise en production.",
+"where": "Racine SPRO : Controlling > Product Cost Controlling > Actual Costing/Material Ledger. Transactions clés : CKMLCP (clôture), CKM3 (analyse de prix), FINSC_LEDGER (devises), MR21/MR22.",
+"teaser": "La fiche complète contient 12 chemins SPRO, le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 11 étapes détaillées, 8 points à savoir, 6 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "cfg-co-copa-centres-profit",
+"module": "SAP CO",
+"code": "KEKE · KEA0 · KE51 · OKO6",
+"title": "Rentabilité, centres de profit, règlement",
+"summary": "La rentabilité (margin analysis, CO-PA) et les centres de profit reposent sur la Universal Journal en S/4HANA. Tu paramètres ici le périmètre d'analyse, les caractéristiques, les champs de valeur, la hiérarchie des centres de profit et le règlement.",
+"where": "Racines SPRO : Controlling > Profitability Analysis ; Financial Accounting > General Ledger Accounting > Master Data > Profit Center ; Enterprise Structure. Transactions clés : KEKE, KEA0, KEA5, KEA6, KE51, KCH1, OKO6.",
+"teaser": "La fiche complète contient 14 chemins SPRO, le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 11 étapes détaillées, 8 points à savoir, 7 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "cfg-mmfi-valorisation-obyc",
+"module": "SAP MM-FI",
+"code": "OX14 · OMWD · OMSK · OBYC",
+"title": "Évaluation du stock et comptes OBYC",
+"summary": "La valorisation du stock relie chaque mouvement article à un compte G/L via niveau de valorisation, classe de valorisation et clés OBYC. Cette fiche décrit toute la chaîne de détermination, du type d'article au compte comptabilisé.",
+"where": "SPRO > Materials Management > Valuation and Account Assignment > Account Determination > Account Determination Without Wizard. Transactions principales : OX14, OMWM, OMWD, OMSK, OMS2, OBYC, OMWB.",
+"teaser": "La fiche complète contient 12 chemins SPRO, le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 12 étapes détaillées, 8 points à savoir, 7 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "cfg-mmfi-miro-grir",
+"module": "SAP MM-FI",
+"code": "MIRO · OMR6 · MR11 · F.19",
+"title": "Facture logistique et GR/IR",
+"summary": "La vérification de factures logistique rapproche commande, réception et facture, et solde le compte GR/IR. Cette fiche couvre MIRO, les tolérances OMR6, les blocages, l'apurement MR11 et le traitement des écarts et provisions de livraison.",
+"where": "SPRO > Materials Management > Logistics Invoice Verification (Incoming Invoice, Invoice Block, Automatic Payment Block) et menu Logistics > Materials Management > Logistics Invoice Verification > GR/IR Account Maintenance. Transactions : MIRO, OMR6, MRBR, MR11, MR11SHOW.",
+"teaser": "La fiche complète contient 13 chemins SPRO, le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 12 étapes détaillées, 8 points à savoir, 7 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "cfg-mmfi-mouvements",
+"module": "SAP MM-FI",
+"code": "OMJJ · MIGO · OBYC · MATDOC",
+"title": "Types de mouvement et intégration FI",
+"summary": "Un type de mouvement pilote les chaînes de quantités et de valeurs qui déclenchent les écritures FI via OBYC. Cette fiche couvre copie et modification, groupement de comptes, stocks spéciaux et les nouveautés S/4HANA (MATDOC, Material Ledger, article 40).",
+"where": "SPRO > Materials Management > Inventory Management and Physical Inventory > Movement Types > Copy, Change Movement Types. Transactions principales : OMJJ (usage courant), MIGO, OBYC, MMBE.",
+"teaser": "La fiche complète contient 11 chemins SPRO, le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 12 étapes détaillées, 8 points à savoir, 7 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "cfg-sdfi-vkoa",
+"module": "SAP MM-FI",
+"code": "VKOA · V/07 · V/08 · V/12",
+"title": "Détermination des comptes de produits VKOA",
+"summary": "VKOA relie chaque poste de facture SD à un compte de produits en lisant une table de conditions KOFI. Tu maîtrises ici séquence d'accès, groupes d'imputation client et article, et clés de compte (ERL, ERS, ERU) pour ne plus avoir d'erreur en facturation.",
+"where": "Racine SPRO : Sales and Distribution > Basic Functions > Account Assignment/Costing > Revenue Account Determination. Les enregistrements se saisissent en VKOA, la clé de compte vient de la procédure de tarification (V/08).",
+"teaser": "La fiche complète contient 12 chemins SPRO, le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 11 étapes détaillées, 8 points à savoir, 7 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "cfg-sdfi-facturation",
+"module": "SAP MM-FI",
+"code": "VOFA · VF01 · VF04 · VTFA",
+"title": "Facturation SD et interface comptable",
+"summary": "La facture SD génère automatiquement la pièce FI via les paramètres du type de facture (VOFA). Tu règles types de pièces, blocages, copy control, tarification et taxes pour que la comptabilisation soit complète ou rejetée en bloc.",
+"where": "Racine SPRO : Sales and Distribution > Billing > Billing Documents (types de facture, copy control) et Basic Functions > Pricing / Taxes. Exécution : VF01, VF04, VF06, VF02.",
+"teaser": "La fiche complète contient 13 chemins SPRO, le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 10 étapes détaillées, 8 points à savoir, 7 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "cfg-sdfi-ristournes-interco",
+"module": "SAP MM-FI",
+"code": "VBO1 · IV · UKM_BP · FARR",
+"title": "Ristournes, interco, crédit et S/4HANA",
+"summary": "Ristournes, facturation intersociétés, crédit client et comptabilisation des produits sont les points où SD diverge le plus entre ECC et S/4HANA. Tu vois ici le paramétrage classique, les remplacements (Settlement, Credit Management, RAR) et leurs impacts FI.",
+"where": "Racines : Sales and Distribution > Billing > Rebate Processing et Intercompany Billing ; Financial Supply Chain Management > Credit Management ; Revenue Accounting and Reporting (FARR). Transactions : VBO1, UKM_BP, FARR_CONTR_MON.",
+"teaser": "La fiche complète contient 13 chemins SPRO, le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 11 étapes détaillées, 8 points à savoir, 7 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "cfg-rep-etats-financiers",
+"module": "SAP FI",
+"code": "OB58 · F.01 · GR31 · GRR1 · F0717",
+"title": "États financiers et reporting FI",
+"summary": "Tu construis les états financiers via les versions OB58 exécutées en F.01, puis les rapports Report Painter/Writer et les apps Fiori. En S/4HANA tout lit ACDOCA, ce qui change les tables et les requêtes analytiques à privilégier.",
+"where": "Racine SPRO : Financial Accounting > General Ledger Accounting > Business Transactions > Closing > Document (OB58). Exécution par F.01 ou FAGLB03 ; Report Painter/Writer par GR31/GRR1 ; apps Fiori et vues CDS d'ACDOCA hors SPRO.",
+"teaser": "La fiche complète contient 13 chemins SPRO, le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 11 étapes détaillées, 7 points à savoir, 7 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "cfg-rep-bp-cvi-interfaces",
+"module": "SAP FI",
+"code": "CVI_COCKPIT · BP_CVI_IMG_CHK · BD64 · WE20",
+"title": "Business Partner, CVI et interfaces FI",
+"summary": "Tu synchronises clients et fournisseurs avec le Business Partner via la CVI, puis tu ouvres les flux FI par IDoc/ALE, BAPI et OData. La fiche sépare ce qui est standard certain de ce qui dépend de la release.",
+"where": "Racine SPRO : Cross-Application Components > Master Data Synchronization (CVI) et SAP Business Partner ; ALE via SALE. Outils : CVI_COCKPIT, BP_CVI_IMG_CHK, MDS_LOAD_COCKPIT, BD64, WE20, WE21 ; BAPI en SE37 ; OData en /IWFND/MAINT_SERVICE.",
+"teaser": "La fiche complète contient 14 chemins SPRO, le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 11 étapes détaillées, 7 points à savoir, 7 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "cfg-rep-archivage-autorisations-conso",
+"module": "SAP FI",
+"code": "SARA · OBR7 · OBR8 · F_BKPF_BUK · Group Reporting",
+"title": "Archivage, autorisations et consolidation",
+"summary": "Tu archives les pièces FI_DOCUMNT avec SARA, tu sécurises les écritures par les objets F_BKPF_* et tu cadres la consolidation dans Group Reporting. Le rapprochement intersociétés se fait avant la clôture, avec un ID société cohérent dans chaque entité.",
+"where": "Racine SPRO : archivage applicatif via SARA > Customizing ; durées de vie par OBR7/OBR8. Autorisations par PFCG, SU24 et SU53. Group Reporting par apps Fiori ; nœud IMG « Group Reporting » (chemin intermédiaire selon release : chercher par la transaction dans SPRO).",
+"teaser": "La fiche complète contient 14 chemins SPRO, le mécanisme expliqué avec 2 schémas, les interactions avec l'usage key user, 11 étapes détaillées, 7 points à savoir, 7 pièges, un cas pratique, les contrôles à faire et les transactions liées."
+},
+{
+"id": "tips-pieges/aa-au133-compte-amortissement",
+"module": "Tip · Immobilisations",
+"code": "FI-AA",
+"title": "AFAB / AFABN : erreur AU133, compte d'amortissement introuvable",
+"summary": "",
+"where": "",
+"teaser": "La fiche complète contient la cause, 4 étapes de solution, 3 pièges, 2 tips, les notes OSS / KBA et les sources."
+},
+{
+"id": "tips-pieges/aa-aa677-acquisition-complementaire-vnc-zero",
+"module": "Tip · Immobilisations",
+"code": "FI-AA",
+"title": "AS01 : avertissement AA677, acquisition complémentaire avec VNC à zéro",
+"summary": "",
+"where": "",
+"teaser": "La fiche complète contient la cause, 2 étapes de solution, 2 pièges, 2 tips, les notes OSS / KBA et les sources."
+},
+{
+"id": "tips-pieges/aa-cloture-annuelle-depreciations-non-comptabilisees",
+"module": "Tip · Immobilisations",
+"code": "FI-AA",
+"title": "Clôture annuelle AA : amortissements non comptabilisés sur exercice déjà certifié",
+"summary": "",
+"where": "",
+"teaser": "La fiche complète contient la cause, 3 étapes de solution, 2 pièges, 2 tips, les notes OSS / KBA et les sources."
+},
+{
+"id": "tips-pieges/aa-zones-amortissement-t093b-ac264",
+"module": "Tip · Immobilisations",
+"code": "FI-AA",
+"title": "Zones d'amortissement : copie de zone (T093B) et message AC264",
+"summary": "",
+"where": "",
+"teaser": "La fiche complète contient la cause, 2 étapes de solution, 2 pièges, 2 tips, les notes OSS / KBA et les sources."
+},
+{
+"id": "tips-pieges/s4-migration-universal-journal-fins-acdoc-cust",
+"module": "Tip · SAP FI",
+"code": "S/4HANA",
+"title": "Migration S/4HANA : pièges Universal Journal (ACDOCA, FINS_ACDOC_CUST)",
+"summary": "",
+"where": "",
+"teaser": "La fiche complète contient la cause, 5 étapes de solution, 4 pièges, 2 tips, les notes OSS / KBA et les sources."
+},
+{
+"id": "tips-pieges/fm-ficustom401-facturation-s4",
+"module": "Tip · SAP FI",
+"code": "PSM-FM",
+"title": "Funds Management dans S/4HANA : erreur FICUSTOM401 à la facture",
+"summary": "",
+"where": "",
+"teaser": "La fiche complète contient la cause, 1 étape de solution, 1 piège, 1 tip, les notes OSS / KBA et les sources."
+},
+{
+"id": "tips-pieges/ap-f110-fournisseur-non-repris",
+"module": "Tip · SAP FI",
+"code": "FI-AP",
+"title": "F110 : un fournisseur n'est pas repris dans la proposition de paiement",
+"summary": "",
+"where": "",
+"teaser": "La fiche complète contient la cause, 5 étapes de solution, 3 pièges, 2 tips, les notes OSS / KBA et les sources."
+},
+{
+"id": "tips-pieges/ap-f110-erreurs-parametrage-fbzp",
+"module": "Tip · SAP FI",
+"code": "FI-AP",
+"title": "F110 : méthode de paiement, devise, solde débiteur, retenue à la source",
+"summary": "",
+"where": "",
+"teaser": "La fiche complète contient la cause, 6 étapes de solution, 3 pièges, 2 tips, les notes OSS / KBA et les sources."
+},
+{
+"id": "tips-pieges/mm-grir-f13-assignation",
+"module": "Tip · SAP MM-FI",
+"code": "FI-GL",
+"title": "GR/IR : la compensation automatique F.13 ne compense pas",
+"summary": "",
+"where": "",
+"teaser": "La fiche complète contient la cause, 6 étapes de solution, 3 pièges, 2 tips, les notes OSS / KBA et les sources."
+},
+{
+"id": "tips-pieges/co-ksu5-f6754-periode-budgetaire",
+"module": "Tip · SAP CO",
+"code": "CO",
+"title": "KSU5 / CO43 : message F6754, période budgétaire blanche non valide",
+"summary": "",
+"where": "",
+"teaser": "La fiche complète contient la cause, 2 étapes de solution, 2 pièges, 1 tip, les notes OSS / KBA et les sources."
+},
+{
+"id": "tips-pieges/co-ksu5-ga622-ensemble-ccss",
+"module": "Tip · SAP CO",
+"code": "CO",
+"title": "KSU5 : message GA622, erreur de lecture d'ensemble (table CCSS)",
+"summary": "",
+"where": "",
+"teaser": "La fiche complète contient la cause, 1 étape de solution, 2 pièges, 1 tip, les notes OSS / KBA et les sources."
+},
+{
+"id": "tips-pieges/gl-document-splitting-glt2152-glt2001",
+"module": "Tip · SAP FI",
+"code": "FI-GL",
+"title": "Document splitting : GLT2152 / GLT2001 à la compensation (F-51)",
+"summary": "",
+"where": "",
+"teaser": "La fiche complète contient la cause, 5 étapes de solution, 2 pièges, 1 tip, les notes OSS / KBA et les sources."
+},
+{
+"id": "tips-pieges/gl-evaluation-devises-fagl-fc-val",
+"module": "Tip · SAP FI",
+"code": "FI-GL",
+"title": "Évaluation des devises : F.05 obsolète, FAGL_FC_VAL et erreur FR894",
+"summary": "",
+"where": "",
+"teaser": "La fiche complète contient la cause, 3 étapes de solution, 2 pièges, 1 tip, les notes OSS / KBA et les sources."
+}
+]

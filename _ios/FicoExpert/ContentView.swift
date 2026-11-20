@@ -18,6 +18,7 @@ struct ContentView: View {
     @StateObject private var favorites = FavoritesStore()
     @StateObject private var recents = RecentsStore()
     @StateObject private var notes = NotesStore()
+    @StateObject private var catalog = CatalogStore()
     @StateObject private var store = StoreManager()
 
     @State private var isLoading = true
@@ -25,6 +26,7 @@ struct ContentView: View {
     @State private var reloadToken = 0
     @State private var showLibrary = false
     @State private var showNote = false
+    @State private var showCatalog = false
     @State private var showPremium = false
 
     private let accent = Color(red: 58/255, green: 95/255, blue: 143/255)
@@ -72,6 +74,9 @@ struct ContentView: View {
         .sheet(isPresented: $showLibrary) {
             LibraryView(favorites: favorites, recents: recents, notes: notes) { url in model.load(url) }
         }
+        .sheet(isPresented: $showCatalog) {
+            CatalogView(catalog: catalog, storeManager: store)
+        }
         .sheet(isPresented: $showNote) {
             if let url = model.url {
                 NoteEditorView(notes: notes, title: model.title, url: url)
@@ -92,6 +97,7 @@ struct ContentView: View {
             barButton("chevron.backward", label: "Retour", enabled: model.canGoBack) {
                 model.goBack()
             }
+            barButton("magnifyingglass", label: "Catalogue") { showCatalog = true }
             Spacer()
             barButton(favorites.contains(model.url) ? "star.fill" : "star",
                       label: favorites.contains(model.url) ? "Retirer des favoris" : "Ajouter aux favoris") {
