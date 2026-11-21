@@ -16,6 +16,7 @@ struct HomeView: View {
         let title: String
         let subtitle: String
         let symbol: String
+        var glyph: String? = nil
         let color: Color
         let count: Int?
         let action: () -> Void
@@ -26,15 +27,15 @@ struct HomeView: View {
     private var tiles: [Tile] {
         [
             Tile(id: "fi", title: "SAP FI", subtitle: "Comptabilité générale, clients, fournisseurs",
-                 symbol: "banknote", color: Color(red: 0.25, green: 0.52, blue: 0.96), count: count("SAP FI")) {
+                 symbol: "eurosign.circle.fill", glyph: "€$£", color: Color(red: 0.25, green: 0.52, blue: 0.96), count: count("SAP FI")) {
                 openCatalog("SAP FI", "") },
             Tile(id: "co", title: "SAP CO", subtitle: "Contrôle de gestion",
-                 symbol: "chart.pie.fill", color: Color(red: 0.20, green: 0.70, blue: 0.50), count: count("SAP CO")) {
+                 symbol: "chart.line.uptrend.xyaxis", color: Color(red: 0.20, green: 0.70, blue: 0.50), count: count("SAP CO")) {
                 openCatalog("SAP CO", "") },
             Tile(id: "aa", title: "Immobilisations", subtitle: "Amortissements, AA",
-                 symbol: "building.2.fill", color: Color(red: 0.95, green: 0.55, blue: 0.20), count: count("Immobilisations")) {
+                 symbol: "building.columns.fill", color: Color(red: 0.95, green: 0.55, blue: 0.20), count: count("Immobilisations")) {
                 openCatalog("Immobilisations", "") },
-            Tile(id: "mm", title: "SAP MM-FI", subtitle: "Achats, stocks, GR/IR",
+            Tile(id: "mm", title: "Logistique MM-FI", subtitle: "Achats, stocks, GR/IR",
                  symbol: "shippingbox.fill", color: Color(red: 0.62, green: 0.40, blue: 0.90), count: count("SAP MM-FI")) {
                 openCatalog("SAP MM-FI", "") },
             Tile(id: "tips", title: "Tips & pièges", subtitle: "Erreurs courantes et solutions",
@@ -61,9 +62,6 @@ struct HomeView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 18) {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Bonjour 👋")
-                            .font(.subheadline)
-                            .foregroundColor(.white.opacity(0.65))
                         Text("FICO EXPERT")
                             .font(.system(.largeTitle, design: .rounded).weight(.bold))
                             .foregroundColor(.white)
@@ -122,10 +120,15 @@ struct HomeView: View {
     private func tileView(_ tile: Tile) -> some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack(alignment: .top) {
-                Image(systemName: tile.symbol)
-                    .font(.system(size: 20, weight: .semibold))
+                Group {
+                    if let g = tile.glyph {
+                        Text(g).font(.system(size: 14, weight: .heavy, design: .rounded))
+                    } else {
+                        Image(systemName: tile.symbol).font(.system(size: 20, weight: .semibold))
+                    }
+                }
                     .foregroundColor(.white)
-                    .frame(width: 40, height: 40)
+                    .frame(width: 44, height: 44)
                     .background(tile.color)
                     .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                 Spacer()
