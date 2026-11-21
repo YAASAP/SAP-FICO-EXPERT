@@ -61,7 +61,24 @@ struct HomeView: View {
             Color(AppConfig.nightBlue).ignoresSafeArea()
             ScrollView {
                 VStack(alignment: .leading, spacing: 18) {
-                    VStack(alignment: .leading, spacing: 4) {
+                    VStack(alignment: .leading, spacing: 6) {
+                        HStack(spacing: 8) {
+                            Text("YAASAP")
+                                .font(.system(size: 26, weight: .black, design: .rounded))
+                                .italic()
+                                .foregroundStyle(LinearGradient(
+                                    colors: [.white, Color(red: 0.62, green: 0.78, blue: 1.0)],
+                                    startPoint: .top, endPoint: .bottom))
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 4)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                        .fill(Color(red: 0.20, green: 0.42, blue: 0.90).opacity(0.55))
+                                )
+                            Text("présente")
+                                .font(.caption)
+                                .foregroundColor(.white.opacity(0.55))
+                        }
                         Text("FICO EXPERT")
                             .font(.system(.largeTitle, design: .rounded).weight(.bold))
                             .foregroundColor(.white)
