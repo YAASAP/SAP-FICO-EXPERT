@@ -100,6 +100,23 @@
   var isCat = page === 'catalogue.html';
   var has = !!norm(get());
 
+  /* ---------- fiches consultées et favoris : listes locales, lues par l'accueil ---------- */
+  function lsGet(k) { try { var v = JSON.parse(localStorage.getItem(k) || '[]'); return Array.isArray(v) ? v : []; } catch (e) { return []; } }
+  function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  function track(h) { lsSet('fe_recent', [h].concat(lsGet('fe_recent').filter(function (x) { return x !== h; })).slice(0, 30)); }
+  function favButton(h) {
+    var st = bar.querySelector('.st'); if (!st) return;
+    var b = document.createElement('a'); b.className = 'st'; b.href = '#'; b.setAttribute('role', 'button');
+    function paint() { var on = lsGet('fe_favs').indexOf(h) > -1; b.textContent = on ? '★ Favori' : '☆ Favori'; b.setAttribute('aria-pressed', on ? 'true' : 'false'); b.className = 'st' + (on ? ' on' : ''); }
+    b.addEventListener('click', function (ev) {
+      ev.preventDefault();
+      var f = lsGet('fe_favs'), k = f.indexOf(h);
+      if (k > -1) f.splice(k, 1); else f.unshift(h);
+      lsSet('fe_favs', f); paint();
+    });
+    paint(); bar.insertBefore(b, st);
+  }
+
   // barre de navigation à la place du lien « retour »
   var bar = document.createElement('nav');
   bar.className = 'fs-bar'; bar.setAttribute('aria-label', 'Navigation');
@@ -142,6 +159,15 @@
         lis.forEach(function (li) { var ok = !t || li.textContent.toLowerCase().indexOf(t) > -1; li.hidden = !ok; if (ok) n++; });
         cnt.textContent = t ? (n ? n + ' fiche' + (n > 1 ? 's' : '') : 'Aucune fiche ne correspond.') : '';
       });
+      // filtre par module depuis l'accueil : catalogue.html?m=SAP%20CO
+      var mod = new URLSearchParams(location.search).get('m');
+      if (mod) {
+        var mn = 0, ml = mod.toLowerCase();
+        lis.forEach(function (li) { var k = li.querySelector('.k'), ok = !!k && k.textContent.toLowerCase().indexOf(ml) === 0; li.hidden = !ok; if (ok) mn++; });
+        cnt.innerHTML = '';
+        cnt.appendChild(document.createTextNode(mn + ' fiche' + (mn > 1 ? 's' : '') + ' · ' + mod + ' · '));
+        var all = document.createElement('a'); all.href = 'catalogue.html'; all.textContent = 'Tout afficher'; cnt.appendChild(all);
+      }
     }
     return;
   }
@@ -149,7 +175,9 @@
   // fiches voisines, d'après l'ordre du catalogue
   fiches().then(function (l) {
     var i = -1; l.forEach(function (f, k) { if (f.h === page) i = k; });
-    var foot = document.querySelector('footer'); if (i < 0 || !foot) return;
+    if (i < 0) return;
+    track(page); favButton(page);
+    var foot = document.querySelector('footer'); if (!foot) return;
     function card(f, cls, lab) { return '<a class="' + cls + '" href="' + f.h + '"><small>' + lab + '</small><b>' + f.t.replace(/</g, '&lt;') + '</b></a>'; }
     var pn = document.createElement('nav'); pn.className = 'fs-pn'; pn.setAttribute('aria-label', 'Fiches voisines');
     pn.innerHTML = (i > 0 ? card(l[i - 1], 'pv', '← Précédente') : '') + (i < l.length - 1 ? card(l[i + 1], 'nx', 'Suivante →') : '');

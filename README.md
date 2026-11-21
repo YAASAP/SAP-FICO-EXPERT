@@ -4,7 +4,7 @@ Site de fiches, d'atlas et de modes opératoires SAP FI/CO édité par YAASAP, p
 
 ## Contenu
 
-- `index.html` : page d'accueil.
+- `index.html` : page d'accueil mobile (modules, recherche, outils, activités locales), lit `catalogue.html` pour les compteurs.
 - Pages à la racine : atlas (`atlas_*.html`), `formations.html`, fiches (`yaasap_*.html` et autres).
 - `sitemap-formations.xml` : plan du site pour les moteurs de recherche.
 - `og-*.png`, `yaasap-logo.jpg` : visuels de partage et logo.
