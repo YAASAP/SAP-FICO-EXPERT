@@ -24,7 +24,7 @@ actor PremiumVault {
 
     private func fetchPayload(for id: String) async -> [String: Any]? {
         if let cached = cache[id] { return cached }
-        guard let encoded = id.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed),
+        guard let encoded = (id.split(separator: "/").last.map(String.init) ?? id).addingPercentEncoding(withAllowedCharacters: .urlPathAllowed),
               let url = URL(string: AppConfig.startURL.absoluteString + "/content/\(encoded).json"),
               let result = try? await URLSession.shared.data(from: url),
               (result.1 as? HTTPURLResponse)?.statusCode == 200,
