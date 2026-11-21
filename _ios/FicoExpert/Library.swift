@@ -13,6 +13,7 @@ struct LibraryView: View {
     @ObservedObject var recents: RecentsStore
     @ObservedObject var notes: NotesStore
     var onOpen: (URL) -> Void
+    var showsClose = true
 
     @State private var section: LibSection = .favorites
     @Environment(\.dismiss) private var dismiss
@@ -36,7 +37,7 @@ struct LibraryView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Fermer") { dismiss() }
+                    if showsClose { Button("Fermer") { dismiss() } }
                 }
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Vider") { recents.clear() }

@@ -7,19 +7,21 @@ final class WebModel: ObservableObject {
     @Published var url: URL?
     @Published var canGoBack = false
     weak var webView: WKWebView?
+    var pendingURL: URL?
 
     func goBack() { webView?.goBack() }
     func load(_ url: URL) { webView?.load(URLRequest(url: url)) }
     func home() { load(AppConfig.startURL) }
 }
 
-struct ContentView: View {
-    @StateObject private var model = WebModel()
-    @StateObject private var favorites = FavoritesStore()
-    @StateObject private var recents = RecentsStore()
-    @StateObject private var notes = NotesStore()
-    @StateObject private var catalog = CatalogStore()
-    @StateObject private var store = StoreManager()
+struct WebSiteView: View {
+    @ObservedObject var model: WebModel
+    @ObservedObject var favorites: FavoritesStore
+    @ObservedObject var recents: RecentsStore
+    @ObservedObject var notes: NotesStore
+    @ObservedObject var catalog: CatalogStore
+    @ObservedObject var store: StoreManager
+    var onClose: () -> Void
 
     @State private var isLoading = true
     @State private var loadFailed = false
@@ -28,7 +30,6 @@ struct ContentView: View {
     @State private var showNote = false
     @State private var showCatalog = false
     @State private var showPremium = false
-    @State private var showHome = true
     @State private var catalogFilter = "Tous"
     @State private var catalogQuery = ""
 
@@ -74,19 +75,6 @@ struct ContentView: View {
             }
         }
         .background(Color(AppConfig.nightBlue).ignoresSafeArea())
-        .overlay {
-            if showHome {
-                HomeView(catalog: catalog, store: store,
-                         openCatalog: { filter, query in
-                             catalogFilter = filter
-                             catalogQuery = query
-                             showCatalog = true
-                         },
-                         openLibrary: { showLibrary = true },
-                         openSite: { showHome = false },
-                         openPremium: { showPremium = true })
-            }
-        }
         .sheet(isPresented: $showLibrary) {
             LibraryView(favorites: favorites, recents: recents, notes: notes) { url in model.load(url) }
         }
@@ -111,7 +99,7 @@ struct ContentView: View {
     /// (Accueil, Catalogue, Atlas, Formations, Accès) reste la barre du bas du site.
     private var topBar: some View {
         HStack(spacing: 6) {
-            barButton("square.grid.2x2.fill", label: "Accueil") { showHome = true }
+            barButton("xmark", label: "Fermer le site") { onClose() }
             barButton("chevron.backward", label: "Retour", enabled: model.canGoBack) {
                 model.goBack()
             }
@@ -162,6 +150,64 @@ struct ContentView: View {
     }
 }
 
+/// Racine de l'app : barre d'onglets native. Le site web (Atlas, formations) s'ouvre en plein écran.
+struct ContentView: View {
+    @StateObject private var model = WebModel()
+    @StateObject private var favorites = FavoritesStore()
+    @StateObject private var recents = RecentsStore()
+    @StateObject private var notes = NotesStore()
+    @StateObject private var catalog = CatalogStore()
+    @StateObject private var store = StoreManager()
+
+    @State private var tab = 0
+    @State private var showSite = false
+    @State private var catalogFilter = "Tous"
+    @State private var catalogQuery = ""
+    @State private var catalogToken = 0
+
+    var body: some View {
+        TabView(selection: $tab) {
+            HomeView(catalog: catalog, store: store,
+                     openCatalog: { filter, query in
+                         catalogFilter = filter
+                         catalogQuery = query
+                         catalogToken += 1
+                         tab = 1
+                     },
+                     openLibrary: { tab = 2 },
+                     openSite: { showSite = true },
+                     openPremium: { tab = 3 })
+                .tabItem { Label("Accueil", systemImage: "square.grid.2x2.fill") }
+                .tag(0)
+
+            CatalogView(catalog: catalog, storeManager: store,
+                        initialFilter: catalogFilter, initialQuery: catalogQuery, showsClose: false)
+                .id(catalogToken)
+                .tabItem { Label("Catalogue", systemImage: "magnifyingglass") }
+                .tag(1)
+
+            LibraryView(favorites: favorites, recents: recents, notes: notes,
+                        onOpen: { url in
+                            model.pendingURL = url
+                            showSite = true
+                        },
+                        showsClose: false)
+                .tabItem { Label("Bibliothèque", systemImage: "star.fill") }
+                .tag(2)
+
+            PaywallView(store: store, showsClose: false)
+                .tabItem { Label("Premium", systemImage: store.isPremium ? "checkmark.seal.fill" : "lock.open.fill") }
+                .tag(3)
+        }
+        .tint(Color(red: 0.45, green: 0.65, blue: 1.0))
+        .fullScreenCover(isPresented: $showSite) {
+            WebSiteView(model: model, favorites: favorites, recents: recents, notes: notes,
+                        catalog: catalog, store: store, onClose: { showSite = false })
+                .preferredColorScheme(.dark)
+        }
+    }
+}
+
 struct WebView: UIViewRepresentable {
     @ObservedObject var model: WebModel
     @Binding var isLoading: Bool
@@ -209,7 +255,8 @@ struct WebView: UIViewRepresentable {
 
         model.webView = web
         context.coordinator.lastPremium = isPremium
-        web.load(URLRequest(url: AppConfig.startURL))
+        web.load(URLRequest(url: model.pendingURL ?? AppConfig.startURL))
+        model.pendingURL = nil
         return web
     }
 

@@ -97,6 +97,7 @@ final class StoreManager: ObservableObject {
 
 struct PaywallView: View {
     @ObservedObject var store: StoreManager
+    var showsClose = true
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -148,7 +149,7 @@ struct PaywallView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Fermer") { dismiss() }
+                    if showsClose { Button("Fermer") { dismiss() } }
                 }
             }
         }

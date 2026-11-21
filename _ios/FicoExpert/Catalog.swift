@@ -96,10 +96,12 @@ struct CatalogView: View {
     @ObservedObject var storeManager: StoreManager
     @Environment(\.dismiss) private var dismiss
 
+    let showsClose: Bool
     @State private var query: String
     @State private var filter: String
 
-    init(catalog: CatalogStore, storeManager: StoreManager, initialFilter: String = "Tous", initialQuery: String = "") {
+    init(catalog: CatalogStore, storeManager: StoreManager, initialFilter: String = "Tous", initialQuery: String = "", showsClose: Bool = true) {
+        self.showsClose = showsClose
         self.catalog = catalog
         self.storeManager = storeManager
         _filter = State(initialValue: initialFilter)
@@ -173,7 +175,7 @@ struct CatalogView: View {
             .searchable(text: $query, prompt: "Transaction, mot-clé…")
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Fermer") { dismiss() }
+                    if showsClose { Button("Fermer") { dismiss() } }
                 }
             }
         }
