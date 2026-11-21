@@ -28,6 +28,9 @@ struct ContentView: View {
     @State private var showNote = false
     @State private var showCatalog = false
     @State private var showPremium = false
+    @State private var showHome = true
+    @State private var catalogFilter = "Tous"
+    @State private var catalogQuery = ""
 
     private let accent = Color(red: 58/255, green: 95/255, blue: 143/255)
 
@@ -71,11 +74,25 @@ struct ContentView: View {
             }
         }
         .background(Color(AppConfig.nightBlue).ignoresSafeArea())
+        .overlay {
+            if showHome {
+                HomeView(catalog: catalog, store: store,
+                         openCatalog: { filter, query in
+                             catalogFilter = filter
+                             catalogQuery = query
+                             showCatalog = true
+                         },
+                         openLibrary: { showLibrary = true },
+                         openSite: { showHome = false },
+                         openPremium: { showPremium = true })
+            }
+        }
         .sheet(isPresented: $showLibrary) {
             LibraryView(favorites: favorites, recents: recents, notes: notes) { url in model.load(url) }
         }
         .sheet(isPresented: $showCatalog) {
-            CatalogView(catalog: catalog, storeManager: store)
+            CatalogView(catalog: catalog, storeManager: store,
+                        initialFilter: catalogFilter, initialQuery: catalogQuery)
         }
         .sheet(isPresented: $showNote) {
             if let url = model.url {
@@ -94,10 +111,13 @@ struct ContentView: View {
     /// (Accueil, Catalogue, Atlas, Formations, Accès) reste la barre du bas du site.
     private var topBar: some View {
         HStack(spacing: 6) {
+            barButton("square.grid.2x2.fill", label: "Accueil") { showHome = true }
             barButton("chevron.backward", label: "Retour", enabled: model.canGoBack) {
                 model.goBack()
             }
-            barButton("magnifyingglass", label: "Catalogue") { showCatalog = true }
+            barButton("magnifyingglass", label: "Catalogue") {
+                catalogFilter = "Tous"; catalogQuery = ""; showCatalog = true
+            }
             Spacer()
             barButton(favorites.contains(model.url) ? "star.fill" : "star",
                       label: favorites.contains(model.url) ? "Retirer des favoris" : "Ajouter aux favoris") {

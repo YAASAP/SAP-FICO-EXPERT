@@ -96,8 +96,16 @@ struct CatalogView: View {
     @ObservedObject var storeManager: StoreManager
     @Environment(\.dismiss) private var dismiss
 
-    @State private var query = ""
-    @State private var filter = "Tous"
+    @State private var query: String
+    @State private var filter: String
+
+    init(catalog: CatalogStore, storeManager: StoreManager, initialFilter: String = "Tous", initialQuery: String = "") {
+        self.catalog = catalog
+        self.storeManager = storeManager
+        _filter = State(initialValue: initialFilter)
+        _query = State(initialValue: initialQuery)
+    }
+
     private let tipsFilter = "Tips & pièges"
     private let favFilter = "Favoris"
 
