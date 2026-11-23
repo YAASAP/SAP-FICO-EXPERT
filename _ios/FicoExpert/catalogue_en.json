@@ -873,6 +873,15 @@
   "teaser": "The full note contains 14 SPRO paths, the mechanism explained with 2 diagrams, interactions with key-user usage, 11 detailed steps, 7 points to know, 7 pitfalls, a worked example, the checks to run and related transactions."
  },
  {
+  "id": "swdd-scenario",
+  "module": "SAP FI",
+  "code": "SWDD_SCENARIO",
+  "title": "Flexible workflow: configuring a scenario",
+  "summary": "The flexible workflow is configured in SWDD_SCENARIO: conditions, PFAC agent rules, activation per document type and versions. Knowing at which level to act avoids most errors.",
+  "where": "Transaction SWDD_SCENARIO, agent rules PFAC, activation SPRO / SWU3, version deletion PFWS, diagnosis SWIA / SWI1",
+  "teaser": "Free note: fully readable, offline. (Note body in French.)"
+ },
+ {
   "id": "tips-pieges/aa-au133-compte-amortissement",
   "module": "Tip · Fixed assets",
   "code": "FI-AA",

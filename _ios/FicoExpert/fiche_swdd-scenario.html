@@ -1,0 +1,118 @@
+<p class="deck">Le workflow flexible est une couche de paramétrage posée sur un moteur standard : on ne réécrit pas le moteur, on configure des conditions, des agents et une activation. Savoir à quel niveau agir évite 90 % des erreurs.</p>
+<div class="where">Transaction <code>SWDD_SCENARIO</code> (ancien nom <code>SWB_PROC</code>, obsolète) · règles d'agents <code>PFAC</code> · activation <code>SPRO</code> / <code>SWU3</code> · suppression de version <code>PFWS</code> · runtime <code>SWIA</code>, <code>SWI1</code>, <code>SWI2_DIAG</code></div>
+
+<h2>1. Comprendre le principe</h2>
+<p>Chaque scénario (<code>WS…</code>) référence une classe ABAP standard (par exemple <code>CL_MM_PUR_PO_FLEX_WFL</code> pour les commandes d'achat) et expose des points de configuration : conditions, règles d'agents, activation par type de document. Quand un comportement semble incohérent, identifie d'abord le niveau concerné :</p>
+<table><tr><th>Niveau</th><th>Où</th></tr>
+<tr><td>Scénario</td><td><code>SWDD_SCENARIO</code></td></tr>
+<tr><td>Activation par type de document</td><td><code>SPRO</code>, contrôle <code>SWU3</code></td></tr>
+<tr><td>Modèle de workflow sous-jacent</td><td><code>PFTC</code> / <code>PFWS</code></td></tr>
+<tr><td>Exécution</td><td><code>SWIA</code> / <code>SWI1</code></td></tr></table>
+<div class="box warn"><b>À retenir</b>Un paramétrage correct à un niveau ne compense pas une erreur à un autre niveau.</div>
+
+<h2>2. Anatomie d'un scénario</h2>
+<table><tr><th>Élément</th><th>Rôle</th></tr>
+<tr><td>Objet principal</td><td>Objet métier relié à une vue CDS (ex. facture bloquée → <code>I_SUPPLIERINVOICEAPI01</code>)</td></tr>
+<tr><td>Événement de début</td><td>Déclenche l'instanciation (ex. <code>POSTED</code>)</td></tr>
+<tr><td>Événements d'exécution</td><td>Interrompent ou pilotent une instance en cours (<code>CANCELLED</code>, <code>RELEASED</code>)</td></tr>
+<tr><td>Conteneur</td><td>Variables disponibles pour conditions et agents (initiateur, décision, agent, numéro de pièce)</td></tr>
+<tr><td>Étapes</td><td>Le flux : activités, conditions, blocs, branches</td></tr></table>
+<p>Une version est identifiée par le triplet <code>Scénario / Version / Statut</code>.</p>
+
+<h2>3. Types d'étapes</h2>
+<table><tr><th>Type</th><th>Usage</th><th>Point d'attention</th></tr>
+<tr><td>Activité</td><td>Étape de dialogue standard</td><td>—</td></tr>
+<tr><td>Décision utilisateur</td><td>Approuver, refuser, renvoyer</td><td>—</td></tr>
+<tr><td>Condition / condition multiple</td><td>Branche pilotée par une expression ou une valeur</td><td>Voir §4 et §5</td></tr>
+<tr><td>Bloc flexible</td><td>Attend qu'une condition sur le document devienne vraie</td><td>Reste « en cours » en SWIA tant que la condition n'est pas remplie : normal</td></tr>
+<tr><td>Section parallèle</td><td>Plusieurs branches simultanées</td><td>—</td></tr>
+<tr><td>Boucle (until)</td><td>Répète jusqu'à la condition de sortie</td><td>—</td></tr>
+<tr><td>Générateur d'événement</td><td>Déclenche un événement métier</td><td>—</td></tr>
+<tr><td>Opération de conteneur</td><td>Affecte ou recalcule une variable sans action utilisateur</td><td>—</td></tr>
+<tr><td>Pilotage d'exécution</td><td>Interrompt, relance ou termine une instance</td><td>—</td></tr></table>
+
+<h2>4. Conditions : syntaxe et pièges</h2>
+<p>L'éditeur s'ouvre par double-clic sur une étape Condition ou sur les préconditions d'un bloc flexible. Il combine opérateurs, connecteurs <code>And</code>/<code>Or</code>/<code>Not</code> et une case <b>Not</b> qui inverse la ligne.</p>
+<table><tr><th>Opérateur</th><th>Sens</th></tr>
+<tr><td><code>EX</code></td><td>Égal</td></tr><tr><td><code>NX</code></td><td>Différent</td></tr>
+<tr><td><code>NE</code></td><td>Non égal, <b>indisponible sur les domaines à valeurs fixes</b></td></tr></table>
+<div class="box bad"><b>Piège : domaine à valeurs fixes</b>Sur un champ comme le code de blocage paiement (<code>DZLSPR</code>), l'opérateur <code>NE</code> n'est pas proposé. Combine <code>=</code> avec la case <b>Not</b> cochée.</div>
+<pre>Not   Express.1            Op.   Express.2
+not   &amp;PAYMENT_BLOCK&amp;      =     Y
+→ NOT(&amp;PAYMENT_BLOCK&amp; = Y) : vrai pour tout motif différent de Y</pre>
+
+<h2>5. Démarrage ou étape : le piège n°1</h2>
+<table><tr><th>Où poser la condition</th><th>Effet</th></tr>
+<tr><td>Conditions de démarrage du scénario</td><td>Empêche l'instanciation : aucune trace en SWIA si elle est fausse</td></tr>
+<tr><td>Condition d'une étape ou précondition d'un bloc</td><td>Le workflow existe déjà ; seule l'étape est sautée ou en attente, visible en SWIA quoi qu'il arrive</td></tr></table>
+<div class="box"><b>Symptôme</b>Des instances apparaissent en SWIA alors qu'une condition était censée bloquer un motif : elle a presque sûrement été posée sur l'étape, pas sur le démarrage.</div>
+
+<h2>6. Règles d'agents (PFAC) : qui reçoit le work item</h2>
+<table><tr><th>Critère</th><th>Type F : fonction ABAP</th><th>Type R : responsabilités</th></tr>
+<tr><td>Logique</td><td>Fonction custom, calcul dynamique</td><td>Table de responsabilités, critères déclaratifs</td></tr>
+<tr><td>Cas d'usage</td><td>Résolution croisant société, montant, centre de coût</td><td>Approbateurs nominatifs fixes</td></tr>
+<tr><td>Maintenance</td><td>Développeur ABAP requis</td><td>Key user directement en PFAC</td></tr></table>
+<div class="box ok"><b>Règle empirique</b>Pour des approbateurs fixes et connus, choisis le type R : un développement ABAP pour une logique qui n'a rien de dynamique est un surcoût inutile.</div>
+
+<h2>7. Activation par type de document</h2>
+<ol>
+<li><code>SPRO</code> → Gestion des matériaux → Achats → Commande → Workflow flexible pour commandes (ou recherche « Flexible Workflow »).</li>
+<li>Nœud <b>Activate Flexible Workflow for Document Types</b> : vérifie que chaque type de document concerné référence le bon scénario.</li>
+<li><code>SWU3</code> : le point « Classify Flexible Workflow scenario tasks as general » doit être vert. Un KO empêche le déclenchement même si le scénario est correct.</li>
+<li>Transporte ce paramétrage SPRO, <b>distinct</b> du transport de la définition du scénario (objet <code>R3TR WFDS</code>).</li></ol>
+
+<h2>8. Tuile Fiori « Manage Workflows »</h2>
+<ol>
+<li>Accès par la tuile « Manage Workflows » du lanceur, ou l'URL <code>/sap/bc/ui5_ui5/sap/mmpur_s4_wf_ui/index.html</code> pour les commandes.</li>
+<li>Renseigne la <b>classification d'étape</b> de toute nouvelle étape d'approbation (onglet Pilotage). Sans elle : avertissement au contrôle syntaxique et risque de non-affichage.</li>
+<li>Teste la remontée avec un utilisateur couvert par la règle d'agent.</li>
+<li>Note la tuile et son URL dans la fiche de paramétrage pour le support N1/N2.</li></ol>
+
+<h2>9. Cycle de vie des versions</h2>
+<table><tr><th>Statut</th><th>Sens</th><th>Impact</th></tr>
+<tr><td>Nouveau, sauvegardé</td><td>Brouillon</td><td>Aucun</td></tr>
+<tr><td>Actif</td><td>Activé par <i>Scénario → Activation</i></td><td>Effectif pour toute nouvelle instance</td></tr></table>
+<p>Les instances déjà démarrées <b>restent sur leur version d'origine</b> : aucune migration automatique. Une migration forcée est possible via SWIA/SWPR, mais elle peut réordonner ou invalider des étapes déjà franchies : valide-la avec le métier.</p>
+<h3>Supprimer une version</h3>
+<p><code>SWDD_SCENARIO</code> ne propose aucune suppression de version. Passe par le modèle de workflow :</p>
+<ol><li><code>/nPFWS</code>, saisis l'ID du workflow (ex. <code>90000003</code> pour <code>WS90000003</code>).</li>
+<li><b>Modifier</b> (le bouton reste grisé en affichage).</li>
+<li><i>Traiter → Supprimer versions…</i>, sélectionne la ou les versions, valide.</li></ol>
+<div class="box warn"><b>Impossible si la version est</b>active, en cours d'utilisation (instance ouverte), ou la dernière restante. Bouton grisé malgré tout : vérifie un verrou (<code>SM12</code>) ou l'autorisation <code>S_WF_WI</code>. Des brouillons jamais activés peuvent rester sans risque.</div>
+
+<h2>10. Diagnostic runtime</h2>
+<table><tr><th>Transaction</th><th>Usage</th></tr>
+<tr><td><code>SWIA</code></td><td>Work items en administrateur ; filtre sur le <b>scénario exact</b> (un WS custom n'est pas un WS standard livré)</td></tr>
+<tr><td><code>SWI1</code></td><td>Log détaillé : exception ABAP, message précis</td></tr>
+<tr><td><code>SWI2_DIAG</code></td><td>Où le moteur a buté : agent non résolu, BAdI en échec, donnée manquante</td></tr>
+<tr><td><code>SM12</code></td><td>Verrous</td></tr>
+<tr><td><code>CDHDR</code> / <code>CDPOS</code></td><td>Reconstituer l'historique d'une instance</td></tr></table>
+<ol><li>Identifie le scénario exact.</li><li><code>SWI1</code> sur le work item en erreur : lis le log complet.</li>
+<li>Bloc flexible en attente prolongée ? Vérifie d'abord si la condition attendue n'est simplement pas remplie.</li>
+<li>Instances malgré une condition censée les bloquer ? Contrôle le niveau de la condition (§5).</li>
+<li>Statut document et work item désynchronisés ? Pense à une facture débloquée directement hors workflow.</li></ol>
+
+<h2>11. Checklist de paramétrage</h2>
+<ol>
+<li>Crée une <b>nouvelle version</b> (<i>Scénario → Définir version</i>) au lieu d'écraser une version active.</li>
+<li>Place les étapes par glisser-déposer.</li>
+<li>Paramètre les conditions au bon niveau (§5).</li>
+<li>Crée ou affecte les règles d'agents PFAC, type F ou R (§6).</li>
+<li>Renseigne la classification d'étape des étapes d'approbation.</li>
+<li>Contrôle de syntaxe (<code>Ctrl+F2</code>) : traite les erreurs, analyse les avertissements.</li>
+<li>Active la version, hors heures de forte activité si le processus est critique.</li>
+<li>Vérifie l'activation par type de document et <code>SWU3</code> (§7).</li>
+<li>Teste la remontée Fiori avec un utilisateur de test (§8).</li>
+<li>Transporte (<code>SE09</code>/<code>SE10</code>, <code>R3TR WFDS</code>) et vérifie le package ; <code>$TMP</code> n'est pas transportable.</li>
+<li>Recette, puis documente dans une spécification de paramétrage.</li></ol>
+
+<h2>12. Pièges fréquents</h2>
+<ul>
+<li>Une condition d'<b>étape</b> ne bloque jamais le <b>démarrage</b>.</li>
+<li>Domaine à valeurs fixes : <code>=</code> avec <b>Not</b>, pas de <code>NE</code>.</li>
+<li>Approbateurs fixes : type <b>R</b> plutôt que F.</li>
+<li>Bloc flexible long en SWIA : souvent normal.</li>
+<li>Coexistence de versions : aucune migration automatique.</li>
+<li>Suppression de version : PFWS, jamais SWDD_SCENARIO.</li></ul>
+
+<footer>Contenu à vérifier dans ton système : écrans et paramètres varient selon la release. SAP est une marque de SAP SE ; publication indépendante de YAASAP.</footer>

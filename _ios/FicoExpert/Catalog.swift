@@ -95,6 +95,12 @@ final class CatalogStore: ObservableObject {
         return cacheFolder.appendingPathComponent(safe + ".html")
     }
 
+    /// Fiches offertes, embarquées dans l'app : lisibles sans achat ni réseau.
+    func bundledHTML(_ id: String) -> String? {
+        guard let url = Bundle.main.url(forResource: "fiche_" + id, withExtension: "html") else { return nil }
+        return try? String(contentsOf: url, encoding: .utf8)
+    }
+
     func cachedHTML(_ id: String) -> String? {
         try? String(contentsOf: cacheURL(id), encoding: .utf8)
     }
@@ -327,6 +333,10 @@ struct FicheDetailView: View {
     }
 
     @MainActor private func load() async {
+        if let free = catalog.bundledHTML(entry.id) {
+            html = free
+            return
+        }
         if let cached = catalog.cachedHTML(entry.id) {
             html = cached
             return
