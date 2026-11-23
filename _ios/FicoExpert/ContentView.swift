@@ -1,4 +1,5 @@
 import SwiftUI
+import CoreSpotlight
 import WebKit
 
 /// Pont entre SwiftUI et la WebView : page courante, titre, navigation.
@@ -200,6 +201,14 @@ struct ContentView: View {
                 .tag(3)
         }
         .tint(Color(red: 0.45, green: 0.65, blue: 1.0))
+        .onContinueUserActivity(CSSearchableItemActionType) { activity in
+            guard let id = activity.userInfo?[CSSearchableItemActivityIdentifier] as? String,
+                  let entry = catalog.entries.first(where: { $0.id == id }) else { return }
+            catalogFilter = L("Tous")
+            catalogQuery = entry.code.isEmpty ? entry.title : entry.code
+            catalogToken += 1
+            tab = 1
+        }
         .fullScreenCover(isPresented: $showSite) {
             WebSiteView(model: model, favorites: favorites, recents: recents, notes: notes,
                         catalog: catalog, store: store, onClose: { showSite = false })

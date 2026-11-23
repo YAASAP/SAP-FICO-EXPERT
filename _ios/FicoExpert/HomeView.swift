@@ -54,6 +54,14 @@ struct HomeView: View {
         ]
     }
 
+    /// Une fiche différente chaque jour, choisie localement dans le catalogue (hors Tips).
+    private var dailyEntry: CatalogEntry? {
+        let pool = catalog.entries.filter { !$0.isTip }
+        guard !pool.isEmpty else { return nil }
+        let day = Calendar.current.ordinality(of: .day, in: .era, for: Date()) ?? 0
+        return pool[day % pool.count]
+    }
+
     private let columns = [GridItem(.flexible(), spacing: 14), GridItem(.flexible(), spacing: 14)]
 
     var body: some View {
@@ -120,6 +128,28 @@ struct HomeView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
                     }
                     .buttonStyle(.plain)
+
+                    if let daily = dailyEntry {
+                        Button { openCatalog(L("Tous"), daily.code.isEmpty ? daily.title : daily.code) } label: {
+                            HStack(spacing: 12) {
+                                Image(systemName: "sparkles")
+                                    .font(.title2)
+                                    .foregroundColor(Color(red: 0.62, green: 0.78, blue: 1.0))
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("Fiche du jour").font(.caption.weight(.semibold)).foregroundColor(.white.opacity(0.6))
+                                    Text(verbatim: daily.heading).font(.headline).foregroundColor(.white).lineLimit(1)
+                                    Text(verbatim: daily.summary).font(.caption).foregroundColor(.white.opacity(0.65)).lineLimit(2)
+                                        .multilineTextAlignment(.leading)
+                                }
+                                Spacer()
+                                Image(systemName: "chevron.right").foregroundColor(.white.opacity(0.4))
+                            }
+                            .padding(14)
+                            .background(Color.white.opacity(0.09))
+                            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                        }
+                        .buttonStyle(.plain)
+                    }
 
                     LazyVGrid(columns: columns, spacing: 14) {
                         ForEach(tiles) { tile in

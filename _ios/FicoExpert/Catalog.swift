@@ -1,5 +1,6 @@
 import SwiftUI
 import WebKit
+import CoreSpotlight
 
 /// Une entrée du catalogue embarqué dans l'app (catalogue.json) : consultable hors ligne.
 struct CatalogEntry: Identifiable, Codable, Hashable {
@@ -40,6 +41,23 @@ final class CatalogStore: ObservableObject {
         }
         favoriteIDs = Set(UserDefaults.standard.stringArray(forKey: favKey) ?? [])
         notes = (UserDefaults.standard.dictionary(forKey: noteKey) as? [String: String]) ?? [:]
+        indexInSpotlight()
+    }
+
+    /// Rend les fiches trouvables depuis la recherche iOS (Spotlight), sur l'appareil uniquement.
+    private func indexInSpotlight() {
+        let items = entries.map { entry -> CSSearchableItem in
+            let attrs = CSSearchableItemAttributeSet(contentType: .content)
+            attrs.title = entry.heading
+            attrs.contentDescription = entry.summary
+            attrs.keywords = [entry.code, entry.module, "SAP", "FICO"].filter { !$0.isEmpty }
+            return CSSearchableItem(uniqueIdentifier: entry.id, domainIdentifier: "com.yaasap.sapfico.fiches", attributeSet: attrs)
+        }
+        guard !items.isEmpty else { return }
+        let index = CSSearchableIndex.default()
+        index.deleteSearchableItems(withDomainIdentifiers: ["com.yaasap.sapfico.fiches"]) { _ in
+            index.indexSearchableItems(items) { _ in }
+        }
     }
 
     var modules: [String] {
@@ -269,6 +287,10 @@ struct FicheDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItemGroup(placement: .primaryAction) {
+                ShareLink(item: "\(entry.heading)\n\(entry.summary)\nhttps://yaasap.github.io/SAP-FICO-EXPERT/") {
+                    Image(systemName: "square.and.arrow.up")
+                }
+                .accessibilityLabel("Partager")
                 Button {
                     noteText = catalog.note(for: entry.id)
                     showNote = true
