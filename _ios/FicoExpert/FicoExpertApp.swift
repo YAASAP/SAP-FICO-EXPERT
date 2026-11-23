@@ -6,7 +6,6 @@ enum AppConfig {
 
     /// Domaines ouverts dans l'app. Tout le reste s'ouvre dans Safari.
     static let allowedHosts: Set<String> = [
-        "yaasap.github.io",
         "replit.app",
         "replit.dev"
     ]

@@ -335,7 +335,11 @@ struct WebView: UIViewRepresentable {
             let host = url.host ?? ""
             let allowed = AppConfig.allowedHosts.contains { host == $0 || host.hasSuffix("." + $0) }
             if !allowed && action.navigationType == .linkActivated {
-                UIApplication.shared.open(url)
+                // Aucun chemin d'achat ou de saisie de code hors achat intégré : ces liens sont ignorés.
+                let blocked = ["stripe.com", "github.io"]
+                if !blocked.contains(where: { host == $0 || host.hasSuffix("." + $0) }) {
+                    UIApplication.shared.open(url)
+                }
                 return decisionHandler(.cancel)
             }
             decisionHandler(.allow)
