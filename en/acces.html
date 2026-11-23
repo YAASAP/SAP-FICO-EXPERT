@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>My access — SAP FICO EXPERT</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600&family=Source+Code+Pro:wght@400;600&display=swap">
+<link rel="stylesheet" href="../access.css">
+</head>
+<body>
+<header class="mast"><div class="in"><a class="brand" href=".././">SAP FICO EXPERT</a><nav><a href="catalogue.html">Catalog</a><a href="acces.html">My access</a></nav></div></header>
+<main>
+  <h1>My access</h1>
+  <div class="msg ok hide" id="paid">Payment received. Your access code is sent by e-mail: enter it below.</div>
+
+  <!-- saisie du code d'accès (fiches) -->
+  <form class="box" id="fc" novalidate>
+    <label for="cc">Your access code</label>
+    <input id="cc" type="text" autocomplete="off" spellcheck="false" placeholder="Paste the code you received by e-mail" style="font-family:'Source Code Pro',monospace">
+    <p><button class="btn" id="bc">Save my code</button></p>
+    <div class="msg err hide" id="ec"></div>
+    <p class="lock">The code is sent by e-mail after payment. It stays on this device and automatically opens your notes.</p>
+  </form>
+
+  <!-- code enregistré -->
+  <section class="hide" id="mine">
+    <div class="status" id="ms"></div>
+    <div class="msg hide" id="prog" role="status"></div>
+    <ul class="lib" id="ml"></ul>
+    <p>
+      <a class="btn" href="catalogue.html">Browse the catalog</a>
+      <button class="btn ghost" type="button" id="show">See my unlocked notes</button>
+      <button class="btn ghost" type="button" id="rm">Remove my code</button>
+    </p>
+  </section>
+
+</main>
+<script src="site.js"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var show = function (id, on) { $(id).classList[on === false ? 'add' : 'remove']('hide'); };
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function err(id, msg) { $(id).textContent = msg; show(id); }
+  if (/[?&]paid=1/.test(location.search)) show('paid');
+  // code d'accès aux fiches
+  var FS = window.FicoSite;
+  function render() {
+    var has = !!FS.norm(FS.get());
+    show('fc', !has); show('mine', has);
+    if (has) $('ms').innerHTML = '<strong>Code saved on this device.</strong><br>It automatically opens your notes.';
+  }
+  async function list() {
+    $('show').disabled = true; $('prog').classList.remove('hide'); $('prog').textContent = 'Checking…';
+    var hit = await FS.scan(FS.get(), true, function (n, t) { $('prog').textContent = 'Checking… ' + n + ' / ' + t; });
+    $('prog').classList.add('hide'); $('show').disabled = false;
+    $('ml').innerHTML = hit.length ? hit.map(function (f) {
+      return '<li><div><div class="t">' + esc(f.t) + '</div><div class="s">' + esc(f.k) + '</div></div><a class="btn" href="' + esc(f.h) + '">Read</a></li>';
+    }).join('') : '<li><span class="s">This code does not open any note yet.</span></li>';
+    if (hit.length) $('ms').innerHTML = '<strong>Code saved.</strong><br>' + hit.length + ' note' + (hit.length > 1 ? 's' : '') + ' unlocked.';
+  }
+  $('fc').addEventListener('submit', async function (ev) {
+    ev.preventDefault(); show('ec', false);
+    var c = $('cc').value, s = FS.norm(c);
+    if (s.length < 26 || s.length % 26) return err('ec', 'Incomplete code: it contains 26 characters (letters A–Z and digits 2–7).');
+    $('bc').disabled = true; $('bc').textContent = 'Checking…';
+    var hit = await FS.scan(c, false);
+    $('bc').disabled = false; $('bc').textContent = 'Save my code';
+    if (!hit.length) return err('ec', 'This code does not open any note. Check it or write to us.');
+    FS.save(c); $('cc').value = ''; render(); list();
+  });
+  $('show').addEventListener('click', list);
+  $('rm').addEventListener('click', function () { FS.clear(); $('ml').innerHTML = ''; render(); $('cc').focus(); });
+  render();
+})();
+</script>
+</body>
+</html>

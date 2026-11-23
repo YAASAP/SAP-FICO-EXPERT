@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07101d">
+<title>SAP FICO EXPERT: SAP configuration notes and Atlases</title>
+<meta name="description" content="97 SAP FICO configuration notes and 4 Atlases: transactions, steps, pitfalls and checks. Free preview, access by code.">
+<link rel="canonical" href="https://yaasap.github.io/SAP-FICO-EXPERT/en/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="SAP FICO EXPERT: SAP configuration notes and Atlases">
+<meta property="og:description" content="97 SAP FICO configuration notes and 4 Atlases. Free preview, access by code.">
+<meta property="og:url" content="https://yaasap.github.io/SAP-FICO-EXPERT/">
+<meta property="og:image" content="https://yaasap.github.io/SAP-FICO-EXPERT/og-formations.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#07101d;--bg2:#0b1830;--panel:#0f1d34;--panel2:#13253f;--line:rgba(130,170,255,.16);--line2:rgba(130,170,255,.3);
+  --ink:#eaf1fb;--mute:#9fb1c8;--blue:#3d8bff;--blue-d:#2a6fe0;--cyan:#38c8ff;--gold:#f2b134;
+  --fi:#2f7bff;--co:#22b573;--aa:#f28c28;--mm:#8b5cf6;--tip:#f2c230;
+  --f-body:'Archivo',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;
+  --f-mono:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace;
+  --r:16px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:120px;-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;color:var(--ink);font:400 16px/1.5 var(--f-body);-webkit-font-smoothing:antialiased;
+  background:radial-gradient(900px 420px at 85% -80px,rgba(61,139,255,.28),transparent 70%),radial-gradient(700px 400px at -10% 30%,rgba(56,200,255,.08),transparent 70%),var(--bg);
+  background-repeat:no-repeat;background-attachment:scroll;
+  padding-bottom:calc(96px + env(safe-area-inset-bottom))}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;cursor:pointer}
+svg.i{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:8px}
+.skip{position:absolute;left:-9999px;top:8px;background:#fff;color:#000;padding:8px 12px;border-radius:8px;z-index:50}
+.skip:focus{left:8px}
+.wrap{width:100%;max-width:980px;margin:0 auto;padding:0 16px}
+
+/* En-tête */
+.top{padding-top:calc(14px + env(safe-area-inset-top));display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.wm{font:800 italic 30px/1 var(--f-body);letter-spacing:-.03em;color:#fff;position:relative;padding-bottom:6px;text-shadow:0 2px 14px rgba(61,139,255,.55)}
+.wm::after{content:"";position:absolute;left:2px;right:-6px;bottom:0;height:3px;border-radius:3px;background:linear-gradient(90deg,transparent,var(--cyan) 30%,var(--blue))}
+.bt{min-width:0}
+.bt b{display:flex;align-items:center;gap:8px;font:800 italic 22px/1.05 var(--f-body);letter-spacing:-.02em;white-space:nowrap}
+.bt b span{font:700 12px var(--f-body);font-style:normal;background:var(--blue);color:#fff;border-radius:7px;padding:3px 8px;letter-spacing:0}
+.bt small{display:block;margin-top:3px;font-size:12.5px;color:var(--mute);line-height:1.25}
+.me{position:relative;display:grid;place-items:center;width:46px;height:46px;border-radius:50%;background:linear-gradient(160deg,#1d4fa8,#102a55);border:1px solid var(--line2);flex:none}
+.me.on::after{content:"";position:absolute;right:1px;top:1px;width:12px;height:12px;border-radius:50%;background:#34d399;border:2px solid var(--bg)}
+
+/* Onglets */
+.tabs{position:sticky;top:0;z-index:20;margin:14px -16px 0;padding:8px 16px 0;background:linear-gradient(180deg,var(--bg) 70%,rgba(7,16,29,0));}
+.tabs ul{list-style:none;margin:0;padding:0 0 8px;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--line)}
+.tabs ul::-webkit-scrollbar{display:none}
+.tabs li{flex:1 1 0;min-width:0}
+.tabs a{display:flex;flex-direction:column;align-items:center;gap:3px;min-height:60px;justify-content:center;padding:6px 2px;border-radius:14px;font-weight:600;font-size:13.5px;color:#d5e1f2;white-space:nowrap}
+.tabs a:hover{background:rgba(255,255,255,.06)}
+.tabs a[aria-current]{background:linear-gradient(180deg,#2f7bff,#1d58c9);color:#fff;box-shadow:0 6px 18px rgba(47,123,255,.4)}
+
+/* Bandeau */
+.banner{position:relative;display:block;margin-top:16px;border-radius:20px;overflow:hidden;height:clamp(262px,70vw,320px);border:1px solid var(--line2);background:#091526}
+.banner img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 18%}
+.banner::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(7,16,29,.05) 0%,rgba(7,16,29,.35) 45%,rgba(7,16,29,.94) 100%)}
+.b-txt{position:absolute;z-index:2;left:18px;right:18px;bottom:16px}
+.b-txt h1{margin:0;font:800 clamp(30px,8.4vw,48px)/1.02 var(--f-body);letter-spacing:-.025em}
+.b-txt h1 em{font-style:normal;color:var(--cyan)}
+.b-txt p{margin:6px 0 0;color:#d6e3f5;font-size:clamp(12px,3.3vw,17px)}
+
+/* Recherche */
+.search{position:relative;margin-top:16px}
+.search form{display:flex;align-items:center;gap:10px;background:rgba(15,29,52,.9);border:1px solid var(--line2);border-radius:16px;padding:0 14px;height:56px}
+.search input{flex:1;min-width:0;height:100%;background:transparent;border:0;color:var(--ink);font:500 16px var(--f-body)}
+.search input::placeholder{color:#8aa0bb}
+.search input:focus{outline:0}
+.search form:focus-within{border-color:var(--blue);box-shadow:0 0 0 3px rgba(61,139,255,.25)}
+.res{list-style:none;margin:8px 0 0;padding:6px;background:var(--panel);border:1px solid var(--line2);border-radius:16px;display:none;max-height:340px;overflow:auto}
+.res.show{display:block}
+.res li a{display:block;padding:10px 12px;border-radius:12px}
+.res li a:hover,.res li a:focus-visible{background:rgba(61,139,255,.16)}
+.res .k{display:block;font:700 11px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--cyan)}
+.res b{font-weight:700;font-size:15px}
+.res .none{padding:12px;color:var(--mute);font-size:14.5px}
+
+/* Raccourcis */
+.quick{list-style:none;margin:16px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(min-width:640px){.quick{grid-template-columns:repeat(6,1fr)}}
+.quick a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:104px;padding:12px 6px;text-align:center;font-weight:600;font-size:13.5px;line-height:1.2;background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:16px;transition:transform .15s,border-color .15s}
+.quick a:hover{transform:translateY(-2px);border-color:var(--blue)}
+.quick svg.i{width:30px;height:30px;color:#bcd6ff}
+.quick .tip svg.i{color:var(--tip)}
+.quick .cfg svg.i{color:#7ab4ff}
+
+/* Sections */
+.sec{margin-top:26px}
+.sh{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.sh h2{display:flex;align-items:center;gap:10px;margin:0;font-size:21px;line-height:1.15;letter-spacing:-.01em}
+.sh h2 svg.i{color:var(--blue);width:26px;height:26px}
+.more{display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:14.5px;color:#7ab4ff;white-space:nowrap}
+.more svg.i{width:18px;height:18px}
+.more:hover{text-decoration:underline}
+
+/* Modules */
+.mods{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:520px){.mods{grid-template-columns:1fr 1fr}}
+.mod{display:flex;align-items:center;gap:14px;padding:16px;background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:var(--r);transition:transform .15s,border-color .15s}
+.mod:hover{transform:translateY(-2px);border-color:var(--c)}
+.ico{display:grid;place-items:center;width:56px;height:56px;border-radius:14px;background:var(--c);color:#fff;flex:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 6px 16px rgba(0,0,0,.3)}
+.ico svg.i{width:30px;height:30px}
+.ico.g{font:800 15px var(--f-body);letter-spacing:-.04em}
+.mod .tx{flex:1;min-width:0}
+.mod h3{margin:0;font-size:17px;line-height:1.2}
+.mod p{margin:3px 0 0;color:var(--mute);font-size:13.5px;line-height:1.35}
+.mod .n{text-align:center;flex:none}
+.mod .n b{display:block;font:800 30px/1 var(--f-body);letter-spacing:-.02em}
+.mod .n small{font-size:12.5px;color:var(--mute)}
+
+/* Duo outils / activités */
+.duo{display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:640px){.duo{grid-template-columns:1fr 1fr}}
+.box{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.box h2{display:flex;align-items:center;gap:10px;margin:0 0 10px;font-size:20px}
+.box h2 svg.i{color:var(--blue);width:26px;height:26px}
+.rows{list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:14px;background:rgba(7,16,29,.35)}
+.rows li+li{border-top:1px solid var(--line)}
+.rows a,.rows button{display:flex;align-items:center;gap:12px;width:100%;min-height:56px;padding:10px 14px;background:none;border:0;text-align:left;font-weight:600;font-size:15px;color:var(--ink)}
+.rows a:hover,.rows button:hover{background:rgba(61,139,255,.12)}
+.rows li:first-child>*{border-radius:13px 13px 0 0}.rows li:last-child>*{border-radius:0 0 13px 13px}
+.rows svg.i{color:#7ab4ff}
+.rows .sp{flex:1;min-width:0}
+.rows .sp small{display:block;font-weight:400;color:var(--mute);font-size:13px;line-height:1.3}
+.rows .v{font:800 17px var(--f-body);color:#fff}
+.rows .chev{color:#8aa0bb;width:18px;height:18px}
+.rows .ok{color:#34d399}
+.rows .star{color:var(--gold)}
+
+/* Ressources */
+.res-row{display:flex;gap:12px;overflow-x:auto;padding:2px 2px 12px;margin:0 -16px;padding-inline:16px;scroll-snap-type:x proximity;scrollbar-width:none}
+.res-row::-webkit-scrollbar{display:none}
+.rc{flex:0 0 156px;scroll-snap-align:start;display:flex;flex-direction:column;border-radius:16px;overflow:hidden;border:1px solid var(--line);background:var(--panel)}
+.rc:hover{border-color:var(--blue)}
+.rc .pic{height:92px;display:grid;place-items:center;color:#fff}
+.rc .pic svg.i{width:44px;height:44px;stroke-width:1.6;filter:drop-shadow(0 4px 10px rgba(0,0,0,.4))}
+.rc b{display:block;padding:10px 12px 12px;font-size:14px;line-height:1.3}
+.p1{background:linear-gradient(135deg,#0a3a8c,#2f7bff 60%,#38c8ff)}
+.p2{background:linear-gradient(135deg,#5b1d2a,#e5484d 70%,#ff8a5c)}
+.p3{background:linear-gradient(135deg,#0f4f46,#22b573)}
+.p4{background:linear-gradient(135deg,#4a2a9a,#8b5cf6)}
+.p5{background:linear-gradient(135deg,#7a4308,#f28c28 70%,#f2c230)}
+
+/* Premium */
+.prem{margin-top:26px;border-radius:20px;padding:22px;background:linear-gradient(135deg,#0a2a5e,#12306a 55%,#1b4aa0);border:1px solid var(--line2);display:grid;gap:18px}
+@media(min-width:760px){.prem{grid-template-columns:1.2fr .8fr;align-items:center;padding:30px}}
+.prem .eb{font:700 12px var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:#bcd6ff}
+.prem h2{margin:6px 0 8px;font-size:clamp(22px,5vw,28px);line-height:1.15;letter-spacing:-.015em}
+.prem p{margin:0;color:#cfe0fa}
+.cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 20px;border-radius:999px;font-weight:700;font-size:15px;border:1px solid transparent}
+.btn.solid{background:#fff;color:#0b2a57}
+.btn.solid:hover{background:#e7f0ff}
+.btn.ghost{border-color:rgba(255,255,255,.55);color:#fff}
+.btn.ghost:hover{background:rgba(255,255,255,.12)}
+.prices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pr{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:14px}
+.pr.hot{border:2px solid var(--gold)}
+.pr b{display:block;font-size:13px;color:#cfe0fa;font-weight:600}
+.pr .n{font:800 26px/1.1 var(--f-body);margin-top:4px;letter-spacing:-.02em}
+.pr .t{font-size:12px;color:#a9bfdc}
+
+footer{margin-top:34px;border-top:1px solid var(--line);padding:24px 0 8px;color:var(--mute);font-size:13px}
+footer .wrap{display:grid;gap:18px}
+@media(min-width:760px){footer .wrap{grid-template-columns:1.5fr 1fr 1fr}}
+footer h4{margin:0 0 8px;color:#fff;font-size:14px}
+footer ul{list-style:none;margin:0;padding:0;display:grid;gap:6px;font-size:14px}
+footer a:hover{color:#fff;text-decoration:underline}
+footer .legal{margin:0;line-height:1.5;max-width:62ch}
+
+/* Barre du bas */
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:30;padding:8px 12px calc(10px + env(safe-area-inset-bottom));background:linear-gradient(180deg,rgba(7,16,29,0),rgba(7,16,29,.92) 35%)}
+.dock ul{list-style:none;margin:0 auto;padding:6px;max-width:560px;display:grid;grid-template-columns:repeat(5,1fr);gap:2px;background:rgba(14,28,50,.96);border:1px solid var(--line2);border-radius:26px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 10px 30px rgba(0,0,0,.45)}
+.dock a,.dock button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;width:100%;min-height:58px;border:0;background:none;border-radius:20px;font-weight:600;font-size:12.5px;color:#d5e1f2}
+.dock a[aria-current]{background:linear-gradient(180deg,#2f7bff,#1d58c9);color:#fff}
+.dock a:hover,.dock button:hover{background:rgba(255,255,255,.07)}
+.dock svg.i{width:24px;height:24px}
+@media(min-width:900px){.dock{display:none}body{padding-bottom:40px}}
+
+/* Feuille favoris / récents */
+.shade{position:fixed;inset:0;z-index:60;background:rgba(2,8,18,.7);display:none}
+.shade.show{display:block}
+.sheet{position:absolute;left:0;right:0;bottom:0;max-height:78vh;overflow:auto;background:var(--panel);border:1px solid var(--line2);border-radius:22px 22px 0 0;padding:16px 16px calc(20px + env(safe-area-inset-bottom));max-width:640px;margin:0 auto}
+.sheet header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.sheet h2{margin:0;font-size:20px}
+.sheet .x{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.08);border:0}
+.sheet ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.sheet li a{display:block;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:rgba(7,16,29,.4)}
+.sheet li a:hover{border-color:var(--blue)}
+.sheet .k{display:block;font:700 11px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--cyan)}
+.sheet p{color:var(--mute);margin:6px 2px}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body id="haut">
+<a class="skip" href="#contenu">Skip to content</a>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol>
+    <symbol id="i-tool" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></symbol>
+    <symbol id="i-cap" viewBox="0 0 24 24"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></symbol>
+    <symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></symbol>
+    <symbol id="i-sliders" viewBox="0 0 24 24"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></symbol>
+    <symbol id="i-code" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></symbol>
+    <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.7.6 1 1.3 1 2.3h6c0-1 .3-1.7 1-2.3A7 7 0 0 0 12 2z"/></symbol>
+    <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></symbol>
+    <symbol id="i-bank" viewBox="0 0 24 24"><path d="M3 21h18"/><path d="M5 21V10"/><path d="M9 21V10"/><path d="M15 21V10"/><path d="M19 21V10"/><path d="M12 3L2 9h20z"/></symbol>
+    <symbol id="i-box" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></symbol>
+    <symbol id="i-mark" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></symbol>
+    <symbol id="i-crown" viewBox="0 0 24 24"><path d="M3 7l4.5 4.5L12 4l4.5 7.5L21 7l-2 12H5z"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></symbol>
+    <symbol id="i-swap" viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
+    <symbol id="i-news" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="7" y1="9" x2="17" y2="9"/><line x1="7" y1="13" x2="17" y2="13"/><line x1="7" y1="17" x2="12" y2="17"/></symbol>
+  </defs>
+</svg>
+
+<div class="wrap" id="app">
+  <header class="top">
+    <a class="brand" href="index.html" aria-label="YAASAP FICO Expert, home">
+      <span class="wm" aria-hidden="true">YAASAP</span>
+      <span class="bt"><b>FICO <span>Expert</span></b><small>The reference for SAP FICO professionals</small></span>
+    </a>
+    <a class="me" id="me" href="acces.html" aria-label="My access"><svg class="i"><use href="#i-user"/></svg></a>
+  </header>
+
+  <nav class="tabs" aria-label="Main navigation">
+    <ul>
+      <li><a href="#haut" aria-current="page"><svg class="i"><use href="#i-home"/></svg>Home</a></li>
+      <li><a href="#modules"><svg class="i"><use href="#i-grid"/></svg>Modules</a></li>
+      <li><a href="catalogue.html"><svg class="i"><use href="#i-book"/></svg>Notes</a></li>
+      <li><a href="#outils"><svg class="i"><use href="#i-tool"/></svg>Tools</a></li>
+      <li><a href="formations.html"><svg class="i"><use href="#i-cap"/></svg>Training</a></li>
+    </ul>
+  </nav>
+
+  <main id="contenu">
+    <a class="banner" href="catalogue.html" aria-label="Browse the 97 catalog notes">
+      <img src="../yaasap-logo.jpg" alt="" width="1260" height="691" decoding="async">
+      <div class="b-txt">
+        <h1>SAP <em>FICO</em> Expert</h1>
+        <p>Reference · Procedures · Troubleshooting · Worked examples</p>
+      </div>
+    </a>
+
+    <div class="search" role="search">
+      <form id="sf" autocomplete="off" novalidate>
+        <svg class="i" aria-hidden="true"><use href="#i-search"/></svg>
+        <input id="q" type="search" placeholder="Search a transaction, a code…" aria-label="Search a note" enterkeyhint="search">
+      </form>
+      <ul class="res" id="res" aria-live="polite"></ul>
+    </div>
+
+    <ul class="quick" aria-label="Quick access">
+      <li><a href="catalogue.html"><svg class="i"><use href="#i-layers"/></svg>T-Codes</a></li>
+      <li><a href="formations.html"><svg class="i"><use href="#i-doc"/></svg>Atlases &amp; notes</a></li>
+      <li><a href="../yaasap_sap_fico_mode_operatoire.html"><svg class="i"><use href="#i-book"/></svg>Step-by-step procedures</a></li>
+      <li class="cfg"><a href="../yaasap_customizing_fi_s4hana.html"><svg class="i"><use href="#i-sliders"/></svg>Configuration (Customizing)</a></li>
+      <li><a href="../yaasap_services_odata.html"><svg class="i"><use href="#i-code"/></svg>OData &amp; interfaces</a></li>
+      <li class="tip"><a href="../tips-pieges/index.html"><svg class="i"><use href="#i-bulb"/></svg>Tips &amp; pitfalls</a></li>
+    </ul>
+
+    <section class="sec" id="modules" aria-labelledby="t-mod">
+      <div class="sh">
+        <h2 id="t-mod"><svg class="i"><use href="#i-grid"/></svg>My FICO modules</h2>
+        <a class="more" href="catalogue.html">See all<svg class="i"><use href="#i-arrow"/></svg></a>
+      </div>
+      <div class="mods">
+        <a class="mod" style="--c:var(--fi)" href="catalogue.html?m=SAP%20FI">
+          <span class="ico g" aria-hidden="true">€$£</span>
+          <span class="tx"><h3>FI – Finance</h3><p>General ledger, customers, vendors, banks</p></span>
+          <span class="n"><b data-m="SAP FI">64</b><small>notes</small></span>
+        </a>
+        <a class="mod" style="--c:var(--co)" href="catalogue.html?m=SAP%20CO">
+          <span class="ico" aria-hidden="true"><svg class="i"><use href="#i-chart"/></svg></span>
+          <span class="tx"><h3>CO – Management accounting</h3><p>Cost centers, orders, projects, analyses</p></span>
+          <span class="n"><b data-m="SAP CO">12</b><small>notes</small></span>
+        </a>
+        <a class="mod" style="--c:var(--aa)" href="catalogue.html?m=Immobilisations">
+          <span class="ico" aria-hidden="true"><svg class="i"><use href="#i-bank"/></svg></span>
+          <span class="tx"><h3>AA – Fixed assets</h3><p>Acquisitions, depreciation, disposals, postings</p></span>
+          <span class="n"><b data-m="Immobilisations">12</b><small>notes</small></span>
+        </a>
+        <a class="mod" style="--c:var(--mm)" href="catalogue.html?m=SAP%20MM-FI">
+          <span class="ico" aria-hidden="true"><svg class="i"><use href="#i-box"/></svg></span>
+          <span class="tx"><h3>MM-FI – Logistics &amp; FI</h3><p>Purchasing, stock, GR/IR, valuation</p></span>
+          <span class="n"><b data-m="SAP MM-FI">9</b><small>notes</small></span>
+        </a>
+      </div>
+    </section>
+
+    <div class="duo sec">
+      <section class="box" id="outils" aria-labelledby="t-out">
+        <h2 id="t-out"><svg class="i"><use href="#i-tool"/></svg>Practical tools</h2>
+        <ul class="rows">
+          <li><a href="../yaasap_se16h_jointures.html"><svg class="i"><use href="#i-db"/></svg><span class="sp">Tables &amp; joins<small>SE16H for FI analysis</small></span><svg class="i chev"><use href="#i-chev"/></svg></a></li>
+          <li><a href="../yaasap_integration_fi_mm.html"><svg class="i"><use href="#i-swap"/></svg><span class="sp">FI-MM integration<small>Valuation class, transaction key</small></span><svg class="i chev"><use href="#i-chev"/></svg></a></li>
+          <li><a href="../yaasap_idocs_sap.html"><svg class="i"><use href="#i-doc"/></svg><span class="sp">IDocs<small>Statuses and configuration</small></span><svg class="i chev"><use href="#i-chev"/></svg></a></li>
+          <li><a href="../yaasap_tuiles_fiori.html"><svg class="i"><use href="#i-grid"/></svg><span class="sp">Fiori tiles<small>Catalog, role, service</small></span><svg class="i chev"><use href="#i-chev"/></svg></a></li>
+        </ul>
+      </section>
+
+      <section class="box" id="activites" aria-labelledby="t-act">
+        <h2 id="t-act"><svg class="i"><use href="#i-chart"/></svg>My activity</h2>
+        <ul class="rows">
+          <li><button type="button" data-sheet="fav"><svg class="i"><use href="#i-mark"/></svg><span class="sp">My favorites</span><span class="v" id="n-fav">0</span></button></li>
+          <li><button type="button" data-sheet="rec"><svg class="i"><use href="#i-clock"/></svg><span class="sp">Recently viewed</span><span class="v" id="n-rec">0</span></button></li>
+          <li><a href="../tips-pieges/index.html"><svg class="i"><use href="#i-bulb"/></svg><span class="sp">Tips &amp; pitfalls</span><span class="v" data-m="Tip">13</span></a></li>
+          <li><a id="acc" href="#premium"><svg class="i star"><use href="#i-crown"/></svg><span class="sp"><span id="acc-t">Free access</span><small id="acc-s">Preview of every note, complete with a code</small></span><svg class="i chev"><use href="#i-chev"/></svg></a></li>
+        </ul>
+      </section>
+    </div>
+
+    <section class="sec" aria-labelledby="t-res">
+      <div class="sh">
+        <h2 id="t-res"><svg class="i"><use href="#i-news"/></svg>Resources &amp; atlases</h2>
+        <a class="more" href="formations.html">See all<svg class="i"><use href="#i-arrow"/></svg></a>
+      </div>
+      <div class="res-row">
+        <a class="rc" href="../atlas_efacture.html"><span class="pic p1"><svg class="i"><use href="#i-doc"/></svg></span><b>E-invoicing Atlas</b></a>
+        <a class="rc" href="../tips-pieges/index.html"><span class="pic p2"><svg class="i"><use href="#i-alert"/></svg></span><b>Common errors &amp; solutions</b></a>
+        <a class="rc" href="../atlas_ob_oa.html"><span class="pic p3"><svg class="i"><use href="#i-sliders"/></svg></span><b>OB and OA Atlas</b></a>
+        <a class="rc" href="../atlas_mmfi.html"><span class="pic p4"><svg class="i"><use href="#i-box"/></svg></span><b>MM-FI Atlas: T030, OBYC, OMJJ</b></a>
+        <a class="rc" href="../atlas_astuces.html"><span class="pic p5"><svg class="i"><use href="#i-layers"/></svg></span><b>Atlas of 30 step-by-step notes</b></a>
+      </div>
+    </section>
+
+    <section class="prem" id="premium" aria-labelledby="t-prem">
+      <div>
+        <div class="eb">Premium</div>
+        <h2 id="t-prem">A free preview, then access by code.</h2>
+        <p>Every note opens as a preview. For the full note, choose one note or the whole catalog; your access code is sent after payment.</p>
+        <div class="cta">
+          <a class="btn solid" href="catalogue.html#tarifs">Choose my notes</a>
+          <a class="btn ghost" href="acces.html#code">I already have a code</a>
+        </div>
+      </div>
+      <div class="prices" aria-label="Note pricing">
+        <div class="pr"><b>1 note</b><div class="n">2,90&nbsp;€</div><div class="t">TTC, TVA 20&nbsp;% incluse</div></div>
+        <div class="pr hot"><b>Full catalog</b><div class="n">14,90&nbsp;€</div><div class="t">TTC, TVA 20&nbsp;% incluse</div></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap" style="padding:0">
+      <div>
+        <h4>SAP FICO EXPERT</h4>
+        <p class="legal">Independent publication by YAASAP. This site is not affiliated with, endorsed by or sponsored by SAP SE. SAP, SAP S/4HANA and the SAP product names mentioned are trademarks of SAP SE. Educational content.</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="catalogue.html">Notes catalog</a></li>
+          <li><a href="formations.html">The Atlases</a></li>
+          <li><a href="acces.html">My access</a></li>
+          <li><a href="confidentialite.html">Privacy</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:yacine.aouabed@yaasap.com">yacine.aouabed@yaasap.com</a></li>
+          <li><a href="https://yaasap.github.io/dailywatch/">YAASAP Notes</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<nav class="dock" aria-label="Bottom navigation">
+  <ul>
+    <li><a href="#haut" aria-current="page"><svg class="i"><use href="#i-home"/></svg>Home</a></li>
+    <li><a href="catalogue.html"><svg class="i"><use href="#i-grid"/></svg>Catalog</a></li>
+    <li><button type="button" data-sheet="rec"><svg class="i"><use href="#i-book"/></svg>Recent</button></li>
+    <li><button type="button" data-sheet="fav"><svg class="i"><use href="#i-star"/></svg>Favorites</button></li>
+    <li><a href="#premium"><svg class="i"><use href="#i-crown"/></svg>Premium</a></li>
+  </ul>
+</nav>
+
+<div class="shade" id="shade" role="presentation">
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sh-t" tabindex="-1">
+    <header><h2 id="sh-t"></h2><button type="button" class="x" id="sh-x" aria-label="Fermer"><svg class="i"><use href="#i-x"/></svg></button></header>
+    <ul id="sh-l"></ul>
+    <p id="sh-e" hidden></p>
+  </div>
+</div>
+
+<script src="site.js"></script>
+<script>
+(function () {
+  'use strict';
+  var $ = function (s) { return document.querySelector(s); };
+  function ls(k) { try { var v = JSON.parse(localStorage.getItem(k) || '[]'); return Array.isArray(v) ? v : []; } catch (e) { return []; } }
+
+  var list = [], byHref = {};
+
+  /* ---- catalogue : lu dans catalogue.html, donc toujours à jour ---- */
+  function load() {
+    return fetch('catalogue.html').then(function (r) { return r.text(); }).then(function (t) {
+      var d = new DOMParser().parseFromString(t, 'text/html');
+      list = [].map.call(d.querySelectorAll('ul.list a'), function (a) {
+        return {
+          h: a.getAttribute('href'),
+          k: ((a.querySelector('.k') || {}).textContent || '').trim(),
+          t: ((a.querySelector('b') || {}).textContent || a.textContent).trim(),
+          i: ((a.querySelector('.i') || {}).textContent || '').trim()
+        };
+      });
+      list.forEach(function (f) { byHref[f.h] = f; });
+      counts();
+    }).catch(function () {});
+  }
+
+  function counts() {
+    if (!list.length) return;
+    [].forEach.call(document.querySelectorAll('[data-m]'), function (el) {
+      var m = el.getAttribute('data-m');
+      var n = list.filter(function (f) { return m === 'Tip' ? f.k.indexOf('Tip') === 0 : f.k === m; }).length;
+      if (n) el.textContent = n;
+    });
+  }
+
+  /* ---- recherche ---- */
+  var q = $('#q'), res = $('#res');
+  function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+  function render() {
+    var t = q.value.trim().toLowerCase();
+    if (!t) { res.className = 'res'; res.innerHTML = ''; return; }
+    if (!list.length) { res.className = 'res show'; res.innerHTML = '<li class="none">Loading the catalog…</li>'; return; }
+    var hit = list.filter(function (f) { return (f.k + ' ' + f.t + ' ' + f.i).toLowerCase().indexOf(t) > -1; });
+    res.className = 'res show';
+    if (!hit.length) { res.innerHTML = '<li class="none">No note matches.</li>'; return; }
+    res.innerHTML = hit.slice(0, 8).map(function (f) {
+      return '<li><a href="' + esc(f.h) + '"><span class="k">' + esc(f.k) + '</span><b>' + esc(f.t) + '</b></a></li>';
+    }).join('') + (hit.length > 8 ? '<li class="none">' + hit.length + ' results: refine your search or <a href="catalogue.html" style="color:#7ab4ff;text-decoration:underline">open the catalog</a>.</li>' : '');
+  }
+  q.addEventListener('input', render);
+  $('#sf').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var a = res.querySelector('a'); if (a) location.href = a.getAttribute('href');
+  });
+
+  /* ---- activités (données écrites par site.js sur cet appareil) ---- */
+  function paint() {
+    $('#n-fav').textContent = ls('fe_favs').length;
+    $('#n-rec').textContent = ls('fe_recent').length;
+  }
+
+  /* ---- accès ---- */
+  function access() {
+    var has = false;
+    try { has = !!(window.FicoSite && FicoSite.norm(FicoSite.get())); } catch (e) {}
+    if (!has) return;
+    $('#me').className = 'me on';
+    $('#acc-t').textContent = 'Code saved';
+    $('#acc-s').textContent = 'Your code’s notes open on this device';
+    $('#acc').setAttribute('href', 'acces.html');
+  }
+
+  /* ---- feuille favoris / récents ---- */
+  var shade = $('#shade'), opener = null;
+  function openSheet(kind, btn) {
+    var key = kind === 'fav' ? 'fe_favs' : 'fe_recent', items = ls(key);
+    $('#sh-t').textContent = kind === 'fav' ? 'My favorites' : 'Recently viewed';
+    var ul = $('#sh-l'), e = $('#sh-e'); ul.innerHTML = '';
+    items.forEach(function (h) {
+      var f = byHref[h], li = document.createElement('li'), a = document.createElement('a');
+      a.href = h;
+      if (f) { var k = document.createElement('span'); k.className = 'k'; k.textContent = f.k; a.appendChild(k); }
+      var b = document.createElement('b'); b.textContent = f ? f.t : h.replace(/\.html$/, '').toUpperCase(); a.appendChild(b);
+      li.appendChild(a); ul.appendChild(li);
+    });
+    e.hidden = !!items.length;
+    e.textContent = kind === 'fav' ? 'No favorites yet. Open a note and tap “☆ Favorite”.' : 'No notes viewed yet.';
+    opener = btn; shade.className = 'shade show';
+    shade.querySelector('.sheet').focus();
+  }
+  function closeSheet() { shade.className = 'shade'; if (opener) opener.focus(); }
+  [].forEach.call(document.querySelectorAll('[data-sheet]'), function (b) {
+    b.addEventListener('click', function () { openSheet(b.getAttribute('data-sheet'), b); });
+  });
+  $('#sh-x').addEventListener('click', closeSheet);
+  shade.addEventListener('click', function (e) { if (e.target === shade) closeSheet(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && shade.className.indexOf('show') > -1) closeSheet(); });
+
+  paint(); access(); load().then(function () { if (q.value) render(); });
+  window.addEventListener('pageshow', paint);
+})();
+</script>
+</body>
+</html>
