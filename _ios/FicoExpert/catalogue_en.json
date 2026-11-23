@@ -1,0 +1,992 @@
+[
+ {
+  "id": "fs00",
+  "module": "SAP FI",
+  "code": "FS00",
+  "title": "Reconciliation account",
+  "summary": "A reconciliation account links a subledger (customers, vendors, fixed assets) to the general ledger. It is set in the account's control data at company-code level.",
+  "where": "Transaction FS00, company code view, Type/Control tab (tables SKA1 and SKB1)",
+  "teaser": "The full note contains 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "fb50",
+  "module": "SAP FI",
+  "code": "FB50",
+  "title": "G/L account document entry",
+  "summary": "FB50 posts a document to the general ledger: accrual, provision, reclassification. One single screen for all lines, with a mandatory zero balance.",
+  "where": "Transaction FB50, G/L account document entry (tables BKPF and BSEG, ACDOCA in S/4HANA)",
+  "teaser": "The full note contains 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "fb60",
+  "module": "SAP FI",
+  "code": "FB60",
+  "title": "Vendor invoice",
+  "summary": "FB60 posts a vendor invoice outside the logistics flow: overheads, fees, subscriptions. The vendor line and expense lines are entered on the same screen.",
+  "where": "Transaction FB60, vendor invoice entry (tables BKPF, BSEG and BSIK; LFA1 and LFB1 for the vendor)",
+  "teaser": "The full note contains 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "fb70",
+  "module": "SAP FI",
+  "code": "FB70",
+  "title": "Customer invoice",
+  "summary": "FB70 posts a customer invoice directly in accounting, without going through sales billing. Ideal for re-invoicing or revenue outside the sales flow.",
+  "where": "Transaction FB70, customer invoice entry (tables BKPF, BSEG and BSID; KNA1 and KNB1 for the customer)",
+  "teaser": "The full note contains 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "f-53",
+  "module": "SAP FI",
+  "code": "F-53",
+  "title": "Manual outgoing payment",
+  "summary": "F-53 posts a manual vendor payment and clears the selected invoices. Use it for settlements outside the automatic payment run.",
+  "where": "Transaction F-53, posting an outgoing payment (tables BKPF, BSEG, BSAK and BSIK)",
+  "teaser": "The full note contains 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "f-28",
+  "module": "SAP FI",
+  "code": "F-28",
+  "title": "Incoming payment",
+  "summary": "F-28 posts a customer receipt and clears it against open invoices. The key decision is partial payment versus residual item.",
+  "where": "Transaction F-28, posting an incoming payment (tables BKPF, BSEG, BSAD and BSID)",
+  "teaser": "The full note contains 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "fbl1n",
+  "module": "SAP FI",
+  "code": "FBL1N",
+  "title": "Vendor line items",
+  "summary": "FBL1N displays a vendor's line items: open, cleared or all. It is the reference screen to track vendor payables and prepare a reconciliation.",
+  "where": "Transaction FBL1N, vendor line items (table BSIK for open items and BSAK for cleared items)",
+  "teaser": "The full note contains 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "fbl5n",
+  "module": "SAP FI",
+  "code": "FBL5N",
+  "title": "Customer line items",
+  "summary": "FBL5N is the customer equivalent of FBL1N: open invoices, receipts and clearings. Essential before any dunning or unpaid-invoice analysis.",
+  "where": "Transaction FBL5N, customer line items (table BSID for open items and BSAD for cleared items)",
+  "teaser": "The full note contains 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "fagll03",
+  "module": "SAP FI",
+  "code": "FAGLL03",
+  "title": "G/L account line items",
+  "summary": "FAGLL03 displays the lines of a general ledger account, with ledger selection. It is the control screen for expense, revenue and balance sheet accounts.",
+  "where": "Transaction FAGLL03, G/L account line items (table FAGLFLEXA in ECC, ACDOCA in S/4HANA)",
+  "teaser": "The full note contains 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "fbra",
+  "module": "SAP FI",
+  "code": "FBRA",
+  "title": "Reset cleared items",
+  "summary": "FBRA reverses the clearing of a payment or account clearing. It puts the items back to open, without reversing the payment document itself.",
+  "where": "Transaction FBRA, reset clearing (tables BKPF, BSEG)",
+  "teaser": "The full note contains 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "fb08",
+  "module": "SAP FI",
+  "code": "FB08",
+  "title": "Reverse document",
+  "summary": "FB08 reverses an accounting document by generating a reversal document. The original stays in the system, linked to its reversal.",
+  "where": "Transaction FB08, individual document reversal (tables BKPF and BSEG)",
+  "teaser": "The full note contains 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "f-01",
+  "module": "SAP FI",
+  "code": "F.01",
+  "title": "Financial statements",
+  "summary": "F.01 outputs the balance sheet and income statement from a financial statement version. It is the most used summary view to check a closing.",
+  "where": "Transaction F.01, financial statements (financial statement versions, account balances)",
+  "teaser": "The full note contains 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "faglgvtr",
+  "module": "SAP FI",
+  "code": "FAGLGVTR",
+  "title": "Balance carryforward",
+  "summary": "FAGLGVTR carries balances forward to the new fiscal year: balance sheet to balance sheet accounts, profit/loss to the retained earnings account.",
+  "where": "Transaction FAGLGVTR, balance carryforward in general ledger accounting (new General Ledger)",
+  "teaser": "The full note contains 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "fagl-fcv",
+  "module": "SAP FI",
+  "code": "FAGL_FCV",
+  "title": "Foreign currency valuation",
+  "summary": "FAGL_FCV revalues foreign-currency items at the closing date and posts unrealized exchange differences, with automatic reversal in the next period.",
+  "where": "Transaction FAGL_FCV, foreign currency valuation (new General Ledger)",
+  "teaser": "The full note contains 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "f110",
+  "module": "SAP FI",
+  "code": "F110",
+  "title": "Payment proposal",
+  "summary": "F110 runs the automatic payment program: parameters, proposal, edit, execution and printout. It settles hundreds of invoices at once.",
+  "where": "Transaction F110, automatic payment run (configuration in FBZP)",
+  "teaser": "The full note contains 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "fb03",
+  "module": "SAP FI",
+  "code": "FB03",
+  "title": "Display document",
+  "summary": "FB03 displays an accounting document with its lines, currency and header data. It is the read transaction you use most often to check an entry.",
+  "where": "Transaction FB03, document display (tables BKPF and BSEG)",
+  "teaser": "The full note contains 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "fbv0",
+  "module": "SAP FI",
+  "code": "FBV0",
+  "title": "Parked document",
+  "summary": "FBV0 lets you resume, complete, validate and post a parked document. A parked document has no effect on balances until it is posted.",
+  "where": "Transaction FBV0, post or delete parked documents (entry transactions with \"park\")",
+  "teaser": "The full note contains 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "fbd1",
+  "module": "SAP FI",
+  "code": "FBD1",
+  "title": "Recurring document",
+  "summary": "FBD1 creates a model document that is posted automatically at regular intervals: rent, subscription, insurance. It is executed by the recurring entry program.",
+  "where": "Transaction FBD1, recurring entry (executed with F.14)",
+  "teaser": "The full note contains 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "fb65",
+  "module": "SAP FI",
+  "code": "FB65",
+  "title": "Vendor credit memo",
+  "summary": "FB65 posts a credit memo received from a vendor. It creates a credit on the vendor item that must be cleared against the invoice or deducted from the next payment.",
+  "where": "Transaction FB65, vendor credit memo (tables BKPF, BSEG and BSIK)",
+  "teaser": "The full note contains 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "fd32",
+  "module": "SAP FI",
+  "code": "FD32",
+  "title": "Customer credit limit",
+  "summary": "FD32 changes a customer's credit management data: credit control area, limit, risk category. It blocks or warns on orders exceeding the exposure.",
+  "where": "Transaction FD32, change credit management (customer, credit control area)",
+  "teaser": "The full note contains 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "fk01-xk01",
+  "module": "SAP FI",
+  "code": "FK01 / XK01",
+  "title": "Vendor creation",
+  "summary": "FK01 creates a vendor on the accounting side, XK01 creates it centrally (accounting and purchasing). In S/4HANA, creation goes through the business partner.",
+  "where": "Transactions FK01 and XK01, vendor creation (tables LFA1, LFB1, LFBK and LFM1)",
+  "teaser": "The full note contains 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "fd01",
+  "module": "SAP FI",
+  "code": "FD01",
+  "title": "Customer creation",
+  "summary": "FD01 creates a customer on the accounting side. It carries the reconciliation account and payment terms; sales data is completed afterwards through sales transactions.",
+  "where": "Transaction FD01, customer creation (tables KNA1, KNB1 and KNVV)",
+  "teaser": "The full note contains 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "migo",
+  "module": "SAP MM-FI",
+  "code": "MIGO",
+  "title": "Goods receipt 101",
+  "summary": "MIGO records the goods receipt for a purchase order with movement type 101. It creates the stock document and the accounting document at the same time, with the GR/IR account as offset.",
+  "where": "Transaction MIGO, goods receipt for purchase order (material document, then accounting document; table EKBE for PO history)",
+  "teaser": "The full note contains 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "miro",
+  "module": "SAP MM-FI",
+  "code": "MIRO",
+  "title": "Logistics invoice",
+  "summary": "MIRO records a vendor invoice against a purchase order or goods receipt. It clears the GR/IR account and records price differences.",
+  "where": "Transaction MIRO, incoming invoice entry (tables RBKP and RSEG, PO history EKBE)",
+  "teaser": "The full note contains 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "mr11",
+  "module": "SAP MM-FI",
+  "code": "MR11",
+  "title": "GR/IR account clearing",
+  "summary": "MR11 clears the GR/IR balances that remain open: goods received not invoiced, or invoices received without receipt. Used at closing after analysis.",
+  "where": "Transaction MR11, GR/IR account maintenance (list and reversal with MR11SHOW)",
+  "teaser": "The full note contains 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "f-03",
+  "module": "SAP FI",
+  "code": "F-03",
+  "title": "Clear G/L account",
+  "summary": "F-03 clears the open items of an open-item-managed G/L account. It is used to clean up suspense or clearing accounts.",
+  "where": "Transaction F-03, G/L account clearing (open items)",
+  "teaser": "The full note contains 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "abzon",
+  "module": "Fixed assets",
+  "code": "ABZON",
+  "title": "Asset acquisition",
+  "summary": "ABZON posts a fixed asset acquisition with automatic offsetting entry. Used when the asset is created without a matching vendor invoice.",
+  "where": "Transaction ABZON, acquisition with automatic offsetting entry (asset created beforehand)",
+  "teaser": "The full note contains 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "abavn",
+  "module": "Fixed assets",
+  "code": "ABAVN",
+  "title": "Asset scrapping",
+  "summary": "ABAVN posts the retirement of an asset without sale proceeds: breakage, destruction, theft. The net book value is recognized as a loss.",
+  "where": "Transaction ABAVN, scrapping without revenue (asset retirement)",
+  "teaser": "The full note contains 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "aw01n",
+  "module": "Fixed assets",
+  "code": "AW01N",
+  "title": "Asset explorer",
+  "summary": "AW01N displays an asset's values by depreciation area and fiscal year. It is the control screen for acquisition value, depreciation and net book value.",
+  "where": "Transaction AW01N, asset explorer (values by depreciation area)",
+  "teaser": "The full note contains 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "ksb1",
+  "module": "SAP FI",
+  "code": "KSB1",
+  "title": "Cost center line items",
+  "summary": "KSB1 displays the lines posted to a cost center: actual costs by cost element. It is the basic screen to justify a budget variance.",
+  "where": "Transaction KSB1, cost center actual line items (table COEP)",
+  "teaser": "The full note contains 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "obd4",
+  "module": "SAP FI",
+  "code": "OBD4",
+  "title": "G/L account groups",
+  "summary": "The G/L account group sets an account's number range and the layout of its screen fields. It is defined per chart of accounts with OBD4.",
+  "where": "Transaction OBD4, SPRO path: Financial Accounting > General Ledger Accounting > G/L Accounts > Master Data > Preparations > Define Account Group (view V_T077S, table T077S); exact SPRO path to confirm in your IMG (release-dependent)",
+  "teaser": "The full note contains the mechanism explained with 2 diagrams, interactions with key-user usage, 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "ob52",
+  "module": "SAP FI",
+  "code": "OB52",
+  "title": "Open posting periods",
+  "summary": "OB52 opens and closes posting periods by account type, from a posting period variant shared across company codes. It is the first reflex when a posting is rejected.",
+  "where": "Transaction OB52 (table T001B, view V_T001BB), variant defined with OBBO and assigned to the company code with OBBP; exact SPRO path to confirm in your IMG (release-dependent)",
+  "teaser": "The full note contains the mechanism explained with 2 diagrams, interactions with key-user usage, 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "oba4",
+  "module": "SAP FI",
+  "code": "OBA4",
+  "title": "Employee tolerances",
+  "summary": "OBA4 defines employee tolerance groups: maximum posting amounts and accepted differences. It does not handle company customer and vendor tolerances (OBA3).",
+  "where": "Transaction OBA4, view V_T043T (SM30), IMG activity FIGLCL_T_OBA4; exact SPRO path to confirm in your IMG (release-dependent)",
+  "teaser": "The full note contains the mechanism explained with 2 diagrams, interactions with key-user usage, 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "oba7",
+  "module": "SAP FI",
+  "code": "OBA7",
+  "title": "Document types",
+  "summary": "The document type distinguishes transactions and drives filing. It carries the number range, allowed account types and reversal type.",
+  "where": "Transaction OBA7, SPRO path: Financial Accounting > General Ledger Accounting > Business Transactions > G/L Account Posting > Carry out and Check Document Settings > Define Document Types (view V_T003, table T003); exact SPRO path to confirm in your IMG (release-dependent)",
+  "teaser": "The full note contains the mechanism explained with 2 diagrams, interactions with key-user usage, 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "obc4",
+  "module": "SAP FI",
+  "code": "OBC4",
+  "title": "Field status variant",
+  "summary": "The field status variant groups field status groups that make G/L entry fields optional, required or hidden. It is defined with OBC4 and assigned to the company code with OBC5.",
+  "where": "Transaction OBC4, cluster view V_T004V (SM34), IMG activity SIMG_CFMENUORFBOBC4; exact SPRO path to confirm in your IMG (release-dependent)",
+  "teaser": "The full note contains the mechanism explained with 2 diagrams, interactions with key-user usage, 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "fbn1",
+  "module": "SAP FI",
+  "code": "FBN1",
+  "title": "Document number ranges",
+  "summary": "FBN1 maintains accounting document number intervals, by company code and fiscal year. Each document type points to a range key, with internal or external numbering.",
+  "where": "Transaction FBN1 (accounting document number ranges, by company code and fiscal year); exact SPRO path to confirm in your IMG (release-dependent)",
+  "teaser": "The full note contains the mechanism explained with 2 diagrams, interactions with key-user usage, 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "devises-societe",
+  "module": "SAP FI",
+  "code": "FINSC_LEDGER",
+  "title": "Company code currencies",
+  "summary": "In S/4HANA, a company code's currencies are configured per ledger with currency types in FINSC_LEDGER. You choose the parallel currencies stored in ACDOCA.",
+  "where": "Transaction FINSC_LEDGER, SPRO path: Financial Accounting > Financial Accounting Global Settings > Ledgers > Ledger > Define Settings for Ledgers and Currency Types, \"Currency Types\" folder",
+  "teaser": "The full note contains the mechanism explained with 2 diagrams, interactions with key-user usage, 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "ftxp",
+  "module": "SAP FI",
+  "code": "FTXP",
+  "title": "Tax codes",
+  "summary": "FTXP creates and maintains 2-character tax codes, per country calculation procedure, with their tax type and rate. Tax accounts are configured separately, in OB40.",
+  "where": "Transaction FTXP, exact SPRO path to confirm in your IMG (release-dependent) (tables T007A, T007S, KONP)",
+  "teaser": "The full note contains the mechanism explained with 2 diagrams, interactions with key-user usage, 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "ob08",
+  "module": "SAP FI",
+  "code": "OB08",
+  "title": "Exchange rates",
+  "summary": "OB08 is used to enter exchange rates by rate type and validity date. Direct or indirect quotation and the inverse rate are set up beforehand.",
+  "where": "Transaction OB08, SPRO path > SAP NetWeaver > General Settings > Currencies > Enter Exchange Rates (tables TCURR, TCURN, TCURV)",
+  "teaser": "The full note contains the mechanism explained with 2 diagrams, interactions with key-user usage, 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "oba1",
+  "module": "SAP FI",
+  "code": "OBA1",
+  "title": "Exchange rate differences",
+  "summary": "OBA1 determines the exchange rate difference accounts (KDB, KDF) and revaluation accounts. All accounts must be filled in, otherwise foreign currency valuation fails.",
+  "where": "Transaction OBA1, SPRO path Financial Accounting > General Ledger Accounting / Accounts Receivable and Accounts Payable > Business Transactions > Closing > Valuating > Foreign Currency Valuation > Prepare Automatic Postings for Foreign Currency Valuation",
+  "teaser": "The full note contains the mechanism explained with 2 diagrams, interactions with key-user usage, 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "finsc-ledger",
+  "module": "SAP FI",
+  "code": "FINSC_LEDGER",
+  "title": "Ledgers",
+  "summary": "FINSC_LEDGER defines the ledgers and their currency types. The leading ledger 0L is unique and mandatory; non-leading ledgers are optional.",
+  "where": "Transaction FINSC_LEDGER, SPRO path Financial Accounting > Financial Accounting Global Settings > Ledgers > Ledger > Define Settings for Ledgers and Currency Types (table FINSC_LD_CMP)",
+  "teaser": "The full note contains the mechanism explained with 2 diagrams, interactions with key-user usage, 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "obya",
+  "module": "SAP FI",
+  "code": "OBYA",
+  "title": "Intercompany postings",
+  "summary": "OBYA configures the clearing accounts between company codes of the same group for intercompany postings. It is used with OBY6.",
+  "where": "Transaction OBYA, exact SPRO path to confirm in your IMG (release-dependent)",
+  "teaser": "The full note contains the mechanism explained with 2 diagrams, interactions with key-user usage, 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "obb8",
+  "module": "SAP FI",
+  "code": "OBB8",
+  "title": "Payment terms",
+  "summary": "OBB8 defines payment terms: baseline date, discount tiers, fixed day and additional months. They are then assigned to customer and vendor records.",
+  "where": "Transaction OBB8, exact SPRO path to confirm in your IMG (release-dependent) (table T052)",
+  "teaser": "The full note contains the mechanism explained with 2 diagrams, interactions with key-user usage, 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "oba3",
+  "module": "SAP FI",
+  "code": "OBA3",
+  "title": "Customer and vendor tolerances",
+  "summary": "OBA3 defines, per company code, the settlement differences SAP clears automatically when clearing a customer or vendor: amount, percentage and discount adjustment.",
+  "where": "Transaction OBA3, customer/vendor tolerance groups; exact SPRO path to confirm in your IMG (release-dependent)",
+  "teaser": "The full note contains the mechanism explained with 2 diagrams, interactions with key-user usage, 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "fbmp",
+  "module": "SAP FI",
+  "code": "FBMP",
+  "title": "Dunning procedure",
+  "summary": "FBMP maintains the dunning procedure: levels, days in arrears, grace periods, charges, minimum amounts and forms. Dunning runs are then executed with F150.",
+  "where": "Transaction FBMP, dunning procedure maintenance; exact SPRO path to confirm in your IMG (release-dependent). Dunning areas, keys and block reasons: OB61, OB17, OB18 (Dunning node of the IMG)",
+  "teaser": "The full note contains the mechanism explained with 2 diagrams, interactions with key-user usage, 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "ob46",
+  "module": "SAP FI",
+  "code": "OB46",
+  "title": "Interest calculation",
+  "summary": "OB46 defines the interest calculation indicator: P for interest on open items, S for interest on balances. It is completed by rates, terms and accounts.",
+  "where": "Transaction OB46, interest calculation types; exact SPRO path to confirm in your IMG (release-dependent)",
+  "teaser": "The full note contains the mechanism explained with 2 diagrams, interactions with key-user usage, 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "fbzp",
+  "module": "SAP FI",
+  "code": "FBZP",
+  "title": "Payment program configuration",
+  "summary": "FBZP is the central configuration screen of payment program F110. You go through it from top to bottom: company codes, paying company codes, payment methods, then bank determination.",
+  "where": "Transaction FBZP, SPRO path: Financial Accounting > Accounts Receivable and Accounts Payable > Business Transactions > Outgoing Payments > Automatic Outgoing Payments > Payment Method/Bank Selection for Payment Program",
+  "teaser": "The full note contains the mechanism explained with 2 diagrams, interactions with key-user usage, 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "obxl",
+  "module": "SAP FI",
+  "code": "OBXL",
+  "title": "Settlement differences",
+  "summary": "OBXL assigns the G/L account that receives customer and vendor settlement differences. It is used with OBA3 (tolerances) and OBBE (difference reasons).",
+  "where": "Transaction OBXL, G/L accounts for customer/vendor settlement differences; exact SPRO path to confirm in your IMG (release-dependent)",
+  "teaser": "The full note contains the mechanism explained with 2 diagrams, interactions with key-user usage, 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "ob74",
+  "module": "SAP FI",
+  "code": "OB74",
+  "title": "Automatic clearing",
+  "summary": "OB74 prepares automatic clearing: it defines the grouping criteria for the open items of an account. Program F.13 then applies them to clear.",
+  "where": "Transaction OB74, prepare automatic clearing; exact SPRO path to confirm in your IMG (release-dependent)",
+  "teaser": "The full note contains the mechanism explained with 2 diagrams, interactions with key-user usage, 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "ec08",
+  "module": "Fixed assets",
+  "code": "EC08",
+  "title": "Depreciation chart",
+  "summary": "The chart of depreciation groups a country's depreciation areas. You create it by copying the SAP reference chart with EC08, then assign it to the company code with OAOB.",
+  "where": "Transaction EC08, activity \"Copy Reference Chart of Depreciation / Depreciation Areas\", under SPRO > Financial Accounting > Asset Accounting > Organizational Structures; company code assignment with OAOB; exact SPRO path to confirm in your IMG (release-dependent)",
+  "teaser": "The full note contains the mechanism explained with 2 diagrams, interactions with key-user usage, 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "oaoa",
+  "module": "Fixed assets",
+  "code": "OAOA",
+  "title": "Asset classes",
+  "summary": "The asset class defines the structure of the asset master record: screen layout, number range, account determination and depreciation defaults. You define it with OAOA.",
+  "where": "Transaction OAOA, SPRO path Financial Accounting > Asset Accounting > Organizational Structures > Asset Classes > \"Define Asset Classes\" (table ANKA); exact SPRO path to confirm in your IMG (release-dependent)",
+  "teaser": "The full note contains the mechanism explained with 2 diagrams, interactions with key-user usage, 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "afama",
+  "module": "Fixed assets",
+  "code": "AFAMA",
+  "title": "Depreciation keys",
+  "summary": "The depreciation key defines how SAP calculates depreciation: base method, declining balance, multilevel, period control and rounding. It can combine several phases.",
+  "where": "Transaction AFAMA, SPRO path Financial Accounting > Asset Accounting > Depreciation > Valuation Methods > \"Depreciation Key\"; period control via AFAMP; exact SPRO path to confirm in your IMG (release-dependent)",
+  "teaser": "The full note contains the mechanism explained with 2 diagrams, interactions with key-user usage, 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "ao90",
+  "module": "Fixed assets",
+  "code": "AO90",
+  "title": "Asset accounting G/L accounts",
+  "summary": "AO90 assigns G/L accounts to FI-AA transactions: acquisition, depreciation, disposal. The assignment depends on the account determination key, area and transaction type.",
+  "where": "Transaction AO90, SPRO path Financial Accounting > Asset Accounting > Integration with General Ledger Accounting > \"Assign G/L Accounts\"; exact SPRO path to confirm in your IMG (release-dependent)",
+  "teaser": "The full note contains the mechanism explained with 2 diagrams, interactions with key-user usage, 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "oayr",
+  "module": "Fixed assets",
+  "code": "OAYR",
+  "title": "Posting intervals",
+  "summary": "OAYR sets the intervals and rules for posting depreciation to the general ledger. OAYZ activates areas per class, AO71 defines the document type.",
+  "where": "Transactions OAYR \"Specify Intervals and Posting Rules\", OAYZ \"Determine Depreciation Areas in Asset Class\" and AO71 (document type for depreciation posting); exact SPRO path to confirm in your IMG (release-dependent)",
+  "teaser": "The full note contains the mechanism explained with 2 diagrams, interactions with key-user usage, 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "types-mouvement-aa",
+  "module": "Fixed assets",
+  "code": "IMG types de mouvement",
+  "title": "Asset transaction types",
+  "summary": "Transaction types classify FI-AA operations: acquisitions, retirements, transfers. You create new ones by copying a standard type, using customer-reserved keys.",
+  "where": "SPRO path Financial Accounting > Asset Accounting > Transactions (Acquisitions, Retirements, Transfers), table TABW; for transfers: \"Define Transaction Types for Transfers\"; exact SPRO path to confirm in your IMG (release-dependent)",
+  "teaser": "The full note contains the mechanism explained with 2 diagrams, interactions with key-user usage, 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "okkp",
+  "module": "SAP CO",
+  "code": "OKKP",
+  "title": "Controlling area",
+  "summary": "The controlling area is the organizational unit of controlling. OKKP sets its currency, chart of accounts, fiscal year variant, company code assignment mode and standard hierarchy.",
+  "where": "Transaction OKKP \"Maintain Controlling Area\" (table TKA01); exact SPRO path to confirm in your IMG (release-dependent)",
+  "teaser": "The full note contains the mechanism explained with 2 diagrams, interactions with key-user usage, 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "okeon",
+  "module": "SAP CO",
+  "code": "OKEON",
+  "title": "Standard cost center hierarchy",
+  "summary": "The standard hierarchy is the tree that groups all cost centers of a controlling area. OKEON lets you build and check it before creating the cost centers.",
+  "where": "Transaction OKEON (standard hierarchy maintenance), hierarchy referenced in OKKP (field KHINR of table TKA01); exact SPRO path to confirm in your IMG (release-dependent)",
+  "teaser": "The full note contains the mechanism explained with 2 diagrams, interactions with key-user usage, 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "ka01",
+  "module": "SAP CO",
+  "code": "KA01",
+  "title": "Cost elements",
+  "summary": "In S/4HANA, a cost element is a general ledger account. Its role in CO is set in the control data of FS00: account type and category.",
+  "where": "Transaction FS00 (or app \"Manage G/L Account Master Data\"), \"Control Data\" tab; in ECC, KA01 created the primary element and KA06 the secondary element; actual and plan line items in ACDOCA and ACDOCP; exact SPRO path to confirm in your IMG (release-dependent)",
+  "teaser": "The full note contains the mechanism explained with 2 diagrams, interactions with key-user usage, 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "ksv5",
+  "module": "SAP CO",
+  "code": "KSV5",
+  "title": "Distribution cycles",
+  "summary": "KSV5 runs actual cost distribution cycles between cost centers. The cycle is defined in KSV1; its assessment counterpart goes through KSU1 and KSU5.",
+  "where": "Transaction KSV5 (run actual distribution cycles, on-premise application); cycles defined in KSV1; assessment: KSU1 and KSU5; exact SPRO path to confirm in your IMG (release-dependent)",
+  "teaser": "The full note contains the mechanism explained with 2 diagrams, interactions with key-user usage, 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "kot2-opa",
+  "module": "SAP CO",
+  "code": "KOT2_OPA",
+  "title": "Internal order types",
+  "summary": "The order type sets the behavior of an internal order: settlement profile, number range, planning profile. KOT2_OPA is the maintenance transaction for these types.",
+  "where": "Transaction KOT2_OPA, IMG activity \"Define Order Types\" (additional code S_ALR_87005053); exact SPRO path to confirm in your IMG (release-dependent)",
+  "teaser": "The full note contains the mechanism explained with 2 diagrams, interactions with key-user usage, 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "okb9",
+  "module": "SAP CO",
+  "code": "OKB9",
+  "title": "Automatic CO account assignment",
+  "summary": "OKB9 provides a default CO account assignment for primary cost accounts when a system-generated posting has no CO object: stock movements, invoices, SD billing.",
+  "where": "Transaction OKB9 (tables TKA3A per account, TKA3P per profit center, TKA3C per valuation area); exact SPRO path to confirm in your IMG (release-dependent)",
+  "teaser": "The full note contains the mechanism explained with 2 diagrams, interactions with key-user usage, 5 detailed steps, 4 points to know, 3 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "cfg-fi-structure",
+  "module": "SAP FI",
+  "code": "OX02 · OX15 · OB13 · OB29 · OBBO · OBC4",
+  "title": "FI enterprise structure and variants",
+  "summary": "Client, company code, chart of accounts and three variants (fiscal year, open periods, field status) form the foundation of any SAP accounting. You define them once, then assign them to the company code.",
+  "where": "SPRO root: Enterprise Structure > Definition / Assignment > Financial Accounting, then Financial Accounting Global Settings (fiscal year, periods, field statuses). Main transactions: OX02, OX15, OX16, OB13, OB62, OB29, OB37, OBBO, OBBP, OBC4, OBC5.",
+  "teaser": "The full note contains 13 SPRO paths, the mechanism explained with 2 diagrams, interactions with key-user usage, 11 detailed steps, 7 points to know, 7 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "cfg-fi-pieces",
+  "module": "SAP FI",
+  "code": "OBA7 · FBN1 · OB41 · OBC4 · OB32",
+  "title": "Accounting documents: types, numbers, keys",
+  "summary": "FI document control relies on the document type, its number range, the posting key and the field status. These four parameters determine what the user can enter and how the document is numbered.",
+  "where": "SPRO root: Financial Accounting > Financial Accounting Global Settings > Document (or Documents depending on release). Main transactions: OBA7 (document types), FBN1 (number ranges), OB41 (posting keys), OBC4 (field statuses), OB32 (change rules).",
+  "teaser": "The full note contains 11 SPRO paths, the mechanism explained with 2 diagrams, interactions with key-user usage, 10 detailed steps, 8 points to know, 7 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "cfg-fi-tolerances-devises",
+  "module": "SAP FI",
+  "code": "OBA4 · OBA3 · OBA0 · OB52 · OB07 · OB08",
+  "title": "Tolerances, periods, currencies, rates",
+  "summary": "Tolerances limit amounts and clearing differences, OB52 opens or closes periods, and currency types, rate types and exchange rates drive conversions. You set them together because they condition data entry.",
+  "where": "SPRO root: Financial Accounting Global Settings > Document > Tolerance Groups, Ledgers > Fiscal Year and Posting Periods, and currency configuration (Currencies). Main transactions: OBA4, OB57, OBA3, OBA0, OB52, OB07, OB08, OBBS.",
+  "teaser": "The full note contains 12 SPRO paths, the mechanism explained with 2 diagrams, interactions with key-user usage, 10 detailed steps, 7 points to know, 7 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "cfg-gl-comptes",
+  "module": "SAP FI",
+  "code": "OBD4 · FS00 · FSP0 · FSS0",
+  "title": "G/L accounts and chart of accounts",
+  "summary": "The chart of accounts (client level) holds the G/L accounts; the company code segment specifies their accounting use. OBD4 account groups drive numbering and field statuses; the S/4HANA account type replaces cost elements.",
+  "where": "SPRO > Financial Accounting > General Ledger Accounting (G/L account preparations) and Enterprise Structure > Definition / Assignment > Financial Accounting. Transactions: OB13, OB62, OBD4, FS00, FSP0, FSS0.",
+  "teaser": "The full note contains 10 SPRO paths, the mechanism explained with 2 diagrams, interactions with key-user usage, 11 detailed steps, 8 points to know, 7 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "cfg-gl-ledgers-splitting",
+  "module": "SAP FI",
+  "code": "FINSC_LEDGER · OB29 · OBBO",
+  "title": "Ledgers, document splitting and segments",
+  "summary": "The leading ledger 0L and non-leading ledgers carry parallel accounting through accounting principles. Document splitting and segments provide complete financial statements by segment, profit center or other characteristic.",
+  "where": "SPRO > Financial Accounting > Financial Accounting Global Settings > Ledgers, and Financial Accounting > General Ledger Accounting > Business Transactions > Document Splitting. Central transaction: FINSC_LEDGER.",
+  "teaser": "The full note contains 14 SPRO paths, the mechanism explained with 2 diagrams, interactions with key-user usage, 11 detailed steps, 8 points to know, 7 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "cfg-gl-cloture",
+  "module": "SAP FI",
+  "code": "FAGL_FCV · FAGLGVTR · OB52",
+  "title": "Periodic accounting closing",
+  "summary": "Closing chains foreign currency valuation, accruals, reclassifications, GR/IR, open item lists, balance carryforward and period closing. Each step has its own configuration and an order to follow for reliable financial statements.",
+  "where": "SPRO > Financial Accounting > General Ledger Accounting > Periodic Processing (Valuate, Regroup) and Financial Accounting Global Settings > Document > Posting Periods. Transactions: FAGL_FCV, FAGLGVTR, OB52, F.13, F.19.",
+  "teaser": "The full note contains 13 SPRO paths, the mechanism explained with 2 diagrams, interactions with key-user usage, 11 detailed steps, 8 points to know, 7 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "cfg-ap-donnees-base",
+  "module": "SAP FI",
+  "code": "OBD3 · XKN1 · OBAS · BP · OBB8",
+  "title": "Vendors: master data",
+  "summary": "Vendor account groups (OBD3), their number ranges (XKN1, OBAS), payment terms and the reconciliation account structure each record. In S/4HANA, creation goes through the Business Partner and CVI.",
+  "where": "SPRO root: Financial Accounting > Accounts Receivable and Accounts Payable > Vendor Accounts > Master Data > Preparation for Creating Vendor Master Data (OBD3, XKN1, OBAS). In S/4HANA also: Cross-Application Components > SAP Business Partner and Master Data Synchronization (CVI).",
+  "teaser": "The full note contains 14 SPRO paths, the mechanism explained with 2 diagrams, interactions with key-user usage, 10 detailed steps, 8 points to know, 7 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "cfg-ap-operations",
+  "module": "SAP FI",
+  "code": "OBYR · OBA3 · OB27 · OB74",
+  "title": "Vendor operations: down payments, differences, blocks",
+  "summary": "Down payments and special items, difference tolerances (OBA3), difference reasons, payment blocks (OB27), withholding tax, parking, bills of exchange and clearing. This configuration defines how vendor items live until settlement.",
+  "where": "SPRO root: Financial Accounting > Accounts Receivable and Accounts Payable > Business Transactions (Down Payment Made, Open Item Clearing, Outgoing Payments) and Financial Accounting Global Settings > Withholding Tax / Document. Transactions: OBYR, OBA3, OBBE, OB27, OB74.",
+  "teaser": "The full note contains 14 SPRO paths, the mechanism explained with 2 diagrams, interactions with key-user usage, 10 detailed steps, 8 points to know, 7 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "cfg-ap-paiement-f110",
+  "module": "SAP FI",
+  "code": "FBZP · F110 · OBPM1 · DMEE",
+  "title": "Automatic payment F110: full FBZP",
+  "summary": "FBZP defines how F110 selects items, payment method, bank and file format. Five areas to configure from top to bottom (company codes, paying company codes, methods, banks), then DMEE or SEPA formats and the payment log.",
+  "where": "SPRO root: Financial Accounting > Accounts Receivable and Accounts Payable > Business Transactions > Outgoing Payments > Automatic Outgoing Payments > Payment Method/Bank Selection for Payment Program (FBZP) and ... > Payment Media. Execution: F110.",
+  "teaser": "The full note contains 14 SPRO paths, the mechanism explained with 2 diagrams, interactions with key-user usage, 10 detailed steps, 8 points to know, 7 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "cfg-ar-donnees-base",
+  "module": "SAP FI",
+  "code": "OBD2 · XDN1 · OBAR · BP · FS00",
+  "title": "Customers: master data and BP",
+  "summary": "A customer relies on its account group, number range and reconciliation account. In S/4HANA, creation goes through the Business Partner and the CVI integration, which must stay aligned with the FI configuration.",
+  "where": "SPRO root: Financial Accounting > Accounts Receivable and Accounts Payable > Customer Accounts > Master Data (OBD2, XDN1, OBAR). In S/4HANA also: Cross-Application Components > SAP Business Partner and Master Data Synchronization, with transaction BP.",
+  "teaser": "The full note contains 13 SPRO paths, the mechanism explained with 2 diagrams, interactions with key-user usage, 11 detailed steps, 8 points to know, 7 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "cfg-ar-relances-interets",
+  "module": "SAP FI",
+  "code": "FBMP · OB46 · F150 · F107",
+  "title": "Dunning, interest and collections",
+  "summary": "Dunning relies on the FBMP procedure, interest calculation on OB46 types and their rates, collections on payment advices, lockbox and value adjustments. Each building block has prerequisites in the customer record.",
+  "where": "SPRO root: Financial Accounting > Accounts Receivable and Accounts Payable > Business Transactions > Dunning and Interest Calculation. Runs: F150 (dunning), customer interest calculation from the Accounts Receivable menu, F107 (value adjustment).",
+  "teaser": "The full note contains 14 SPRO paths, the mechanism explained with 2 diagrams, interactions with key-user usage, 11 detailed steps, 8 points to know, 7 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "cfg-ar-credit-sepa",
+  "module": "SAP FI",
+  "code": "OVA8 · UKM_BP · SEPA_MNDT · UDM_DISPUTE",
+  "title": "Customer credit, SEPA mandates, disputes",
+  "summary": "In S/4HANA, classic credit control gives way to SAP Credit Management, administered in the BP. Direct debit requires a valid SEPA mandate and disputes are handled as cases in Dispute Management.",
+  "where": "SPRO root: Financial Supply Chain Management > Credit Management (credit segments, risk classes) and Sales and Distribution > Basic Functions > Credit Management/Risk Management (OVA8). Mandates: SEPA_MNDT; disputes: UDM_DISPUTE.",
+  "teaser": "The full note contains 14 SPRO paths, the mechanism explained with 2 diagrams, interactions with key-user usage, 11 detailed steps, 8 points to know, 7 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "cfg-banque-banques-maison",
+  "module": "SAP FI",
+  "code": "FI12 · FI12_HBANK · FI01",
+  "title": "House banks and bank accounts",
+  "summary": "The house bank links your company code to a real bank and its accounts, and each bank account points to a G/L account. It is the foundation of payment, bank statements and treasury, to set up before any flow.",
+  "where": "SPRO > Financial Accounting > Bank Accounting > Bank Accounts > Define House Banks (FI12 in ECC). In S/4HANA: FI12_HBANK and Fiori apps \"Manage Banks\", \"Manage House Banks\", \"Manage Bank Accounts\", plus Bank Account Management configuration under Financial Supply Chain Management.",
+  "teaser": "The full note contains 12 SPRO paths, the mechanism explained with 2 diagrams, interactions with key-user usage, 10 detailed steps, 8 points to know, 7 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "cfg-banque-releve",
+  "module": "SAP FI",
+  "code": "OT83 · FF_5 · FF67",
+  "title": "Electronic and manual bank statement",
+  "summary": "The bank statement (MT940, CAMT.053 or manual entry) updates the bank account, clears open items and posts the rest. Behavior comes from account symbols, posting rules and transaction types.",
+  "where": "SPRO > Financial Accounting > Bank Accounting > Business Transactions > Payment Transactions > Electronic Bank Statement > Make Global Settings for Electronic Bank Statement (OT83); manual statement under Manual Bank Statement. Import: FF_5, FF67; post-processing: FEBAN, Fiori \"Reprocess Bank Statement Items\".",
+  "teaser": "The full note contains 14 SPRO paths, the mechanism explained with 2 diagrams, interactions with key-user usage, 10 detailed steps, 8 points to know, 7 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "cfg-banque-caisse-cash",
+  "module": "SAP FI",
+  "code": "FBCJC0 · FCHI · FF63",
+  "title": "Cash journal, checks and Cash Management",
+  "summary": "The cash journal manages cash, check management and bills of exchange complement payment, and Cash and Liquidity Management forecasts liquidity. You configure dedicated accounts, batches, items and planning levels.",
+  "where": "SPRO > Financial Accounting > Bank Accounting > Business Transactions > Cash Journal (FBCJC0, FBCJC1, FBCJC2); checks (FCHI, FCH1); SPRO > Financial Supply Chain Management > Cash and Liquidity Management (S/4HANA); memo records FF63.",
+  "teaser": "The full note contains 14 SPRO paths, the mechanism explained with 2 diagrams, interactions with key-user usage, 10 detailed steps, 8 points to know, 7 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "cfg-taxe-tva",
+  "module": "SAP FI",
+  "code": "OBYZ · OBBG · FTXP · OB40",
+  "title": "Sales and purchase tax",
+  "summary": "Sales and purchase tax relies on a country calculation procedure, two-character tax codes and tax accounts per process key. This note covers calculation, determination and reverse charge.",
+  "where": "SPRO > Financial Accounting > Financial Accounting Global Settings > Tax on Sales/Purchases (Basic Settings, Calculation, Posting). Main transactions: OBYZ, OBBG, FTXP, OB40.",
+  "teaser": "The full note contains 12 SPRO paths, the mechanism explained with 2 diagrams, interactions with key-user usage, 11 detailed steps, 8 points to know, 7 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "cfg-taxe-retenue",
+  "module": "SAP FI",
+  "code": "EWT · OBWW · FK01",
+  "title": "Extended withholding tax",
+  "summary": "Extended withholding tax (EWT) calculates and posts withholding on invoices or payments, by type, code and third-party data. It is activated per company code before any other configuration.",
+  "where": "SPRO > Financial Accounting > Financial Accounting Global Settings > Withholding Tax > Extended Withholding Tax. Third-party data: FK01/FK02 (Withholding Tax tab) and FD01/FD02.",
+  "teaser": "The full note contains 13 SPRO paths, the mechanism explained with 2 diagrams, interactions with key-user usage, 11 detailed steps, 8 points to know, 7 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "cfg-taxe-declarations-efacture",
+  "module": "SAP FI",
+  "code": "CA3 · FEC · DRC · EDOC_COCKPIT",
+  "title": "Statutory returns and e-invoicing in France",
+  "summary": "French returns (CA3/CA12, DES, FEC) and electronic invoicing rely on configured VAT, eDocuments and DRC. The reform timetable should be confirmed on official websites.",
+  "where": "Standard FI reports (RFUMSV00, RFASLM), Advanced Compliance Reporting / Document and Reporting Compliance (Fiori apps) and eDocument Cockpit (EDOC_COCKPIT).",
+  "teaser": "The full note contains 12 SPRO paths, the mechanism explained with 2 diagrams, interactions with key-user usage, 11 detailed steps, 8 points to know, 7 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "cfg-aa-structure",
+  "module": "Fixed assets",
+  "code": "EC08 · OADB · OAOB · OAOA · AS08 · AO21",
+  "title": "FI-AA structure: charts and classes",
+  "summary": "FI-AA structure is built in order: copied chart of depreciation, areas, company code assignment, classes, number ranges and screens. Any structure error is hard to fix once assets have been created.",
+  "where": "SPRO > Financial Accounting > Asset Accounting > Organizational Structures (ECC: Financial Accounting (New) > Asset Accounting). Key transactions: EC08, OADB, OAOB, OAOA, AS08, AO21, OAYZ.",
+  "teaser": "The full note contains 12 SPRO paths, the mechanism explained with 2 diagrams, interactions with key-user usage, 10 detailed steps, 8 points to know, 7 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "cfg-aa-valorisation",
+  "module": "Fixed assets",
+  "code": "AFAMA · AFAMP · AO90 · OAYR · AO71",
+  "title": "FI-AA valuation and depreciation",
+  "summary": "Valuation combines depreciation key, methods, period control and rounding, then accounting integration through AO90. In new FI-AA, each area is tied to an accounting principle and therefore to a ledger.",
+  "where": "SPRO > Financial Accounting > Asset Accounting > Depreciation > Valuation Methods, then Integration with General Ledger Accounting. Key transactions: AFAMA, AFAMP, OAYR, AO71, AO90, OAYK, AFAB.",
+  "teaser": "The full note contains 12 SPRO paths, the mechanism explained with 2 diagrams, interactions with key-user usage, 10 detailed steps, 8 points to know, 7 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "cfg-aa-mouvements-cloture",
+  "module": "Fixed assets",
+  "code": "AO73 · AIAB · AIBU · AFAB · AJAB · FAA_CMP",
+  "title": "FI-AA transactions, AuC and closing",
+  "summary": "Transaction types, acquisitions, retirements, transfers, assets under construction and settlement, then year-end closing. S/4HANA changes the data model with ACDOCA, multi-company closing and Fiori apps.",
+  "where": "SPRO > Financial Accounting > Asset Accounting > Transactions (transaction types, acquisitions, retirements, transfers) and Year-End Closing. Key transactions: AFAB, AJAB, FAA_CLOSE_FISC_YEARS, FAA_CMP, AIAB, AIBU, FAGLGVTR.",
+  "teaser": "The full note contains 14 SPRO paths, the mechanism explained with 2 diagrams, interactions with key-user usage, 10 detailed steps, 8 points to know, 7 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "cfg-co-fondations",
+  "module": "SAP CO",
+  "code": "OKKP · OKEQ · OKEON · KL01 · KK01",
+  "title": "Controlling foundations",
+  "summary": "The controlling area, its versions, number ranges and standard hierarchy form the foundation of all CO. Cost center categories, activity types, statistical key figures and planning build on it.",
+  "where": "SPRO > Controlling > General Controlling > Organization (OKKP, OKEQ, KANK) then Controlling > Cost Center Accounting > Master Data (OKEON, cost center categories). Master data in the application menu: KS01, KL01, KK01.",
+  "teaser": "The full note contains 12 SPRO paths, the mechanism explained with 2 diagrams, interactions with key-user usage, 10 detailed steps, 8 points to know, 7 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "cfg-co-imputations",
+  "module": "SAP CO",
+  "code": "KSU1 · KSU5 · KSV5 · KB21N · OK06 · OKB9",
+  "title": "CO allocations, assessments and closing",
+  "summary": "Distribution and assessment cycles, S/4HANA universal allocation, activity allocation, OKB9 default account assignment and CO period closing. You see what runs in Fiori and what stays in SAP GUI.",
+  "where": "Application menu Accounting > Controlling > Cost Center Accounting > Period-End Closing (KSU1, KSU5, KSV5, KSII, KGI2); IMG Controlling > General Controlling > Automatic Account Assignment for OKB9. S/4HANA: apps Manage Allocations and Run Allocations.",
+  "teaser": "The full note contains 12 SPRO paths, the mechanism explained with 2 diagrams, interactions with key-user usage, 10 detailed steps, 8 points to know, 7 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "cfg-co-ordres-internes",
+  "module": "SAP CO",
+  "code": "KOT2_OPA · KONK · OK06 · OK07 · KO88",
+  "title": "Internal orders and settlement",
+  "summary": "Order types KOT2_OPA, number ranges, settlement profiles and allocation structures, planning, budget and availability control, then KO88 settlement. A consistent chain avoids orders that cannot be settled.",
+  "where": "SPRO > Controlling > Internal Orders > Order Master Data (KOT2_OPA, KONK) and Actual Postings > Settlement (OK06, OK07, OKOA). Application menu: KO01, KO22, KO88, KOB1.",
+  "teaser": "The full note contains 13 SPRO paths, the mechanism explained with 2 diagrams, interactions with key-user usage, 10 detailed steps, 8 points to know, 7 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "cfg-co-couts-produit",
+  "module": "SAP CO",
+  "code": "OKKN · OKK4 · KZA1 · OKZ2 · OKTZ",
+  "title": "Product costing (CO-PC)",
+  "summary": "Standard costing relies on a chain of parameters: costing variant, valuation variant, costing sheet, overhead keys and component structure. This note explains the role of each and the order to create them.",
+  "where": "SPRO root: Controlling > Product Cost Controlling > Product Cost Planning. Key transactions: OKKN, OKK4, OKY8, KZA1, OKZ2, OKTZ, CK11N, CK40N, CK24.",
+  "teaser": "The full note contains 12 SPRO paths, the mechanism explained with 2 diagrams, interactions with key-user usage, 11 detailed steps, 8 points to know, 7 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "cfg-co-material-ledger",
+  "module": "SAP CO",
+  "code": "CKMLCP · CKM3 · OMX2 · CKMSTART",
+  "title": "Material Ledger and actual costing in S/4HANA",
+  "summary": "In S/4HANA, the Material Ledger is mandatory: each valuation area gets an ML type. Only actual costing, which computes the periodic unit price at closing, remains optional and is decided before go-live.",
+  "where": "SPRO root: Controlling > Product Cost Controlling > Actual Costing/Material Ledger. Key transactions: CKMLCP (closing), CKM3 (price analysis), FINSC_LEDGER (currencies), MR21/MR22.",
+  "teaser": "The full note contains 12 SPRO paths, the mechanism explained with 2 diagrams, interactions with key-user usage, 11 detailed steps, 8 points to know, 6 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "cfg-co-copa-centres-profit",
+  "module": "SAP CO",
+  "code": "KEKE · KEA0 · KE51 · OKO6",
+  "title": "Profitability, profit centers, settlement",
+  "summary": "Profitability (margin analysis, CO-PA) and profit centers rely on the Universal Journal in S/4HANA. Here you configure the operating concern, characteristics, value fields, the profit center hierarchy and settlement.",
+  "where": "SPRO roots: Controlling > Profitability Analysis; Financial Accounting > General Ledger Accounting > Master Data > Profit Center; Enterprise Structure. Key transactions: KEKE, KEA0, KEA5, KEA6, KE51, KCH1, OKO6.",
+  "teaser": "The full note contains 14 SPRO paths, the mechanism explained with 2 diagrams, interactions with key-user usage, 11 detailed steps, 8 points to know, 7 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "cfg-mmfi-valorisation-obyc",
+  "module": "SAP MM-FI",
+  "code": "OX14 · OMWD · OMSK · OBYC",
+  "title": "Stock valuation and OBYC accounts",
+  "summary": "Stock valuation links each material movement to a G/L account via valuation level, valuation class and OBYC keys. This note describes the whole determination chain, from material type to posted account.",
+  "where": "SPRO > Materials Management > Valuation and Account Assignment > Account Determination > Account Determination Without Wizard. Main transactions: OX14, OMWM, OMWD, OMSK, OMS2, OBYC, OMWB.",
+  "teaser": "The full note contains 12 SPRO paths, the mechanism explained with 2 diagrams, interactions with key-user usage, 12 detailed steps, 8 points to know, 7 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "cfg-mmfi-miro-grir",
+  "module": "SAP MM-FI",
+  "code": "MIRO · OMR6 · MR11 · F.19",
+  "title": "Logistics invoice and GR/IR",
+  "summary": "Logistics invoice verification matches purchase order, receipt and invoice, and clears the GR/IR account. This note covers MIRO, OMR6 tolerances, blocks, MR11 clearing and handling of differences and delivery provisions.",
+  "where": "SPRO > Materials Management > Logistics Invoice Verification (Incoming Invoice, Invoice Block, Automatic Payment Block) and menu Logistics > Materials Management > Logistics Invoice Verification > GR/IR Account Maintenance. Transactions: MIRO, OMR6, MRBR, MR11, MR11SHOW.",
+  "teaser": "The full note contains 13 SPRO paths, the mechanism explained with 2 diagrams, interactions with key-user usage, 12 detailed steps, 8 points to know, 7 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "cfg-mmfi-mouvements",
+  "module": "SAP MM-FI",
+  "code": "OMJJ · MIGO · OBYC · MATDOC",
+  "title": "Movement types and FI integration",
+  "summary": "A movement type drives the quantity and value strings that trigger FI postings via OBYC. This note covers copying and changing, account grouping, special stocks and S/4HANA novelties (MATDOC, Material Ledger, material 40).",
+  "where": "SPRO > Materials Management > Inventory Management and Physical Inventory > Movement Types > Copy, Change Movement Types. Main transactions: OMJJ (common use), MIGO, OBYC, MMBE.",
+  "teaser": "The full note contains 11 SPRO paths, the mechanism explained with 2 diagrams, interactions with key-user usage, 12 detailed steps, 8 points to know, 7 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "cfg-sdfi-vkoa",
+  "module": "SAP MM-FI",
+  "code": "VKOA · V/07 · V/08 · V/12",
+  "title": "VKOA revenue account determination",
+  "summary": "VKOA links each SD invoice item to a revenue account by reading a KOFI condition table. Here you master the access sequence, customer and material account assignment groups, and account keys (ERL, ERS, ERU) to stop billing errors.",
+  "where": "SPRO root: Sales and Distribution > Basic Functions > Account Assignment/Costing > Revenue Account Determination. Records are entered in VKOA; the account key comes from the pricing procedure (V/08).",
+  "teaser": "The full note contains 12 SPRO paths, the mechanism explained with 2 diagrams, interactions with key-user usage, 11 detailed steps, 8 points to know, 7 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "cfg-sdfi-facturation",
+  "module": "SAP MM-FI",
+  "code": "VOFA · VF01 · VF04 · VTFA",
+  "title": "SD billing and accounting interface",
+  "summary": "The SD invoice automatically generates the FI document through the billing type settings (VOFA). You set document types, blocks, copy control, pricing and taxes so that posting is either complete or rejected as a whole.",
+  "where": "SPRO root: Sales and Distribution > Billing > Billing Documents (billing types, copy control) and Basic Functions > Pricing / Taxes. Execution: VF01, VF04, VF06, VF02.",
+  "teaser": "The full note contains 13 SPRO paths, the mechanism explained with 2 diagrams, interactions with key-user usage, 10 detailed steps, 8 points to know, 7 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "cfg-sdfi-ristournes-interco",
+  "module": "SAP MM-FI",
+  "code": "VBO1 · IV · UKM_BP · FARR",
+  "title": "Rebates, intercompany, credit and S/4HANA",
+  "summary": "Rebates, intercompany billing, customer credit and revenue recognition are where SD diverges most between ECC and S/4HANA. You see the classic configuration here, the replacements (Settlement, Credit Management, RAR) and their FI impacts.",
+  "where": "Roots: Sales and Distribution > Billing > Rebate Processing and Intercompany Billing; Financial Supply Chain Management > Credit Management; Revenue Accounting and Reporting (FARR). Transactions: VBO1, UKM_BP, FARR_CONTR_MON.",
+  "teaser": "The full note contains 13 SPRO paths, the mechanism explained with 2 diagrams, interactions with key-user usage, 11 detailed steps, 8 points to know, 7 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "cfg-rep-etats-financiers",
+  "module": "SAP FI",
+  "code": "OB58 · F.01 · GR31 · GRR1 · F0717",
+  "title": "Financial statements and FI reporting",
+  "summary": "You build financial statements via OB58 versions run in F.01, then Report Painter/Writer reports and Fiori apps. In S/4HANA everything reads ACDOCA, which changes the tables and analytical queries to favor.",
+  "where": "SPRO root: Financial Accounting > General Ledger Accounting > Business Transactions > Closing > Document (OB58). Execution via F.01 or FAGLB03; Report Painter/Writer via GR31/GRR1; Fiori apps and ACDOCA CDS views outside SPRO.",
+  "teaser": "The full note contains 13 SPRO paths, the mechanism explained with 2 diagrams, interactions with key-user usage, 11 detailed steps, 7 points to know, 7 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "cfg-rep-bp-cvi-interfaces",
+  "module": "SAP FI",
+  "code": "CVI_COCKPIT · BP_CVI_IMG_CHK · BD64 · WE20",
+  "title": "Business Partner, CVI and FI interfaces",
+  "summary": "You synchronize customers and vendors with the Business Partner via CVI, then open FI flows through IDoc/ALE, BAPI and OData. The note separates what is certainly standard from what depends on the release.",
+  "where": "SPRO root: Cross-Application Components > Master Data Synchronization (CVI) and SAP Business Partner; ALE via SALE. Tools: CVI_COCKPIT, BP_CVI_IMG_CHK, MDS_LOAD_COCKPIT, BD64, WE20, WE21; BAPI in SE37; OData in /IWFND/MAINT_SERVICE.",
+  "teaser": "The full note contains 14 SPRO paths, the mechanism explained with 2 diagrams, interactions with key-user usage, 11 detailed steps, 7 points to know, 7 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "cfg-rep-archivage-autorisations-conso",
+  "module": "SAP FI",
+  "code": "SARA · OBR7 · OBR8 · F_BKPF_BUK · Group Reporting",
+  "title": "Archiving, authorizations and consolidation",
+  "summary": "You archive FI_DOCUMNT documents with SARA, secure postings through F_BKPF_* objects and frame consolidation in Group Reporting. Intercompany reconciliation is done before closing, with a consistent company ID in each entity.",
+  "where": "SPRO root: application archiving via SARA > Customizing; retention periods via OBR7/OBR8. Authorizations via PFCG, SU24 and SU53. Group Reporting via Fiori apps; IMG node \"Group Reporting\" (intermediate path depends on release: search by transaction in SPRO).",
+  "teaser": "The full note contains 14 SPRO paths, the mechanism explained with 2 diagrams, interactions with key-user usage, 11 detailed steps, 7 points to know, 7 pitfalls, a worked example, the checks to run and related transactions."
+ },
+ {
+  "id": "tips-pieges/aa-au133-compte-amortissement",
+  "module": "Tip · Fixed assets",
+  "code": "FI-AA",
+  "title": "AFAB / AFABN: error AU133, depreciation account not found",
+  "summary": "",
+  "where": "",
+  "teaser": "The full note contains the cause, 4 solution steps, 3 pitfalls, 2 tips, the OSS / KBA notes and the sources."
+ },
+ {
+  "id": "tips-pieges/aa-aa677-acquisition-complementaire-vnc-zero",
+  "module": "Tip · Fixed assets",
+  "code": "FI-AA",
+  "title": "AS01: warning AA677, subsequent acquisition with zero net book value",
+  "summary": "",
+  "where": "",
+  "teaser": "The full note contains the cause, 2 solution steps, 2 pitfalls, 2 tips, the OSS / KBA notes and the sources."
+ },
+ {
+  "id": "tips-pieges/aa-cloture-annuelle-depreciations-non-comptabilisees",
+  "module": "Tip · Fixed assets",
+  "code": "FI-AA",
+  "title": "AA year-end closing: unposted depreciation on an already certified fiscal year",
+  "summary": "",
+  "where": "",
+  "teaser": "The full note contains the cause, 3 solution steps, 2 pitfalls, 2 tips, the OSS / KBA notes and the sources."
+ },
+ {
+  "id": "tips-pieges/aa-zones-amortissement-t093b-ac264",
+  "module": "Tip · Fixed assets",
+  "code": "FI-AA",
+  "title": "Depreciation areas: area copy (T093B) and message AC264",
+  "summary": "",
+  "where": "",
+  "teaser": "The full note contains the cause, 2 solution steps, 2 pitfalls, 2 tips, the OSS / KBA notes and the sources."
+ },
+ {
+  "id": "tips-pieges/s4-migration-universal-journal-fins-acdoc-cust",
+  "module": "Tip · SAP FI",
+  "code": "S/4HANA",
+  "title": "S/4HANA migration: Universal Journal pitfalls (ACDOCA, FINS_ACDOC_CUST)",
+  "summary": "",
+  "where": "",
+  "teaser": "The full note contains the cause, 5 solution steps, 4 pitfalls, 2 tips, the OSS / KBA notes and the sources."
+ },
+ {
+  "id": "tips-pieges/fm-ficustom401-facturation-s4",
+  "module": "Tip · SAP FI",
+  "code": "PSM-FM",
+  "title": "Funds Management in S/4HANA: error FICUSTOM401 on invoice",
+  "summary": "",
+  "where": "",
+  "teaser": "The full note contains the cause, 1 solution step, 1 pitfall, 1 tip, the OSS / KBA notes and the sources."
+ },
+ {
+  "id": "tips-pieges/ap-f110-fournisseur-non-repris",
+  "module": "Tip · SAP FI",
+  "code": "FI-AP",
+  "title": "F110: a vendor is not picked up in the payment proposal",
+  "summary": "",
+  "where": "",
+  "teaser": "The full note contains the cause, 5 solution steps, 3 pitfalls, 2 tips, the OSS / KBA notes and the sources."
+ },
+ {
+  "id": "tips-pieges/ap-f110-erreurs-parametrage-fbzp",
+  "module": "Tip · SAP FI",
+  "code": "FI-AP",
+  "title": "F110: payment method, currency, debit balance, withholding tax",
+  "summary": "",
+  "where": "",
+  "teaser": "The full note contains the cause, 6 solution steps, 3 pitfalls, 2 tips, the OSS / KBA notes and the sources."
+ },
+ {
+  "id": "tips-pieges/mm-grir-f13-assignation",
+  "module": "Tip · SAP MM-FI",
+  "code": "FI-GL",
+  "title": "GR/IR: automatic clearing F.13 does not clear",
+  "summary": "",
+  "where": "",
+  "teaser": "The full note contains the cause, 6 solution steps, 3 pitfalls, 2 tips, the OSS / KBA notes and the sources."
+ },
+ {
+  "id": "tips-pieges/co-ksu5-f6754-periode-budgetaire",
+  "module": "Tip · SAP CO",
+  "code": "CO",
+  "title": "KSU5 / CO43: message F6754, blank budget period not valid",
+  "summary": "",
+  "where": "",
+  "teaser": "The full note contains the cause, 2 solution steps, 2 pitfalls, 1 tip, the OSS / KBA notes and the sources."
+ },
+ {
+  "id": "tips-pieges/co-ksu5-ga622-ensemble-ccss",
+  "module": "Tip · SAP CO",
+  "code": "CO",
+  "title": "KSU5: message GA622, set read error (table CCSS)",
+  "summary": "",
+  "where": "",
+  "teaser": "The full note contains the cause, 1 solution step, 2 pitfalls, 1 tip, the OSS / KBA notes and the sources."
+ },
+ {
+  "id": "tips-pieges/gl-document-splitting-glt2152-glt2001",
+  "module": "Tip · SAP FI",
+  "code": "FI-GL",
+  "title": "Document splitting: GLT2152 / GLT2001 at clearing (F-51)",
+  "summary": "",
+  "where": "",
+  "teaser": "The full note contains the cause, 5 solution steps, 2 pitfalls, 1 tip, the OSS / KBA notes and the sources."
+ },
+ {
+  "id": "tips-pieges/gl-evaluation-devises-fagl-fc-val",
+  "module": "Tip · SAP FI",
+  "code": "FI-GL",
+  "title": "Currency valuation: F.05 obsolete, FAGL_FC_VAL and error FR894",
+  "summary": "",
+  "where": "",
+  "teaser": "The full note contains the cause, 3 solution steps, 2 pitfalls, 1 tip, the OSS / KBA notes and the sources."
+ }
+]

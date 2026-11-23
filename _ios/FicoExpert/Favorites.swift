@@ -28,7 +28,7 @@ final class FavoritesStore: ObservableObject {
         if let index = items.firstIndex(where: { $0.url == url }) {
             items.remove(at: index)
         } else {
-            let name = title.isEmpty ? (url.lastPathComponent.isEmpty ? "Fiche" : url.lastPathComponent) : title
+            let name = title.isEmpty ? (url.lastPathComponent.isEmpty ? L("Fiche") : url.lastPathComponent) : title
             items.insert(Favorite(title: name, url: url), at: 0)
         }
         save()

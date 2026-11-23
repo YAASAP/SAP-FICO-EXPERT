@@ -32,7 +32,7 @@ final class NotesStore: ObservableObject {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         items.removeAll { $0.url == url }
         if !trimmed.isEmpty {
-            let name = title.isEmpty ? (url.lastPathComponent.isEmpty ? "Fiche" : url.lastPathComponent) : title
+            let name = title.isEmpty ? (url.lastPathComponent.isEmpty ? L("Fiche") : url.lastPathComponent) : title
             items.insert(NoteItem(title: name, url: url, text: trimmed, updated: Date()), at: 0)
         }
         persist()

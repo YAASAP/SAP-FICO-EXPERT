@@ -31,7 +31,7 @@ final class CatalogStore: ObservableObject {
     private let noteKey = "fico.catalog.notes.v1"
 
     init() {
-        if let url = Bundle.main.url(forResource: "catalogue", withExtension: "json"),
+        if let url = Bundle.main.url(forResource: appUsesFrench ? "catalogue" : "catalogue_en", withExtension: "json"),
            let data = try? Data(contentsOf: url),
            let list = try? JSONDecoder().decode([CatalogEntry].self, from: data) {
             entries = list
@@ -100,7 +100,7 @@ struct CatalogView: View {
     @State private var query: String
     @State private var filter: String
 
-    init(catalog: CatalogStore, storeManager: StoreManager, initialFilter: String = "Tous", initialQuery: String = "", showsClose: Bool = true) {
+    init(catalog: CatalogStore, storeManager: StoreManager, initialFilter: String = L("Tous"), initialQuery: String = "", showsClose: Bool = true) {
         self.showsClose = showsClose
         self.catalog = catalog
         self.storeManager = storeManager
@@ -108,16 +108,16 @@ struct CatalogView: View {
         _query = State(initialValue: initialQuery)
     }
 
-    private let tipsFilter = "Tips & pièges"
-    private let favFilter = "Favoris"
+    private let tipsFilter = L("Tips & pièges")
+    private let favFilter = L("Favoris")
 
-    private var filters: [String] { ["Tous", favFilter] + catalog.modules + [tipsFilter] }
+    private var filters: [String] { [L("Tous"), favFilter] + catalog.modules + [tipsFilter] }
 
     private var results: [CatalogEntry] {
         let q = query.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         return catalog.entries.filter { entry in
             switch filter {
-            case "Tous": break
+            case L("Tous"): break
             case favFilter: if !catalog.isFavorite(entry.id) { return false }
             case tipsFilter: if !entry.isTip { return false }
             default: if entry.module != filter { return false }
@@ -246,14 +246,14 @@ struct FicheDetailView: View {
                     Image(systemName: storeManager.isPremium ? "wifi.slash" : "lock")
                         .font(.largeTitle).foregroundColor(.secondary)
                     if storeManager.isPremium {
-                        Text(failed ? "Fiche indisponible pour le moment. Vérifie ta connexion : une fois ouverte, elle reste lisible hors ligne."
-                                    : "Chargement…")
+                        Text(failed ? L("Fiche indisponible pour le moment. Vérifie ta connexion : une fois ouverte, elle reste lisible hors ligne.")
+                                    : L("Chargement…"))
                             .font(.subheadline).foregroundColor(.secondary)
                             .multilineTextAlignment(.center)
                         Button("Réessayer") { Task { await load() } }
                             .buttonStyle(.bordered)
                     } else {
-                        Text(entry.teaser.isEmpty ? "La fiche complète est incluse avec Premium." : entry.teaser)
+                        Text(entry.teaser.isEmpty ? L("La fiche complète est incluse avec Premium.") : entry.teaser)
                             .font(.subheadline).foregroundColor(.secondary)
                             .multilineTextAlignment(.center)
                         Button("Débloquer Premium") { showPaywall = true }

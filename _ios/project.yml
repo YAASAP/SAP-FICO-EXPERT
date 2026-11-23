@@ -1,6 +1,8 @@
 name: FicoExpert
 options:
   bundleIdPrefix: com.yaasap
+  developmentLanguage: en
+  knownRegions: [en, fr]
   deploymentTarget:
     iOS: "16.0"
   createIntermediateGroups: true

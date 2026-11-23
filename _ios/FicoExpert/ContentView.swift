@@ -30,7 +30,7 @@ struct WebSiteView: View {
     @State private var showNote = false
     @State private var showCatalog = false
     @State private var showPremium = false
-    @State private var catalogFilter = "Tous"
+    @State private var catalogFilter = L("Tous")
     @State private var catalogQuery = ""
 
     private let accent = Color(red: 58/255, green: 95/255, blue: 143/255)
@@ -99,30 +99,30 @@ struct WebSiteView: View {
     /// (Accueil, Catalogue, Atlas, Formations, Accès) reste la barre du bas du site.
     private var topBar: some View {
         HStack(spacing: 6) {
-            barButton("xmark", label: "Fermer le site") { onClose() }
-            barButton("chevron.backward", label: "Retour", enabled: model.canGoBack) {
+            barButton("xmark", label: L("Fermer le site")) { onClose() }
+            barButton("chevron.backward", label: L("Retour"), enabled: model.canGoBack) {
                 model.goBack()
             }
-            barButton("magnifyingglass", label: "Catalogue") {
-                catalogFilter = "Tous"; catalogQuery = ""; showCatalog = true
+            barButton("magnifyingglass", label: L("Catalogue")) {
+                catalogFilter = L("Tous"); catalogQuery = ""; showCatalog = true
             }
             Spacer()
             barButton(favorites.contains(model.url) ? "star.fill" : "star",
-                      label: favorites.contains(model.url) ? "Retirer des favoris" : "Ajouter aux favoris") {
+                      label: favorites.contains(model.url) ? L("Retirer des favoris") : L("Ajouter aux favoris")) {
                 favorites.toggle(title: model.title, url: model.url)
             }
-            barButton("books.vertical", label: "Ma bibliothèque") { showLibrary = true }
+            barButton("books.vertical", label: L("Ma bibliothèque")) { showLibrary = true }
             barButton(notes.hasNote(for: model.url) ? "note.text.badge.plus" : "square.and.pencil",
-                      label: notes.hasNote(for: model.url) ? "Modifier ma note" : "Ajouter une note",
+                      label: notes.hasNote(for: model.url) ? L("Modifier ma note") : L("Ajouter une note"),
                       enabled: model.url != nil) { showNote = true }
             if let url = model.url {
                 ShareLink(item: url, subject: Text(model.title)) {
-                    barIcon("square.and.arrow.up", label: "Partager")
+                    barIcon("square.and.arrow.up", label: L("Partager"))
                 }
             } else {
-                barIcon("square.and.arrow.up", label: "Partager").opacity(0.35)
+                barIcon("square.and.arrow.up", label: L("Partager")).opacity(0.35)
             }
-            barButton(store.isPremium ? "checkmark.seal.fill" : "lock.open", label: "Premium") {
+            barButton(store.isPremium ? "checkmark.seal.fill" : "lock.open", label: L("Premium")) {
                 showPremium = true
             }
         }
@@ -161,7 +161,7 @@ struct ContentView: View {
 
     @State private var tab = 0
     @State private var showSite = false
-    @State private var catalogFilter = "Tous"
+    @State private var catalogFilter = L("Tous")
     @State private var catalogQuery = ""
     @State private var catalogToken = 0
 

@@ -22,7 +22,7 @@ struct LibraryView: View {
         NavigationStack {
             VStack(spacing: 0) {
                 Picker("Section", selection: $section) {
-                    ForEach(LibSection.allCases) { Text($0.rawValue).tag($0) }
+                    ForEach(LibSection.allCases) { Text(LocalizedStringKey($0.rawValue)).tag($0) }
                 }
                 .pickerStyle(.segmented)
                 .padding()
@@ -57,8 +57,8 @@ struct LibraryView: View {
         VStack(spacing: 8) {
             Spacer()
             Image(systemName: symbol).font(.largeTitle).foregroundColor(.secondary)
-            Text(title).font(.headline)
-            Text(hint)
+            Text(verbatim: title).font(.headline)
+            Text(verbatim: hint)
                 .font(.subheadline)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
@@ -70,7 +70,7 @@ struct LibraryView: View {
 
     @ViewBuilder private var favoritesList: some View {
         if favorites.items.isEmpty {
-            empty("star", "Aucun favori", "Ouvre une fiche et touche l'étoile pour la retrouver ici.")
+            empty("star", L("Aucun favori"), L("Ouvre une fiche et touche l'étoile pour la retrouver ici."))
         } else {
             List {
                 ForEach(favorites.items) { fav in
@@ -86,7 +86,7 @@ struct LibraryView: View {
 
     @ViewBuilder private var recentsList: some View {
         if recents.items.isEmpty {
-            empty("clock", "Aucune fiche consultée", "Les fiches que tu ouvres apparaissent ici pour les retrouver vite.")
+            empty("clock", L("Aucune fiche consultée"), L("Les fiches que tu ouvres apparaissent ici pour les retrouver vite."))
         } else {
             List {
                 ForEach(recents.items) { item in
@@ -107,7 +107,7 @@ struct LibraryView: View {
 
     @ViewBuilder private var notesList: some View {
         if notes.items.isEmpty {
-            empty("note.text", "Aucune note", "Ouvre une fiche et touche l'icône note pour écrire ton propre mémo.")
+            empty("note.text", L("Aucune note"), L("Ouvre une fiche et touche l'icône note pour écrire ton propre mémo."))
         } else {
             List {
                 ForEach(notes.items) { note in

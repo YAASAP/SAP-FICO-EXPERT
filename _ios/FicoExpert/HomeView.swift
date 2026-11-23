@@ -26,29 +26,29 @@ struct HomeView: View {
 
     private var tiles: [Tile] {
         [
-            Tile(id: "fi", title: "SAP FI", subtitle: "Comptabilité générale, clients, fournisseurs",
+            Tile(id: "fi", title: "SAP FI", subtitle: L("Comptabilité générale, clients, fournisseurs"),
                  symbol: "eurosign.circle.fill", glyph: "€$£", color: Color(red: 0.25, green: 0.52, blue: 0.96), count: count("SAP FI")) {
                 openCatalog("SAP FI", "") },
-            Tile(id: "co", title: "SAP CO", subtitle: "Contrôle de gestion",
+            Tile(id: "co", title: "SAP CO", subtitle: L("Contrôle de gestion"),
                  symbol: "chart.line.uptrend.xyaxis", color: Color(red: 0.20, green: 0.70, blue: 0.50), count: count("SAP CO")) {
                 openCatalog("SAP CO", "") },
-            Tile(id: "aa", title: "Immobilisations", subtitle: "Amortissements, AA",
-                 symbol: "building.columns.fill", color: Color(red: 0.95, green: 0.55, blue: 0.20), count: count("Immobilisations")) {
-                openCatalog("Immobilisations", "") },
-            Tile(id: "mm", title: "Logistique MM-FI", subtitle: "Achats, stocks, GR/IR",
+            Tile(id: "aa", title: L("Immobilisations"), subtitle: L("Amortissements, AA"),
+                 symbol: "building.columns.fill", color: Color(red: 0.95, green: 0.55, blue: 0.20), count: count(L("Immobilisations"))) {
+                openCatalog(L("Immobilisations"), "") },
+            Tile(id: "mm", title: L("Logistique MM-FI"), subtitle: L("Achats, stocks, GR/IR"),
                  symbol: "shippingbox.fill", color: Color(red: 0.62, green: 0.40, blue: 0.90), count: count("SAP MM-FI")) {
                 openCatalog("SAP MM-FI", "") },
-            Tile(id: "tips", title: "Tips & pièges", subtitle: "Erreurs courantes et solutions",
+            Tile(id: "tips", title: L("Tips & pièges"), subtitle: L("Erreurs courantes et solutions"),
                  symbol: "lightbulb.fill", color: Color(red: 0.93, green: 0.72, blue: 0.15),
                  count: catalog.entries.filter { $0.isTip }.count) {
-                openCatalog("Tips & pièges", "") },
-            Tile(id: "fav", title: "Mes favoris", subtitle: "Mes fiches marquées",
+                openCatalog(L("Tips & pièges"), "") },
+            Tile(id: "fav", title: L("Mes favoris"), subtitle: L("Mes fiches marquées"),
                  symbol: "star.fill", color: Color(red: 0.92, green: 0.35, blue: 0.55), count: catalog.favoriteIDs.count) {
-                openCatalog("Favoris", "") },
-            Tile(id: "lib", title: "Ma bibliothèque", subtitle: "Récents, notes, favoris du site",
+                openCatalog(L("Favoris"), "") },
+            Tile(id: "lib", title: L("Ma bibliothèque"), subtitle: L("Récents, notes, favoris du site"),
                  symbol: "books.vertical.fill", color: Color(red: 0.35, green: 0.62, blue: 0.80), count: nil) {
                 openLibrary() },
-            Tile(id: "site", title: "Atlas & formations", subtitle: "Le site complet FICO EXPERT",
+            Tile(id: "site", title: L("Atlas & formations"), subtitle: L("Le site complet FICO EXPERT"),
                  symbol: "globe.europe.africa.fill", color: Color(red: 0.45, green: 0.50, blue: 0.62), count: nil) {
                 openSite() }
         ]
@@ -95,7 +95,7 @@ struct HomeView: View {
                                     .foregroundColor(.white.opacity(0.45)))
                             .foregroundColor(.white)
                             .submitLabel(.search)
-                            .onSubmit { openCatalog("Tous", query); query = "" }
+                            .onSubmit { openCatalog(L("Tous"), query); query = "" }
                     }
                     .padding(12)
                     .background(Color.white.opacity(0.09))
@@ -107,9 +107,9 @@ struct HomeView: View {
                                 .font(.title2)
                                 .foregroundColor(store.isPremium ? .green : Color(red: 0.93, green: 0.72, blue: 0.15))
                             VStack(alignment: .leading, spacing: 2) {
-                                Text(store.isPremium ? "Premium actif" : "Débloquer toutes les fiches")
+                                Text(store.isPremium ? L("Premium actif") : L("Débloquer toutes les fiches"))
                                     .font(.headline).foregroundColor(.white)
-                                Text(store.isPremium ? "Toutes les fiches, hors ligne" : "Lecture complète, achat unique")
+                                Text(store.isPremium ? L("Toutes les fiches, hors ligne") : L("Lecture complète, achat unique"))
                                     .font(.caption).foregroundColor(.white.opacity(0.65))
                             }
                             Spacer()
@@ -156,11 +156,11 @@ struct HomeView: View {
                 }
             }
             Spacer(minLength: 0)
-            Text(tile.title)
+            Text(verbatim: tile.title)
                 .font(.headline)
                 .foregroundColor(.white)
                 .lineLimit(1)
-            Text(tile.subtitle)
+            Text(verbatim: tile.subtitle)
                 .font(.caption)
                 .foregroundColor(.white.opacity(0.65))
                 .lineLimit(2)

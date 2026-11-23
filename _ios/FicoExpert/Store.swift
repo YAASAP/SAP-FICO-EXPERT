@@ -30,10 +30,10 @@ final class StoreManager: ObservableObject {
             let products = try await Product.products(for: [Self.premiumProductID])
             product = products.first
             if product == nil {
-                message = "Produit Premium introuvable pour le moment."
+                message = L("Produit Premium introuvable pour le moment.")
             }
         } catch {
-            message = "Impossible de charger l'offre : \(error.localizedDescription)"
+            message = String(format: L("Impossible de charger l'offre : %@"), error.localizedDescription)
         }
     }
 
@@ -49,7 +49,7 @@ final class StoreManager: ObservableObject {
                     await transaction.finish()
                     await refreshEntitlements()
                 } else {
-                    message = "Achat non vérifié."
+                    message = L("Achat non vérifié.")
                 }
             case .userCancelled, .pending:
                 break
@@ -57,7 +57,7 @@ final class StoreManager: ObservableObject {
                 break
             }
         } catch {
-            message = "Achat impossible : \(error.localizedDescription)"
+            message = String(format: L("Achat impossible : %@"), error.localizedDescription)
         }
     }
 
@@ -67,9 +67,9 @@ final class StoreManager: ObservableObject {
         do {
             try await AppStore.sync()
             await refreshEntitlements()
-            if !isPremium { message = "Aucun achat à restaurer." }
+            if !isPremium { message = L("Aucun achat à restaurer.") }
         } catch {
-            message = "Restauration impossible : \(error.localizedDescription)"
+            message = String(format: L("Restauration impossible : %@"), error.localizedDescription)
         }
     }
 
@@ -116,14 +116,14 @@ struct PaywallView: View {
                 } else {
                     Text(store.product?.displayName ?? "FICO EXPERT Premium")
                         .font(.system(.title2, design: .serif).weight(.bold))
-                    Text(store.product?.description ?? "Débloque toutes les fiches premium, atlas et modes opératoires.")
+                    Text(store.product?.description ?? L("Débloque toutes les fiches premium, atlas et modes opératoires."))
                         .multilineTextAlignment(.center)
                         .foregroundColor(.secondary)
 
                     Button {
                         Task { await store.purchase() }
                     } label: {
-                        Text(store.product.map { "Débloquer · \($0.displayPrice)" } ?? "Débloquer")
+                        Text(store.product.map { String(format: L("Débloquer · %@"), $0.displayPrice) } ?? L("Débloquer"))
                             .frame(maxWidth: .infinity)
                     }
                     .buttonStyle(.borderedProminent)
