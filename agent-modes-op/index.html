@@ -368,7 +368,7 @@ function askAI(q,silent){
   .then(function(r){return r.json().then(function(j){return{ok:r.ok,j:j}})})
   .then(function(x){
     clearTimeout(to);w.remove();
-    if(!x.ok||!x.j||!x.j.reponse){add("bot",esc((x.j&&x.j.error)||x.j&&x.j.message||"L'agent IA est indisponible pour le moment. Réessayez plus tard ou utilisez la bibliothèque de fiches."));return}
+    if(!x.ok||!x.j||!x.j.reponse){add("bot",esc((x.j&&x.j.error)||x.j&&x.j.message||"L'agent IA est indisponible pour le moment. Réessayez plus tard ou utilisez la bibliothèque de fiches.")+(x.j&&x.j.code?" <span style='opacity:.6;font-size:12px'>(code : "+esc(String(x.j.code))+")</span>":""));return}
     var d=document.createElement("div");d.className="msg bot keep";d.style.display="block";
     d.innerHTML='<div class="doc"><div class="tags"><span class="tag m">Généré par IA</span></div>'+md(x.j.reponse)+'<p class="foot" style="text-align:left">Réponse générée automatiquement : à vérifier et à adapter au paramétrage de votre système.</p><div class="act"><button class="btn p" data-copyai="1">Copier</button></div></div>';
     d._txt=x.j.reponse;$("#chat").appendChild(d);d.scrollIntoView({block:"start",behavior:"smooth"});
