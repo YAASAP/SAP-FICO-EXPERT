@@ -8,6 +8,7 @@ struct HomeView: View {
     var openLibrary: () -> Void
     var openSite: () -> Void
     var openPremium: () -> Void
+    var openAgent: () -> Void = {}
 
     @State private var query = ""
 
@@ -48,6 +49,9 @@ struct HomeView: View {
             Tile(id: "lib", title: L("Ma bibliothèque"), subtitle: L("Récents, notes, favoris du site"),
                  symbol: "books.vertical.fill", color: Color(red: 0.35, green: 0.62, blue: 0.80), count: nil) {
                 openLibrary() },
+            Tile(id: "agent", title: L("Agent IA modes op"), subtitle: L("Le mode opératoire SAP FICO sur demande"),
+                 symbol: "sparkles", color: Color(red: 0.72, green: 0.53, blue: 0.04), count: nil) {
+                openAgent() },
             Tile(id: "site", title: L("Atlas & formations"), subtitle: L("Le site complet FICO EXPERT"),
                  symbol: "globe.europe.africa.fill", color: Color(red: 0.45, green: 0.50, blue: 0.62), count: nil) {
                 openSite() }

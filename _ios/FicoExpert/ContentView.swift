@@ -162,6 +162,7 @@ struct ContentView: View {
 
     @State private var tab = 0
     @State private var showSite = false
+    @State private var showAgent = false
     @State private var catalogFilter = L("Tous")
     @State private var catalogQuery = ""
     @State private var catalogToken = 0
@@ -177,7 +178,8 @@ struct ContentView: View {
                      },
                      openLibrary: { tab = 2 },
                      openSite: { showSite = true },
-                     openPremium: { tab = 3 })
+                     openPremium: { tab = 3 },
+                     openAgent: { showAgent = true })
                 .tabItem { Label("Accueil", systemImage: "square.grid.2x2.fill") }
                 .tag(0)
 
@@ -208,6 +210,10 @@ struct ContentView: View {
             catalogQuery = entry.code.isEmpty ? entry.title : entry.code
             catalogToken += 1
             tab = 1
+        }
+        .fullScreenCover(isPresented: $showAgent) {
+            AgentSheet(onClose: { showAgent = false })
+                .preferredColorScheme(.dark)
         }
         .fullScreenCover(isPresented: $showSite) {
             WebSiteView(model: model, favorites: favorites, recents: recents, notes: notes,
