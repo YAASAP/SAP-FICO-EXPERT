@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Agent Modes Opératoires SAP FICO · YAASAP</title>
+<meta name="description" content="Agent IA YAASAP : génère le mode opératoire SAP FICO (S/4HANA) pas à pas à partir d'une question.">
+<link rel="canonical" href="https://yaasap.github.io/SAP-FICO-EXPERT/agent-modes-op/index.html">
+<style>
+:root{--bg:#f6f3ec;--card:#fff;--ink:#0b1a2e;--mut:#5b6677;--line:#e2ddd0;--accent:#1a3a5c;--gold:#b8860b;--ok:#1e5c32;--warn:#8a5c00;--err:#a12a1a;--me:#0b1a2e;--meink:#fff}
+@media(prefers-color-scheme:dark){:root{--bg:#0b1a2e;--card:#13263f;--ink:#eef2f7;--mut:#9fb0c4;--line:#24405f;--accent:#7fb2e5;--gold:#e0b84d;--ok:#6fd08c;--warn:#e0b84d;--err:#ff8a7a;--me:#7fb2e5;--meink:#0b1a2e}}
+*{box-sizing:border-box}html,body{margin:0;height:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top)}
+header{background:#0b1a2e;color:#fff;padding:12px 16px;display:flex;align-items:center;gap:10px;flex:none}
+header h1{font-size:16px;margin:0;font-weight:700;letter-spacing:.2px}
+header small{display:block;font-weight:400;color:#9fb0c4;font-size:11px;margin-top:2px}
+.logo{width:34px;height:34px;border-radius:9px;background:#b8860b;display:grid;place-items:center;font-weight:800;color:#0b1a2e}
+.set{margin-left:auto;display:flex;align-items:center;gap:6px;font-size:11px;color:#9fb0c4}
+.set input{width:64px;padding:6px 8px;border-radius:8px;border:1px solid #2f4a68;background:#13263f;color:#fff;font-size:13px;text-align:center}
+main{flex:1;overflow-y:auto;padding:14px 14px 8px;-webkit-overflow-scrolling:touch}
+.view{display:none;max-width:760px;margin:0 auto}.view.on{display:block}
+.msg{margin:0 0 12px;display:flex}.msg.me{justify-content:flex-end}
+.bub{max-width:92%;padding:10px 13px;border-radius:16px;font-size:15px;line-height:1.45}
+.me .bub{background:var(--me);color:var(--meink);border-bottom-right-radius:4px}
+.bot .bub{background:var(--card);border:1px solid var(--line);border-bottom-left-radius:4px}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin:8px 0 14px}
+.chip{border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 12px;border-radius:999px;font-size:13px;cursor:pointer}
+.chip:active{background:var(--line)}
+.doc{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin:0 0 12px}
+.doc h2{margin:0 0 4px;font-size:18px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px}
+.tag{font:600 11px ui-monospace,Menlo,Consolas,monospace;padding:3px 8px;border-radius:6px;background:rgba(26,58,92,.12);color:var(--accent)}
+.tag.m{background:rgba(184,134,11,.18);color:var(--gold)}
+.doc h3{font-size:12px;letter-spacing:.8px;text-transform:uppercase;color:var(--gold);margin:14px 0 6px;border-top:1px solid var(--line);padding-top:10px}
+.doc ol,.doc ul{margin:0;padding-left:20px}.doc li{margin:5px 0;line-height:1.45;font-size:14.5px}
+.doc li.c{list-style:none;margin-left:-20px;padding-left:20px;position:relative}
+.doc li.c:before{content:"✓";position:absolute;left:0;color:var(--ok);font-weight:700}
+.doc li.e:before{content:"!";color:var(--err)}.doc li.e{list-style:none;margin-left:-20px;padding-left:20px;position:relative}
+.doc li.e:before{position:absolute;left:4px;font-weight:700}
+code{font:600 12.5px ui-monospace,Menlo,Consolas,monospace;background:rgba(26,58,92,.12);padding:1px 5px;border-radius:5px}
+.act{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.btn{border:1px solid var(--line);background:transparent;color:var(--ink);padding:9px 12px;border-radius:10px;font-size:13px;cursor:pointer}
+.btn.p{background:var(--accent);color:#fff;border-color:var(--accent)}
+@media(prefers-color-scheme:dark){.btn.p{color:#0b1a2e}}
+.lib input{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:16px;margin-bottom:10px}
+.item{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:8px;cursor:pointer}
+.item b{display:block;font-size:15px}.item span{font-size:12px;color:var(--mut)}
+.empty{color:var(--mut);text-align:center;padding:30px 10px;font-size:14px}
+.foot{font-size:11px;color:var(--mut);text-align:center;margin:14px 0 6px;line-height:1.5}
+form.bar{flex:none;display:flex;gap:8px;padding:8px 12px;border-top:1px solid var(--line);background:var(--bg)}
+form.bar input{flex:1;padding:12px 14px;border-radius:22px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:16px}
+form.bar button{border:0;border-radius:22px;padding:0 18px;background:var(--accent);color:#fff;font-size:15px;font-weight:600}
+@media(prefers-color-scheme:dark){form.bar button{color:#0b1a2e}}
+nav{flex:none;display:flex;background:#0b1a2e;padding-bottom:env(safe-area-inset-bottom)}
+nav button{flex:1;background:none;border:0;color:#9fb0c4;padding:11px 4px;font-size:12px}
+nav button.on{color:#e0b84d;font-weight:700}
+@media print{header,nav,form.bar,.act,.chips,.msg.me,.msg.bot:not(.keep){display:none!important}body{display:block;height:auto;background:#fff;color:#000}main{overflow:visible}.doc{border:0;break-inside:avoid}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">Y</div>
+  <h1>Agent Modes Opératoires<small>SAP FICO · S/4HANA · YAASAP</small></h1>
+  <div class="set"><label for="bukrs">Soc.</label><input id="bukrs" value="1000" maxlength="4" inputmode="text" aria-label="Code société"></div>
+</header>
+<main>
+  <section id="v-agent" class="view on">
+    <div id="chat"></div>
+  </section>
+  <section id="v-lib" class="view lib">
+    <input id="q" type="search" placeholder="Filtrer : transaction, module, mot-clé…">
+    <div id="list"></div>
+  </section>
+  <section id="v-fav" class="view"><div id="favs"></div></section>
+  <p class="foot">Agent à base de règles et de fiches expertes YAASAP. Adapter chaque procédure au paramétrage et aux habilitations de votre système. Contenu informatif.</p>
+</main>
+<form class="bar" id="f"><input id="in" autocomplete="off" placeholder="Ex. : comment lancer le run de paiement F110 ?" aria-label="Votre question"><button>Envoyer</button></form>
+<nav>
+  <button data-v="agent" class="on">Agent</button>
+  <button data-v="lib">Bibliothèque</button>
+  <button data-v="fav">Favoris</button>
+</nav>
+
+<script>
+"use strict";
+/* ===== Base de connaissances : modes opératoires SAP FICO (S/4HANA) ===== */
+var KB=[
+{id:"ecriture-gl",titre:"Saisir une écriture comptable (grand livre)",mod:"FI-GL",tc:["FB50","FB03"],fiori:"Comptabiliser une écriture de journal",
+ mots:"ecriture od operation diverse journal gl grand livre passer pièce comptabiliser saisie manuelle fb50 debit credit",
+ obj:"Comptabiliser manuellement une pièce équilibrée dans le grand livre de la société {BUKRS}.",
+ pre:["Période comptable ouverte pour la société et le type de compte","Habilitation sur les comptes concernés","Comptes de charge : centre de coûts ou ordre si zone obligatoire"],
+ et:["Ouvrir <code>FB50</code> (ou l'app Fiori « Comptabiliser une écriture de journal »).","Renseigner l'en-tête : <b>Date de pièce</b>, <b>Date comptable</b>, <b>Société {BUKRS}</b>, <b>Devise</b>, <b>Référence</b>, <b>Texte d'en-tête</b>.","Saisir les lignes : compte général, indicateur <b>Débit/Crédit</b>, montant, code TVA si nécessaire, centre de coûts / ordre, texte de poste.","Contrôler que le <b>solde est à 0</b> en bas d'écran.","Menu <b>Pièce > Simuler</b> pour visualiser les écritures et les erreurs éventuelles.","<b>Comptabiliser</b> (Ctrl+S) et noter le numéro de pièce affiché."],
+ ctl:["Afficher la pièce avec <code>FB03</code>","Vérifier le compte dans <code>FAGLL03</code> (postes individuels)"],
+ err:["« Période fermée » : voir le mode opératoire sur l'ouverture des périodes (<code>OB52</code>)","« Pièce non équilibrée » : vérifier D/C et montants","« Centre de coûts obligatoire » : compléter l'objet de contrôle du compte de charge"]},
+
+{id:"facture-fournisseur",titre:"Comptabiliser une facture fournisseur",mod:"FI-AP",tc:["FB60","MIRO","FB03"],fiori:"Créer une facture fournisseur",
+ mots:"facture fournisseur achat ap dettes fb60 miro vendor invoice comptabiliser enregistrer",
+ obj:"Enregistrer une facture fournisseur, avec ou sans commande d'achat.",
+ pre:["Fournisseur créé et ouvert à la société {BUKRS}","Conditions de paiement et banque du fournisseur renseignées","Pour MIRO : commande d'achat et réception (EM) comptabilisées"],
+ et:["Facture <b>sans commande</b> : ouvrir <code>FB60</code>. Facture <b>avec commande</b> : ouvrir <code>MIRO</code>.","Saisir <b>Fournisseur</b>, <b>Date de facture</b>, <b>Date comptable</b>, <b>Montant</b>, <b>Devise</b>, <b>Référence</b> (n° de facture fournisseur).","Cocher « Calculer la TVA » et choisir le <b>code TVA</b> si le montant est TTC.","FB60 : saisir les lignes de charge (compte, montant, centre de coûts). MIRO : saisir le n° de commande, vérifier les postes proposés.","Contrôler les <b>conditions de paiement</b> et le <b>mode de paiement</b> proposés.","Simuler puis <b>Comptabiliser</b>."],
+ ctl:["Le solde de la facture est à 0 avant comptabilisation","Visualiser la pièce avec <code>FB03</code>","Poste ouvert visible dans <code>FBL1N</code>"],
+ err:["Doublon de référence : le système signale une facture déjà saisie, ne pas forcer sans vérifier","Écart sur MIRO : comparer quantités/prix de la commande et de la facture","Fournisseur bloqué : vérifier le blocage société ou paiement dans <code>BP</code>"]},
+
+{id:"facture-client",titre:"Comptabiliser une facture client",mod:"FI-AR",tc:["FB70","FB03"],fiori:"Créer une facture client",
+ mots:"facture client vente ar créances fb70 customer invoice émettre comptabiliser",
+ obj:"Enregistrer une facture de vente manuelle dans la comptabilité clients.",
+ pre:["Client créé et ouvert à la société {BUKRS}","Comptes de produit et codes TVA de sortie paramétrés"],
+ et:["Ouvrir <code>FB70</code>.","Saisir <b>Client</b>, <b>Date de facture</b>, <b>Date comptable</b>, <b>Montant</b>, <b>Devise</b>, <b>Référence</b>.","Choisir le <b>code TVA de sortie</b> et cocher le calcul de la taxe.","Saisir les lignes de produit : compte de produit, montant, texte (et élément d'OTP/segment si requis).","Simuler, vérifier les écritures puis <b>Comptabiliser</b>.","Imprimer ou envoyer la facture selon la sortie paramétrée."],
+ ctl:["Poste ouvert visible dans <code>FBL5N</code>","Pièce affichée via <code>FB03</code>"],
+ err:["Pas de zone de TVA : vérifier le code TVA et le pays du client","Compte de produit non autorisé : contrôler le groupe de comptes"]},
+
+{id:"avoir",titre:"Saisir un avoir (fournisseur ou client)",mod:"FI-AP / FI-AR",tc:["FB65","FB75"],fiori:"Créer un avoir",
+ mots:"avoir note de crédit credit memo fb65 fb75 remboursement annulation facture partielle",
+ obj:"Comptabiliser une note de crédit qui diminue la dette ou la créance.",
+ pre:["Référence de la facture d'origine connue","Montant et TVA à régulariser validés"],
+ et:["Avoir fournisseur : <code>FB65</code>. Avoir client : <code>FB75</code>.","Renseigner le compte tiers, les dates, le montant, la référence et le code TVA.","Saisir les lignes de contrepartie (charge ou produit) avec les mêmes imputations que la facture d'origine.","Simuler puis comptabiliser.","Compenser l'avoir avec la facture d'origine (voir le mode opératoire sur le lettrage)."],
+ ctl:["Avoir visible en poste ouvert (<code>FBL1N</code> / <code>FBL5N</code>)","TVA correctement régularisée"],
+ err:["Avoir non compensé : le poste reste ouvert, lancer la compensation","Mauvais sens D/C : l'avoir doit inverser le sens de la facture"]},
+
+{id:"paiement-f110",titre:"Lancer le programme de paiement automatique",mod:"FI-AP",tc:["F110","FBL1N"],fiori:"Gérer les paiements automatiques",
+ mots:"paiement automatique f110 run règlement fournisseur virement sepa proposition échéance payer factures dme",
+ obj:"Payer à échéance les factures fournisseurs de la société {BUKRS} avec le programme de paiement.",
+ pre:["Factures validées et non bloquées au paiement","Banques de la société et du fournisseur paramétrées","Modes de paiement autorisés (ex. virement SEPA)"],
+ et:["Ouvrir <code>F110</code> et renseigner la <b>Date d'exécution</b> et l'<b>Identification</b> (ex. SEPA01).","Onglet <b>Paramètres</b> : société {BUKRS}, modes de paiement, <b>date de prochain paiement</b>, plage de fournisseurs.","Onglet <b>Sélection libre</b> si besoin de restreindre (ex. échéance, fournisseur).","Onglet <b>Journal supplémentaire</b> : activer le journal des paiements pour analyser les exceptions.","Menu <b>Statut</b> : <b>Proposition</b> > Planifier > Démarrer immédiatement > Actualiser.","<b>Éditer la proposition</b> : traiter les exceptions (blocages, banque absente) puis relancer si besoin.","<b>Paiement</b> > Planifier > Démarrer immédiatement > Actualiser, jusqu'à « Ordres de paiement créés ».","<b>Impression / support de paiement</b> : générer le fichier (DME/SEPA) et le transmettre à la banque."],
+ ctl:["Pièces de paiement visibles dans <code>FBL1N</code> (postes compensés)","Fichier bancaire généré et archivé","Journal de paiement sans exception non traitée"],
+ err:["Exceptions « mode de paiement non défini » : corriger la fiche fournisseur ou la facture","« Banque non trouvée » : renseigner une banque partenaire du fournisseur","Facture absente de la proposition : vérifier blocage paiement et date d'échéance"]},
+
+{id:"encaissement",titre:"Comptabiliser un encaissement client",mod:"FI-AR",tc:["F-28","FBL5N"],fiori:"Comptabiliser un règlement entrant",
+ mots:"encaissement règlement client virement reçu f-28 paiement entrant banque affecter facture lettrer",
+ obj:"Enregistrer un virement client et le rapprocher de ses factures ouvertes.",
+ pre:["Montant reçu et date de valeur connus (relevé bancaire)","Compte de banque GL identifié"],
+ et:["Ouvrir <code>F-28</code>.","En-tête : date de pièce, date comptable, société {BUKRS}, devise, <b>Compte bancaire</b>, <b>Montant</b>, date de valeur.","Zone « Sélection des postes ouverts » : saisir le <b>compte client</b>, valider par <b>Traiter les postes ouverts</b>.","Sélectionner les factures soldées par le virement (activer, ou ventiler le reliquat).","Contrôler que le <b>solde est à 0</b>.","Simuler puis <b>Comptabiliser</b>."],
+ ctl:["Les factures n'apparaissent plus en poste ouvert dans <code>FBL5N</code>","Solde banque cohérent avec le relevé"],
+ err:["Montant différent : utiliser « Paiement partiel » ou « Reste en poste ouvert »","Écart de change ou d'escompte : choisir le compte d'écart adapté"]},
+
+{id:"lettrage",titre:"Lettrer / compenser des postes ouverts",mod:"FI-GL / AP / AR",tc:["F-03","F-32","F-44"],fiori:"Compenser des comptes",
+ mots:"lettrage compensation compenser lettrer poste ouvert clearing f-03 f-32 f-44 f13 solder compte",
+ obj:"Solder entre eux des postes ouverts (débit = crédit) pour un compte général, client ou fournisseur.",
+ pre:["Compte géré en postes ouverts","Postes à rapprocher identifiés"],
+ et:["Compte général : <code>F-03</code>. Client : <code>F-32</code>. Fournisseur : <code>F-44</code>.","Saisir le compte, la <b>date de compensation</b>, la société {BUKRS}, puis <b>Traiter les postes ouverts</b>.","Sélectionner les postes à compenser, ou utiliser <b>Sélection de postes</b> / <b>Tout activer</b>.","Vérifier que le <b>solde à affecter est à 0</b>. Sinon : ventiler l'écart ou créer un reste.","Menu <b>Compensation > Simuler</b>.","<b>Comptabiliser</b> : une pièce de compensation est créée."],
+ ctl:["Les postes disparaissent des postes ouverts","Numéro de compensation visible sur les postes (<code>FBL1N</code>/<code>FBL5N</code>)"],
+ err:["Solde ≠ 0 : traiter l'écart (différence de change, escompte) ou laisser un reste","Poste déjà compensé : annuler la compensation par <code>FBRA</code>"]},
+
+{id:"extourne",titre:"Extourner une pièce comptable",mod:"FI-GL",tc:["FB08","F.80","FBRA"],fiori:"Extourner des pièces",
+ mots:"extourne annuler pièce reverse fb08 f.80 stornier erreur reprise inverser contrepasser",
+ obj:"Annuler l'effet comptable d'une pièce saisie par erreur, en créant la pièce inverse.",
+ pre:["Pièce non compensée (sinon annuler la compensation par FBRA)","Période d'extourne ouverte"],
+ et:["Ouvrir <code>FB08</code> (une pièce) ou <code>F.80</code> (extourne en masse).","Saisir <b>numéro de pièce</b>, <b>société {BUKRS}</b>, <b>exercice</b>.","Choisir le <b>motif d'extourne</b> (ex. 01 : pièce erronée) et la <b>date comptable</b> de l'extourne.","Si besoin, afficher d'abord (<b>Pièce > Visualiser avant extourne</b>).","<b>Comptabiliser</b> l'extourne."],
+ ctl:["Nouvelle pièce d'extourne dans <code>FB03</code>","Solde du compte revenu à la valeur attendue"],
+ err:["« Pièce compensée » : <code>FBRA</code> avant extourne","« Période fermée » : choisir une date dans une période ouverte, selon la politique de clôture"]},
+
+{id:"periodes",titre:"Ouvrir / fermer les périodes comptables",mod:"FI-GL",tc:["OB52"],fiori:"Gérer les périodes comptables",
+ mots:"période comptable ouvrir fermer ob52 clôture mensuelle variante période ouverture blocage fin de mois",
+ obj:"Contrôler les périodes autorisées à la comptabilisation, par type de compte.",
+ pre:["Habilitation d'administration des périodes","Variante de périodes rattachée à la société {BUKRS}"],
+ et:["Ouvrir <code>OB52</code> (ou l'app Fiori « Gérer les périodes comptables »).","Repérer la <b>variante de périodes</b> de la société.","Pour chaque ligne de type de compte (+, A, D, K, M, S) renseigner <b>Période 1 : de/à</b> et <b>Exercice</b>.","Période 2 : réservée aux écritures de clôture spéciales si utilisées.","Enregistrer, puis transporter si requis par votre paysage."],
+ ctl:["Tenter une saisie test dans la période concernée","Vérifier le transport dans <code>SE09</code>"],
+ err:["Modification impossible : vérifier les modifications autorisées et le transport","Période ouverte pour les mauvais types de compte : contrôler la ligne « + » et les types spécifiques"]},
+
+{id:"reevaluation",titre:"Réévaluer les soldes en devises",mod:"FI-GL",tc:["FAGL_FCV"],fiori:"Réévaluer les devises étrangères",
+ mots:"réévaluation devises change fagl_fcv écart de conversion clôture monnaie étrangère taux fin de mois",
+ obj:"Réévaluer postes ouverts et soldes en devises au taux de clôture.",
+ pre:["Taux de change du jour de clôture à jour (<code>OB08</code>)","Méthodes de réévaluation paramétrées"],
+ et:["Ouvrir <code>FAGL_FCV</code>.","Saisir société {BUKRS}, <b>Date de clôture</b>, <b>Période / exercice</b>, <b>Méthode de réévaluation</b>.","Cocher « Test » : exécuter, contrôler le journal et les montants d'écart.","Décocher « Test », activer la <b>comptabilisation</b> puis exécuter.","Vérifier l'<b>extourne automatique</b> à la date du jour suivant."],
+ ctl:["Pièces de réévaluation visibles via le journal","Pièce d'extourne en début de période suivante"],
+ err:["Taux manquant : saisir ou importer le taux de clôture","Réévaluation comptabilisée deux fois : contrôler la date et le journal"]},
+
+{id:"immobilisation",titre:"Créer et acquérir une immobilisation",mod:"FI-AA",tc:["AS01","ABZON","F-90","AFAB"],fiori:"Créer une immobilisation",
+ mots:"immobilisation as01 acquisition abzon f-90 amortissement afab actif fixe asset capitalisation mise en service",
+ obj:"Créer la fiche immobilisation, comptabiliser son acquisition et lancer l'amortissement.",
+ pre:["Classe d'immobilisation et plan d'amortissement paramétrés","Facture d'acquisition connue"],
+ et:["Créer la fiche : <code>AS01</code> > classe d'immobilisation, société {BUKRS}, <b>description</b>, <b>date de capitalisation</b>, centre de coûts, durée d'utilisation (onglet Zones d'évaluation).","Acquisition avec fournisseur : <code>F-90</code>. Acquisition sans contrepartie fournisseur : <code>ABZON</code>.","Saisir le numéro d'immobilisation, le <b>type de mouvement</b> (ex. 100), la date de comptabilisation, le montant.","Simuler et comptabiliser.","En période : lancer <code>AFAB</code> (exécution d'amortissement) en test puis en réel."],
+ ctl:["Valeurs de l'immo dans <code>AW01N</code>","Pièces d'amortissement dans le journal AFAB"],
+ err:["Date de capitalisation vide : l'amortissement ne démarre pas","Immo bloquée : vérifier le statut de la fiche"]},
+
+{id:"compte-gl",titre:"Créer un compte général",mod:"FI-GL",tc:["FS00"],fiori:"Gérer les comptes généraux",
+ mots:"créer compte général fs00 plan comptable gl compte charge produit bilan paramétrage compte société",
+ obj:"Créer un compte général dans le plan comptable puis l'ouvrir à la société {BUKRS}.",
+ pre:["Numéro de compte conforme à la nomenclature","Plan comptable opérationnel et groupe de comptes connu"],
+ et:["Ouvrir <code>FS00</code>, saisir le numéro, la société {BUKRS}, puis <b>Créer avec modèle</b> ou <b>Créer</b>.","Onglet <b>Type / description</b> : groupe de comptes, <b>Compte de bilan</b> ou <b>de résultat</b>, désignations courte et longue.","Onglet <b>Gestion en société</b> : devise du compte, <b>Postes ouverts</b> et <b>Gestion par postes individuels</b> selon le besoin, groupe d'autorisations.","Onglet <b>Création/Banque/Intérêts</b> : statut de zone (Opt. / Obligatoire / Masqué) pour le centre de coûts.","Enregistrer."],
+ ctl:["Affichage du compte avec <code>FS03</code>","Saisie d'essai avec <code>FB50</code>"],
+ err:["Compte déjà existant dans le plan : l'étendre à la société plutôt que le recréer","Devise du compte modifiée après saisie : impossible, créer un nouveau compte"]},
+
+{id:"fournisseur-bp",titre:"Créer un fournisseur ou un client (partenaire)",mod:"FI-AP / FI-AR",tc:["BP"],fiori:"Maintenir un partenaire commercial",
+ mots:"créer fournisseur client partenaire bp business partner tiers vendor customer rib iban création tiers",
+ obj:"Créer un tiers (fournisseur ou client) avec ses rôles comptables dans S/4HANA.",
+ pre:["Groupe de partenaires et plage de numéros définis","Pièces justificatives : identité légale, IBAN, TVA"],
+ et:["Ouvrir <code>BP</code> > <b>Personne / Organisation</b>.","Choisir le rôle : <b>Fournisseur FI</b> (FLVN00) ou <b>Client FI</b> (FLCU00), puis le groupe de partenaires.","Onglet Adresse : raison sociale, adresse, pays, langue.","Onglet <b>Banques</b> : IBAN, BIC, titulaire.","Rôle comptable : société {BUKRS}, <b>compte collectif</b>, <b>conditions de paiement</b>, <b>modes de paiement</b>.","Rôle de TVA : numéro de TVA intracommunautaire si requis.","Enregistrer et noter le numéro."],
+ ctl:["Affichage <code>BP</code> avec le rôle FI","Facture d'essai sur le tiers"],
+ err:["Compte collectif manquant : tiers créé mais non comptabilisable","IBAN invalide : le contrôle bancaire rejette la saisie"]},
+
+{id:"relance",titre:"Lancer les relances clients",mod:"FI-AR",tc:["F150"],fiori:"Traitement des relances",
+ mots:"relance client dunning f150 impayé retard lettre recouvrement niveau de relance",
+ obj:"Générer les lettres de relance pour les factures échues de la société {BUKRS}.",
+ pre:["Procédure de relance affectée aux clients","Factures échues et non bloquées à la relance"],
+ et:["Ouvrir <code>F150</code>, saisir la <b>date d'exécution</b> et l'<b>identification</b>.","Onglet <b>Paramètres</b> : société {BUKRS}, plage de clients, date de relance.","Planifier la <b>Proposition</b> puis <b>Éditer</b> : supprimer les clients à ne pas relancer.","Lancer l'<b>Impression</b> des lettres ou l'envoi par e-mail.","Contrôler les niveaux de relance mis à jour sur les postes."],
+ ctl:["Niveau de relance visible dans <code>FBL5N</code>","Journal de relance archivé"],
+ err:["Aucun client sélectionné : vérifier la procédure de relance et la date d'échéance","Courrier non généré : contrôler le formulaire de sortie"]},
+
+{id:"banque-releve",titre:"Saisir un relevé bancaire manuel",mod:"FI-BL",tc:["FF67","FEBA"],fiori:"Saisie de relevé bancaire manuel",
+ mots:"relevé bancaire rapprochement banque ff67 feba import camt mt940 saisie manuelle banque compensation",
+ obj:"Enregistrer un relevé bancaire et comptabiliser ses opérations.",
+ pre:["Compte bancaire et règles de comptabilisation paramétrés","Relevé disponible (papier ou fichier)"],
+ et:["Ouvrir <code>FF67</code>.","Saisir la <b>société {BUKRS}</b>, le <b>compte bancaire</b>, le <b>n° de relevé</b>, les soldes initial et final.","Saisir chaque opération : date, montant, référence, texte.","Lancer la <b>comptabilisation</b> : le système compense les postes ouverts selon les règles.","Traiter les opérations non reconnues avec <code>FEBA</code> (post-traitement)."],
+ ctl:["Solde GL banque égal au solde du relevé","Aucune opération restante dans FEBA"],
+ err:["Opération non affectée : choisir le compte et le poste à compenser en FEBA","Solde final ≠ somme des opérations : revérifier les montants"]},
+
+{id:"reporting",titre:"Consulter soldes, comptes et postes ouverts",mod:"FI-GL / AP / AR",tc:["FAGLB03","FAGLL03","FBL1N","FBL5N"],fiori:"Afficher les soldes / les postes",
+ mots:"reporting consulter solde compte balance grand livre postes ouverts fbl1n fbl5n fagll03 faglb03 balance âgée liste état",
+ obj:"Consulter les soldes et lignes comptables pour contrôle ou analyse.",
+ pre:["Habilitations de consultation"],
+ et:["<b>Solde d'un compte GL</b> : <code>FAGLB03</code> (société {BUKRS}, exercice, ledger).","<b>Lignes d'un compte GL</b> : <code>FAGLL03</code> (postes individuels, filtre par date et centre de coûts).","<b>Fournisseur</b> : <code>FBL1N</code> (postes ouverts, compensés ou tous).","<b>Client</b> : <code>FBL5N</code> (idem, avec option balance âgée).","Adapter la <b>variante d'affichage</b> et exporter vers Excel (menu Liste > Exporter)."],
+ ctl:["Total de l'état = solde du compte","Cohérence entre sous-compte et compte collectif"],
+ err:["Aucune donnée : vérifier le ledger et la période sélectionnés","Écarts de devise : afficher en devise de société et en devise de transaction"]},
+
+{id:"recurrente",titre:"Écritures récurrentes (abonnements, loyers)",mod:"FI-GL",tc:["FBD1","F.14"],fiori:"Écritures récurrentes",
+ mots:"écriture récurrente fbd1 f.14 loyer abonnement répétitive mensuelle périodique automatique modèle",
+ obj:"Automatiser une écriture qui revient à intervalles réguliers.",
+ pre:["Écriture modèle validée","Fréquence et date de fin définies"],
+ et:["Créer l'écriture récurrente : <code>FBD1</code>, saisir les lignes comme pour <code>FB50</code>.","En-tête : <b>Premier jour d'exécution</b>, <b>Dernier jour</b>, <b>Intervalle en mois</b>, <b>Jour d'exécution</b>.","Enregistrer (aucune pièce n'est encore comptabilisée).","Chaque période : lancer <code>F.14</code> (génération des pièces) en test puis en réel."],
+ ctl:["Pièces générées visibles dans <code>FB03</code>","Prochain run de l'écriture mis à jour"],
+ err:["Aucune pièce générée : date d'exécution ou intervalle mal paramétré"]},
+
+{id:"repartition-co",titre:"Cycle de répartition CO (centres de coûts)",mod:"CO-OM",tc:["KSU1","KSU5"],fiori:"Exécuter les répartitions",
+ mots:"répartition cycle co centre de coûts ksu5 ksu1 assessment allocation clés frais généraux imputation contrôle de gestion",
+ obj:"Répartir des coûts d'un centre émetteur vers des centres récepteurs selon une clé.",
+ pre:["Cycle de répartition créé (<code>KSU1</code>) avec émetteurs, récepteurs, clé et type de coût","Coûts à répartir déjà comptabilisés"],
+ et:["Ouvrir <code>KSU5</code>.","Saisir le <b>cycle</b>, la <b>période</b>, l'<b>exercice</b>, la <b>date de début</b>, le périmètre de gestion.","Exécuter d'abord en <b>exécution test</b>, puis analyser la liste de détails.","Décocher « Test » et exécuter en <b>mise à jour</b>.","Contrôler les pièces CO générées."],
+ ctl:["Centre émetteur à zéro après répartition (<code>KSB1</code>)","Centres récepteurs débités conformément à la clé"],
+ err:["Pas de données : coûts non comptabilisés sur la période","Clé de répartition à zéro : vérifier les statistiques ou références"]},
+
+{id:"parquer",titre:"Parquer puis valider une pièce",mod:"FI-GL / AP",tc:["FV50","FBV0","FB03"],fiori:"Valider les pièces parquées",
+ mots:"parquer pièce parkée fv50 fbv0 validation workflow double contrôle approbation brouillon fv60 fv70",
+ obj:"Saisir une pièce sans la comptabiliser, la faire valider par un second utilisateur.",
+ pre:["Droits de parking et de validation séparés (séparation des tâches)"],
+ et:["Saisir la pièce comme d'habitude (<code>FV50</code> pour un document général, <code>FV60</code> fournisseur, <code>FV70</code> client).","Au lieu de comptabiliser, utiliser <b>Parquer</b> (Pièce > Parquer) et noter le numéro.","Le valideur ouvre <code>FBV0</code> (Comptabiliser les pièces parquées).","Contrôler la pièce, la modifier si besoin, puis <b>Comptabiliser</b>."],
+ ctl:["Pièce passée de « parquée » à « comptabilisée »","Journal de validation tracé"],
+ err:["Même utilisateur ne peut pas valider : appliquer la séparation des tâches"]},
+
+{id:"cloture-annuelle",titre:"Clôture annuelle et report de soldes",mod:"FI-GL",tc:["FAGLGVTR","OB52"],fiori:"Reporter les soldes",
+ mots:"clôture annuelle report de soldes fin d'exercice faglgvtr nouvel exercice résultat reprise des soldes bilan",
+ obj:"Reporter les soldes de bilan et le résultat sur le nouvel exercice.",
+ pre:["Toutes les écritures de clôture comptabilisées et validées","Nouvel exercice ouvert (période 1)"],
+ et:["Contrôler la balance : <code>FAGLB03</code> (équilibrée, comptes d'attente soldés).","Terminer les réévaluations (<code>FAGL_FCV</code>), amortissements (<code>AFAB</code>) et provisions.","Lancer <code>FAGLGVTR</code> : société {BUKRS}, exercice à reporter, ledger, <b>exécution test</b>.","Analyser le journal puis relancer en <b>mise à jour</b>.","Reporter les soldes clients/fournisseurs (postes ouverts) et immobilisations selon la procédure du site.","Ouvrir la période 1 du nouvel exercice et fermer l'ancien (<code>OB52</code>)."],
+ ctl:["Soldes d'ouverture = soldes de clôture de bilan","Résultat de l'exercice affecté au compte de report à nouveau"],
+ err:["Report déjà exécuté : le relancer reste sans risque (écrase les soldes reportés)","Écritures tardives : relancer le report après chaque nouvelle écriture sur l'ancien exercice"]}
+];
+
+/* ===== Utilitaires ===== */
+var $=function(s){return document.querySelector(s)};
+var stop="de la le les un une des du et ou en pour dans sur avec comment faire je je veux comme quoi est que qui au aux d l à a mon ma mes ce cette quel quelle quelles quels lancer créer saisir faut".split(" ");
+function norm(s){return (s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9._\- ]/g," ")}
+function toks(s){return norm(s).split(/\s+/).filter(function(w){return w&&stop.indexOf(w)<0&&w.length>1})}
+function bukrs(){return ($("#bukrs").value||"1000").toUpperCase().trim()||"1000"}
+function sub(t){return t.replace(/\{BUKRS\}/g,bukrs())}
+function strip(h){var d=document.createElement("div");d.innerHTML=h;return d.textContent}
+function score(e,q){
+  var qt=toks(q),sc=0,ql=norm(q);
+  if(!qt.length)return 0;
+  var tcs=e.tc.map(norm),mots=norm(e.mots+" "+e.mod),titre=norm(e.titre),body=norm(strip(e.et.join(" ")+" "+e.obj));
+  qt.forEach(function(w){
+    if(tcs.indexOf(w)>=0)sc+=12;
+    if(mots.split(" ").some(function(m){return m===w}))sc+=4;
+    else if(w.length>3&&mots.indexOf(w)>=0)sc+=2;
+    if(titre.indexOf(w)>=0)sc+=3;
+    if(w.length>3&&body.indexOf(w)>=0)sc+=1;
+  });
+  if(mots.indexOf(ql.trim())>=0&&ql.trim().length>3)sc+=5;
+  return sc;
+}
+function find(q){
+  return KB.map(function(e){return {e:e,s:score(e,q)}}).filter(function(x){return x.s>0}).sort(function(a,b){return b.s-a.s});
+}
+/* ===== Favoris (stockage léger, protégé) ===== */
+var mem={};
+function getFav(){try{return JSON.parse(localStorage.getItem("yaasap_mo_fav")||"[]")}catch(e){return mem.fav||[]}}
+function setFav(a){try{localStorage.setItem("yaasap_mo_fav",JSON.stringify(a))}catch(e){mem.fav=a}}
+function isFav(id){return getFav().indexOf(id)>=0}
+function toggleFav(id){var a=getFav(),i=a.indexOf(id);if(i>=0)a.splice(i,1);else a.push(id);setFav(a);renderFavs();document.querySelectorAll('[data-fav="'+id+'"]').forEach(function(b){b.textContent=isFav(id)?"★ Favori":"☆ Favori"})}
+/* ===== Rendu ===== */
+function docHTML(e){
+  var h='<div class="doc" data-id="'+e.id+'"><h2>'+e.titre+'</h2><div class="tags"><span class="tag m">'+e.mod+'</span>'+
+   e.tc.map(function(t){return '<span class="tag">'+t+'</span>'}).join("")+'</div>'+
+   '<p style="margin:0 0 4px;font-size:14.5px">'+sub(e.obj)+'</p>'+
+   '<h3>Prérequis</h3><ul>'+e.pre.map(function(x){return '<li>'+sub(x)+'</li>'}).join("")+'</ul>'+
+   '<h3>Procédure pas à pas</h3><ol>'+e.et.map(function(x){return '<li>'+sub(x)+'</li>'}).join("")+'</ol>'+
+   '<h3>Contrôles</h3><ul>'+e.ctl.map(function(x){return '<li class="c">'+sub(x)+'</li>'}).join("")+'</ul>'+
+   '<h3>Erreurs fréquentes</h3><ul>'+e.err.map(function(x){return '<li class="e">'+sub(x)+'</li>'}).join("")+'</ul>'+
+   '<div class="act"><button class="btn p" data-copy="'+e.id+'">Copier</button><button class="btn" data-print="'+e.id+'">PDF / Imprimer</button><button class="btn" data-fav="'+e.id+'">'+(isFav(e.id)?"★ Favori":"☆ Favori")+'</button></div></div>';
+  return h;
+}
+function textOf(e){
+  var L=[e.titre,"Module : "+e.mod+" | Transactions : "+e.tc.join(", "),"","Objectif : "+sub(e.obj),"","Prérequis :"];
+  e.pre.forEach(function(x){L.push("- "+strip(sub(x)))});L.push("","Procédure :");
+  e.et.forEach(function(x,i){L.push((i+1)+". "+strip(sub(x)))});L.push("","Contrôles :");
+  e.ctl.forEach(function(x){L.push("- "+strip(sub(x)))});L.push("","Erreurs fréquentes :");
+  e.err.forEach(function(x){L.push("- "+strip(sub(x)))});
+  L.push("","Source : YAASAP · Agent Modes Opératoires SAP FICO");return L.join("\n");
+}
+function add(cls,html){var d=document.createElement("div");d.className="msg "+cls;d.innerHTML='<div class="bub">'+html+'</div>';$("#chat").appendChild(d);d.scrollIntoView({block:"end",behavior:"smooth"});return d}
+function addDoc(e){var d=document.createElement("div");d.className="msg bot keep";d.style.display="block";d.innerHTML=docHTML(e);$("#chat").appendChild(d);d.scrollIntoView({block:"start",behavior:"smooth"})}
+var last=null;
+function ask(q){
+  q=q.trim();if(!q)return;
+  add("me",q.replace(/</g,"&lt;"));
+  var ql=norm(q);
+  if(last&&/erreur|probleme|bloque|marche pas|echec/.test(ql)&&toks(q).length<=3){
+    add("bot","Erreurs fréquentes — <b>"+last.titre+"</b> :<ul style='margin:6px 0 0;padding-left:18px'>"+last.err.map(function(x){return "<li>"+sub(x)+"</li>"}).join("")+"</ul>");return;
+  }
+  if(last&&/controle|verifier|valider le resultat/.test(ql)&&toks(q).length<=3){
+    add("bot","Contrôles — <b>"+last.titre+"</b> :<ul style='margin:6px 0 0;padding-left:18px'>"+last.ctl.map(function(x){return "<li>"+sub(x)+"</li>"}).join("")+"</ul>");return;
+  }
+  var r=find(q);
+  if(!r.length){
+    add("bot","Je n'ai pas de mode opératoire pour cette demande. Essayez une transaction (<code>F110</code>, <code>FB50</code>…) ou un mot-clé (« lettrage », « immobilisation »).");
+    chips(["Écriture comptable","Paiement fournisseur","Lettrage","Clôture annuelle"]);return;
+  }
+  var top=r[0].e;last=top;
+  add("bot","Voici le mode opératoire : <b>"+top.titre+"</b>.");addDoc(top);
+  if(r.length>1){add("bot","Autres procédures proches :");chips(r.slice(1,4).map(function(x){return x.e.titre}),r.slice(1,4).map(function(x){return x.e.id}))}
+  else chips(["Erreurs fréquentes","Contrôles"]);
+}
+function chips(labels,ids){
+  var d=document.createElement("div");d.className="chips";
+  labels.forEach(function(l,i){var b=document.createElement("button");b.className="chip";b.type="button";b.textContent=l;b.onclick=function(){ids&&ids[i]?openId(ids[i]):ask(l)};d.appendChild(b)});
+  $("#chat").appendChild(d);
+}
+function openId(id){var e=KB.filter(function(x){return x.id===id})[0];if(!e)return;last=e;show("agent");add("me",e.titre);addDoc(e)}
+/* ===== Bibliothèque / favoris ===== */
+function renderList(){
+  var q=$("#q").value,l=q?find(q).map(function(x){return x.e}):KB;
+  $("#list").innerHTML=l.length?l.map(function(e){return '<div class="item" data-open="'+e.id+'"><b>'+e.titre+'</b><span>'+e.mod+' · '+e.tc.join(", ")+'</span></div>'}).join(""):'<div class="empty">Aucun résultat.</div>';
+}
+function renderFavs(){
+  var f=getFav();
+  $("#favs").innerHTML=f.length?f.map(function(id){var e=KB.filter(function(x){return x.id===id})[0];return e?'<div class="item" data-open="'+e.id+'"><b>'+e.titre+'</b><span>'+e.mod+' · '+e.tc.join(", ")+'</span></div>':""}).join(""):'<div class="empty">Aucun favori. Touchez « ☆ Favori » sur une procédure.</div>';
+}
+function show(v){
+  document.querySelectorAll(".view").forEach(function(x){x.classList.toggle("on",x.id==="v-"+v)});
+  document.querySelectorAll("nav button").forEach(function(b){b.classList.toggle("on",b.dataset.v===v)});
+  $("#f").style.display=v==="agent"?"flex":"none";
+  if(v==="lib")renderList();if(v==="fav")renderFavs();
+}
+document.addEventListener("click",function(ev){
+  var t=ev.target.closest("[data-copy],[data-print],[data-fav],[data-open],nav button");if(!t)return;
+  if(t.dataset.copy){var e=KB.filter(function(x){return x.id===t.dataset.copy})[0],tx=textOf(e);
+    (navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(tx):Promise.reject()).then(function(){t.textContent="Copié ✓"},function(){window.prompt("Copiez le texte :",tx)})}
+  else if(t.dataset.print){document.querySelectorAll(".doc").forEach(function(d){d.style.display=d.dataset.id===t.dataset.print?"":"none"});window.print();document.querySelectorAll(".doc").forEach(function(d){d.style.display=""})}
+  else if(t.dataset.fav)toggleFav(t.dataset.fav);
+  else if(t.dataset.open)openId(t.dataset.open);
+  else if(t.dataset.v)show(t.dataset.v);
+});
+$("#f").addEventListener("submit",function(ev){ev.preventDefault();var v=$("#in").value;$("#in").value="";ask(v)});
+$("#q").addEventListener("input",renderList);
+add("bot","Bonjour. Je génère le <b>mode opératoire SAP FICO</b> (S/4HANA) de votre choix. Posez une question ou une transaction, par exemple « lancer le paiement F110 » ou « comment lettrer un compte fournisseur ».");
+chips(["Écriture comptable FB50","Paiement fournisseur F110","Lettrage","Extourner une pièce","Clôture annuelle","Créer une immobilisation"]);
+</script>
+</body>
+</html>
