@@ -268,6 +268,15 @@ function score(e,q){
   if(mots.indexOf(ql.trim())>=0&&ql.trim().length>3)sc+=5;
   return sc;
 }
+function cov(e,q){
+  var qt=toks(q);if(!qt.length)return 0;
+  var tcs=e.tc.map(norm),mw=norm(e.mots+" "+e.mod),ti=norm(e.titre),h=0,tc=false;
+  qt.forEach(function(w){
+    if(tcs.indexOf(w)>=0){tc=true;h++;return}
+    if(mw.split(" ").indexOf(w)>=0||(w.length>3&&(mw.indexOf(w)>=0||ti.indexOf(w)>=0)))h++;
+  });
+  return tc?1:h/qt.length;
+}
 function find(q){
   return KB.map(function(e){return {e:e,s:score(e,q)}}).filter(function(x){return x.s>0}).sort(function(a,b){return b.s-a.s});
 }
@@ -315,6 +324,12 @@ function ask(q){
     if(API_URL){askAI(q,true);return}
     add("bot","Je n'ai pas de mode opératoire pour cette demande. Essayez une transaction (<code>F110</code>, <code>FB50</code>…) ou un mot-clé (« lettrage », « immobilisation »).");
     chips(["Écriture comptable","Paiement fournisseur","Lettrage","Clôture annuelle"]);return;
+  }
+  if(API_URL&&cov(r[0].e,q)<0.5){
+    askAI(q,true);
+    add("bot","Fiches les plus proches, si utile :");
+    chips(r.slice(0,3).map(function(x){return x.e.titre}),r.slice(0,3).map(function(x){return x.e.id}));
+    return;
   }
   var top=r[0].e;last=top;
   add("bot","Voici le mode opératoire : <b>"+top.titre+"</b>.");addDoc(top);
