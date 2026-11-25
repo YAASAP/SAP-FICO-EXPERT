@@ -301,7 +301,7 @@ function add(cls,html){var d=document.createElement("div");d.className="msg "+cl
 function addDoc(e){var d=document.createElement("div");d.className="msg bot keep";d.style.display="block";d.innerHTML=docHTML(e);$("#chat").appendChild(d);d.scrollIntoView({block:"start",behavior:"smooth"})}
 var last=null;
 function ask(q){
-  q=q.trim();if(!q)return;
+  q=q.trim();if(!q)return;lastQ=q;
   add("me",q.replace(/</g,"&lt;"));
   var ql=norm(q);
   if(last&&/erreur|probleme|bloque|marche pas|echec/.test(ql)&&toks(q).length<=3){
@@ -312,6 +312,7 @@ function ask(q){
   }
   var r=find(q);
   if(!r.length){
+    if(API_URL){askAI(q,true);return}
     add("bot","Je n'ai pas de mode opératoire pour cette demande. Essayez une transaction (<code>F110</code>, <code>FB50</code>…) ou un mot-clé (« lettrage », « immobilisation »).");
     chips(["Écriture comptable","Paiement fournisseur","Lettrage","Clôture annuelle"]);return;
   }
@@ -319,6 +320,7 @@ function ask(q){
   add("bot","Voici le mode opératoire : <b>"+top.titre+"</b>.");addDoc(top);
   if(r.length>1){add("bot","Autres procédures proches :");chips(r.slice(1,4).map(function(x){return x.e.titre}),r.slice(1,4).map(function(x){return x.e.id}))}
   else chips(["Erreurs fréquentes","Contrôles"]);
+  if(API_URL){var d=document.createElement("div");d.className="chips";var b=document.createElement("button");b.className="chip";b.type="button";b.textContent="✨ Version rédigée par l'IA";b.onclick=function(){askAI(q)};d.appendChild(b);$("#chat").appendChild(d)}
 }
 function chips(labels,ids){
   var d=document.createElement("div");d.className="chips";
@@ -326,6 +328,38 @@ function chips(labels,ids){
   $("#chat").appendChild(d);
 }
 function openId(id){var e=KB.filter(function(x){return x.id===id})[0];if(!e)return;last=e;show("agent");add("me",e.titre);addDoc(e)}
+/* ===== Agent IA (serveur YAASAP) ===== */
+var API_URL="https://utilized-messy-pipelining.replit.app";/* renseigné après publication du serveur */
+var lastQ="";
+function esc(t){return t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+function md(t){
+  var out=[],inOl=false,inUl=false;
+  esc(t).split("\n").forEach(function(l){
+    l=l.replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").replace(/`([^`]+)`/g,"<code>$1</code>");
+    var m=l.match(/^\s*(\d+)[.)]\s+(.*)/),u=l.match(/^\s*[-•]\s+(.*)/),h=l.match(/^#+\s*(.*)/);
+    if(m){if(inUl){out.push("</ul>");inUl=false}if(!inOl){out.push("<ol>");inOl=true}out.push("<li>"+m[2]+"</li>");return}
+    if(u){if(inOl){out.push("</ol>");inOl=false}if(!inUl){out.push("<ul>");inUl=true}out.push("<li>"+u[1]+"</li>");return}
+    if(inOl){out.push("</ol>");inOl=false}if(inUl){out.push("</ul>");inUl=false}
+    if(h)out.push("<h3>"+h[1]+"</h3>");else if(l.trim())out.push("<p style='margin:6px 0'>"+l+"</p>");
+  });
+  if(inOl)out.push("</ol>");if(inUl)out.push("</ul>");
+  return out.join("");
+}
+function askAI(q,silent){
+  if(!API_URL){if(!silent)add("bot","L'agent IA n'est pas encore connecté. Utilisez la bibliothèque de fiches.");return}
+  var w=add("bot","Rédaction du mode opératoire par l'IA…");
+  var ctl=new AbortController(),to=setTimeout(function(){ctl.abort()},60000);
+  fetch(API_URL+"/api/ask",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({question:q.slice(0,400),codeSociete:bukrs()}),signal:ctl.signal})
+  .then(function(r){return r.json().then(function(j){return{ok:r.ok,j:j}})})
+  .then(function(x){
+    clearTimeout(to);w.remove();
+    if(!x.ok||!x.j||!x.j.reponse){add("bot",esc((x.j&&x.j.error)||x.j&&x.j.message||"L'agent IA est indisponible pour le moment. Réessayez plus tard ou utilisez la bibliothèque de fiches."));return}
+    var d=document.createElement("div");d.className="msg bot keep";d.style.display="block";
+    d.innerHTML='<div class="doc"><div class="tags"><span class="tag m">Généré par IA</span></div>'+md(x.j.reponse)+'<p class="foot" style="text-align:left">Réponse générée automatiquement : à vérifier et à adapter au paramétrage de votre système.</p><div class="act"><button class="btn p" data-copyai="1">Copier</button></div></div>';
+    d._txt=x.j.reponse;$("#chat").appendChild(d);d.scrollIntoView({block:"start",behavior:"smooth"});
+  })
+  .catch(function(){clearTimeout(to);w.remove();add("bot","Pas de connexion à l'agent IA. Les fiches de la bibliothèque restent disponibles hors ligne.")});
+}
 /* ===== Bibliothèque / favoris ===== */
 function renderList(){
   var q=$("#q").value,l=q?find(q).map(function(x){return x.e}):KB;
@@ -342,8 +376,9 @@ function show(v){
   if(v==="lib")renderList();if(v==="fav")renderFavs();
 }
 document.addEventListener("click",function(ev){
-  var t=ev.target.closest("[data-copy],[data-print],[data-fav],[data-open],nav button");if(!t)return;
-  if(t.dataset.copy){var e=KB.filter(function(x){return x.id===t.dataset.copy})[0],tx=textOf(e);
+  var t=ev.target.closest("[data-copyai],[data-copy],[data-print],[data-fav],[data-open],nav button");if(!t)return;
+  if(t.dataset.copyai){var m=t.closest(".msg"),tx2=(m&&m._txt)||"";(navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(tx2):Promise.reject()).then(function(){t.textContent="Copié ✓"},function(){window.prompt("Copiez le texte :",tx2)})}
+  else if(t.dataset.copy){var e=KB.filter(function(x){return x.id===t.dataset.copy})[0],tx=textOf(e);
     (navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(tx):Promise.reject()).then(function(){t.textContent="Copié ✓"},function(){window.prompt("Copiez le texte :",tx)})}
   else if(t.dataset.print){document.querySelectorAll(".doc").forEach(function(d){d.style.display=d.dataset.id===t.dataset.print?"":"none"});window.print();document.querySelectorAll(".doc").forEach(function(d){d.style.display=""})}
   else if(t.dataset.fav)toggleFav(t.dataset.fav);
